@@ -1,0 +1,96 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-serif: var(--font-lora), 'Playfair Display', Georgia, serif;
+  --font-sans: var(--font-dm-sans), var(--font-inter), sans-serif;
+  --font-display: var(--font-outfit), var(--font-dm-sans), sans-serif;
+  
+  --color-brand-blue: #00264A;
+  --color-brand-green: #629A13;
+  --color-neutral-bg: #F8FAF7;
+  --color-neutral-alt: #F2F5F3;
+  --color-neutral-card: #FFFFFF;
+  --color-neutral-primary: #121212;
+  --color-neutral-secondary: #5E6672;
+  --color-neutral-border: #E3E8E4;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #F8FAF7;
+  color: #121212;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar in Deep Blue & Eco Green */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #001A33;
+}
+::-webkit-scrollbar-thumb {
+  background: #629A13;
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #75B518;
+}
+
+/* Premium Button Glow Effect */
+.btn-eco-glow {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(98, 154, 19, 0.25);
+}
+.btn-eco-glow:hover {
+  box-shadow: 0 6px 25px rgba(98, 154, 19, 0.45);
+  transform: translateY(-1px);
+}
+.btn-eco-glow:active {
+  transform: translateY(0);
+}
+
+/* Deep Blue Action Glow */
+.btn-blue-glow {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 14px rgba(0, 38, 74, 0.18);
+}
+.btn-blue-glow:hover {
+  box-shadow: 0 8px 25px rgba(0, 38, 74, 0.30);
+  transform: translateY(-1px);
+}
+.btn-blue-glow:active {
+  transform: translateY(0);
+}
+
+/* Range input styling for simulator */
+input[type="range"] {
+  accent-color: #629A13;
+}
+
+/* Infinite Marquee Animation for Ribbon */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  display: flex;
+  width: max-content;
+  animation: marquee 28s linear infinite;
+}
+
+.animate-marquee:hover {
+  animation-play-state: paused;
+}
+

@@ -1,0 +1,115 @@
+.hero {
+  position: relative;
+  width: 100%;
+  background-color: #F8FAF7;
+  padding-top: 90px;
+  overflow: hidden;
+  border-bottom: 1px solid #E3E8E4;
+}
+
+.container {
+  position: relative;
+  z-index: 1;
+  max-width: 1440px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (min-width: 1024px) {
+  .container {
+    flex-direction: row;
+    height: 680px;
+    align-items: center;
+    padding: 0 2rem;
+  }
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #00264A;
+  margin-bottom: 1rem;
+}
+
+.eyebrowDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #629A13;
+}
+
+.title {
+  font-family: var(--font-lora), serif;
+  font-size: clamp(2.5rem, 4.2vw, 4.2rem);
+  color: #00264A;
+  line-height: 1.15;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.titleItalic {
+  font-style: italic;
+  color: #629A13;
+  font-weight: 400;
+}
+
+.tagline {
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: clamp(1rem, 1.3vw, 1.15rem);
+  color: #5E6672;
+  line-height: 1.7;
+  max-width: 90%;
+  margin-bottom: 2rem;
+}
+
+.primaryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.75rem;
+  border-radius: 9999px;
+  background-color: #629A13;
+  color: #FFFFFF;
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: 0.925rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 14px rgba(98, 154, 19, 0.25);
+  transition: all 0.25s ease;
+}
+
+.primaryBtn:hover {
+  background-color: #528210;
+  box-shadow: 0 6px 20px rgba(98, 154, 19, 0.4);
+  transform: translateY(-1px);
+}
+
+.secondaryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.75rem;
+  border-radius: 9999px;
+  background-color: #FFFFFF;
+  color: #00264A;
+  font-family: var(--font-dm-sans), sans-serif;
+  font-size: 0.925rem;
+  font-weight: 600;
+  border: 1px solid rgba(0, 38, 74, 0.2);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.secondaryBtn:hover {
+  background-color: #F2F5F3;
+  border-color: #00264A;
+}
