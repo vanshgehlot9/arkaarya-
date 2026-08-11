@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
 import { IndustriesSection } from "@/components/IndustriesSection";
@@ -8,22 +9,21 @@ import { StatsBar } from "@/components/StatsBar";
 import { WhoWeAre } from "@/components/WhoWeAre";
 import { Services } from "@/components/Services";
 import { Timeline } from "@/components/Timeline";
+import { CaseStudies } from "@/components/CaseStudies";
 import { WhyChooseUs } from "@/components/WhyChooseUs";
 import { Testimonials } from "@/components/Testimonials";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
 import { ImpactCalculator } from "@/components/ImpactCalculator";
-import { PickupModal } from "@/components/PickupModal";
 import { LeadPopup } from "@/components/LeadPopup";
 import { WhatsAppWidget } from "@/components/WhatsAppWidget";
 
 export default function Home() {
-  const [isPickupOpen, setIsPickupOpen] = useState(false);
+  const router = useRouter();
   const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
-  const [pickupNotes, setPickupNotes] = useState("");
 
   const handleOpenPickup = () => {
-    setIsPickupOpen(true);
+    router.push("/pickup");
   };
 
   const handleOpenCalculator = () => {
@@ -32,8 +32,7 @@ export default function Home() {
 
   const handleBookWithCalculatedData = (summary: string) => {
     setIsCalculatorOpen(false);
-    setPickupNotes(`Simulator Payload: ${summary}`);
-    setIsPickupOpen(true);
+    router.push(`/pickup?notes=Simulator Payload: ${summary}`);
   };
 
   return (
@@ -65,6 +64,9 @@ export default function Home() {
         {/* 5. PROCESS — How ArkaArya Delivers (5-Stage Lifecycle) */}
         <Timeline onOpenPickup={handleOpenPickup} />
 
+        {/* 5.1. CASE STUDIES — Proof of Work */}
+        <CaseStudies />
+
         {/* 6. INDUSTRIES — Horizontal Showcase of Sectors Served */}
         <IndustriesSection onOpenPickup={handleOpenPickup} />
 
@@ -89,17 +91,7 @@ export default function Home() {
         onBookWithData={handleBookWithCalculatedData}
       />
 
-      {/* Certified Pickup Booking Modal */}
-      <PickupModal
-        isOpen={isPickupOpen}
-        onClose={() => {
-          setIsPickupOpen(false);
-          setPickupNotes("");
-        }}
-        initialNotes={pickupNotes}
-      />
-
-      {/* Auto-Trigger Lead Generation Modal */}
+      {/* Lead Generation Modal */}
       <LeadPopup />
 
       {/* Floating WhatsApp Contact Widget */}

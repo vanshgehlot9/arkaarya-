@@ -143,9 +143,7 @@ export const WhoWeAre: React.FC<WhoWeAreProps> = ({ onOpenPickup = () => {} }) =
               transition={{ duration: 0.6, ease: "easeOut" }}
               className="relative w-full rounded-[2rem] bg-[#001A33] border border-[#00264A] shadow-[0_25px_60px_rgba(0,38,74,0.15)] p-8 sm:p-10 overflow-hidden text-white flex flex-col justify-between min-h-[460px]"
             >
-              {/* Internal Mesh Background */}
-              <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
-
+              {/* Background removed */}
               {/* Top Accent */}
               <div className="relative z-10 flex items-center justify-between border-b border-white/10 pb-5 mb-8">
                 <div className="flex items-center gap-2">

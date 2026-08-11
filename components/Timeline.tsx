@@ -88,8 +88,7 @@ export const Timeline: React.FC<TimelineProps> = ({ onOpenPickup = () => {} }) =
 
   return (
     <section id="lifecycle" className="relative w-full py-16 sm:py-20 bg-white border-b border-[#E3E8E4] overflow-hidden">
-      {/* Blueprint Ambient Grid Background */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#00264A06_1px,transparent_1px),linear-gradient(to_bottom,#00264A06_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
+      {/* Background elements removed */}
       <div className="absolute top-0 right-1/4 w-72 h-72 bg-[#629A13]/05 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute bottom-0 left-1/4 w-72 h-72 bg-[#00264A]/04 rounded-full blur-3xl pointer-events-none" />
 
@@ -195,8 +194,7 @@ export const Timeline: React.FC<TimelineProps> = ({ onOpenPickup = () => {} }) =
           <div className="lg:col-span-7 flex flex-col">
             <div className="h-full rounded-2xl bg-[#001A33] border border-[#00264A] shadow-[0_20px_45px_rgba(0,38,74,0.18)] p-5 sm:p-6 flex flex-col justify-between relative overflow-hidden text-white">
               
-              {/* Subtle Tech Grid Lines */}
-              <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
+              {/* Background grid removed */}
               
               {/* Dashboard Top Header Bar */}
               <div className="relative z-10 flex flex-wrap items-center justify-between gap-2 pb-3 border-b border-white/10">

@@ -2,12 +2,15 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, ArrowRight, CheckCircle2, Laptop, Smartphone, Server, Recycle } from "lucide-react";
+import { X, ArrowRight, CheckCircle2, Laptop, Smartphone, Server, Recycle, Loader2, Phone } from "lucide-react";
+import { submitLead } from "@/app/actions/submitLead";
 
 export const LeadPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [formData, setFormData] = useState({ name: "", company: "", phone: "", email: "", service: "" });
   const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
@@ -45,29 +48,32 @@ export const LeadPopup = () => {
     localStorage.setItem("arka_lead_modal_dismissed", "true");
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitError("");
 
-    const formData = new FormData(e.currentTarget);
-    const data = Object.fromEntries(formData.entries());
+    const form = new FormData();
+    Object.entries(formData).forEach(([key, value]) => {
+      form.append(key, value);
+    });
 
-    // Connect to the backend system (simulated here since none exists yet)
-    console.log("Submitting lead to backend:", data);
-    
-    // Simulate network request
-    await new Promise((resolve) => setTimeout(resolve, 1200));
-
-    setIsSubmitting(false);
-    setIsSubmitted(true);
-    
-    // Mark as dismissed so it doesn't show again
-    localStorage.setItem("arka_lead_modal_dismissed", "true");
-
-    // Auto close after 3 seconds
-    setTimeout(() => {
-      setIsOpen(false);
-    }, 3000);
+    try {
+      const result = await submitLead(form);
+      if (result.success) {
+        setIsSubmitted(true);
+        localStorage.setItem("arka_lead_modal_dismissed", "true");
+        setTimeout(() => {
+          setIsOpen(false);
+        }, 3000);
+      } else {
+        setSubmitError(result.error || "An error occurred");
+      }
+    } catch (err) {
+      setSubmitError("Failed to submit. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -103,8 +109,6 @@ export const LeadPopup = () => {
 
             {/* Left Side: Premium Illustration Area */}
             <div className="w-full md:w-5/12 bg-[#F7F9F6] border-r border-[#E3E8E4] relative overflow-hidden flex flex-col p-8 sm:p-10 min-h-[250px] md:min-h-0">
-              
-              <div className="absolute inset-0 bg-[linear-gradient(to_right,#00264A06_1px,transparent_1px),linear-gradient(to_bottom,#00264A06_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none" />
               
               <div className="flex-1 flex items-center justify-center relative">
                 
@@ -198,29 +202,29 @@ export const LeadPopup = () => {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                         <div className="flex flex-col gap-1.5">
                           <label htmlFor="name" className="text-xs font-bold text-[#00264A] uppercase tracking-wide">Full Name</label>
-                          <input required type="text" id="name" name="name" placeholder="John Doe" className="w-full px-4 py-2.5 bg-[#F7F9F6] border border-[#E3E8E4] rounded-lg text-sm text-[#00264A] focus:outline-none focus:border-[#629A13] focus:ring-1 focus:ring-[#629A13] transition-all" />
+                          <input required type="text" id="name" value={formData.name} onChange={(e) => setFormData({...formData, name: e.target.value})} placeholder="John Doe" className="w-full px-4 py-2.5 bg-[#F7F9F6] border border-[#E3E8E4] rounded-lg text-sm text-[#00264A] focus:outline-none focus:border-[#629A13] focus:ring-1 focus:ring-[#629A13] transition-all" />
                         </div>
                         <div className="flex flex-col gap-1.5">
                           <label htmlFor="company" className="text-xs font-bold text-[#00264A] uppercase tracking-wide">Company</label>
-                          <input required type="text" id="company" name="company" placeholder="Organization Ltd." className="w-full px-4 py-2.5 bg-[#F7F9F6] border border-[#E3E8E4] rounded-lg text-sm text-[#00264A] focus:outline-none focus:border-[#629A13] focus:ring-1 focus:ring-[#629A13] transition-all" />
+                          <input required type="text" id="company" value={formData.company} onChange={(e) => setFormData({...formData, company: e.target.value})} placeholder="Organization Ltd." className="w-full px-4 py-2.5 bg-[#F7F9F6] border border-[#E3E8E4] rounded-lg text-sm text-[#00264A] focus:outline-none focus:border-[#629A13] focus:ring-1 focus:ring-[#629A13] transition-all" />
                         </div>
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                        <div className="flex flex-col gap-1.5">
+                        <div className="flex flex-col gap-1.5 relative">
                           <label htmlFor="phone" className="text-xs font-bold text-[#00264A] uppercase tracking-wide">Phone Number</label>
-                          <input required type="tel" id="phone" name="phone" placeholder="+91 90000 00000" className="w-full px-4 py-2.5 bg-[#F7F9F6] border border-[#E3E8E4] rounded-lg text-sm text-[#00264A] focus:outline-none focus:border-[#629A13] focus:ring-1 focus:ring-[#629A13] transition-all" />
+                          <input required type="tel" id="phone" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} placeholder="+91 90000 00000" className="w-full px-4 py-2.5 bg-[#F7F9F6] border border-[#E3E8E4] rounded-lg text-sm text-[#00264A] focus:outline-none focus:border-[#629A13] focus:ring-1 focus:ring-[#629A13] transition-all" />
                         </div>
                         <div className="flex flex-col gap-1.5">
                           <label htmlFor="email" className="text-xs font-bold text-[#00264A] uppercase tracking-wide">Work Email</label>
-                          <input required type="email" id="email" name="email" placeholder="john@company.com" className="w-full px-4 py-2.5 bg-[#F7F9F6] border border-[#E3E8E4] rounded-lg text-sm text-[#00264A] focus:outline-none focus:border-[#629A13] focus:ring-1 focus:ring-[#629A13] transition-all" />
+                          <input required type="email" id="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} placeholder="john@company.com" className="w-full px-4 py-2.5 bg-[#F7F9F6] border border-[#E3E8E4] rounded-lg text-sm text-[#00264A] focus:outline-none focus:border-[#629A13] focus:ring-1 focus:ring-[#629A13] transition-all" />
                         </div>
                       </div>
 
                       <div className="flex flex-col gap-1.5">
                         <label htmlFor="service" className="text-xs font-bold text-[#00264A] uppercase tracking-wide">What are you looking for?</label>
-                        <select required id="service" name="service" className="w-full px-4 py-2.5 bg-[#F7F9F6] border border-[#E3E8E4] rounded-lg text-sm text-[#00264A] focus:outline-none focus:border-[#629A13] focus:ring-1 focus:ring-[#629A13] transition-all appearance-none cursor-pointer">
-                          <option value="" disabled selected>Select an option...</option>
+                        <select required id="service" value={formData.service} onChange={(e) => setFormData({...formData, service: e.target.value})} className="w-full px-4 py-2.5 bg-[#F7F9F6] border border-[#E3E8E4] rounded-lg text-sm text-[#00264A] focus:outline-none focus:border-[#629A13] focus:ring-1 focus:ring-[#629A13] transition-all appearance-none cursor-pointer">
+                          <option value="" disabled>Select an option...</option>
                           <option value="Pickup">E-Waste Pickup</option>
                           <option value="Corporate">Corporate E-Waste Recycling</option>
                           <option value="ITAD">IT Asset Disposal</option>
@@ -232,13 +236,25 @@ export const LeadPopup = () => {
                         </select>
                       </div>
 
+                      {submitError && (
+                        <div className="text-red-500 text-xs font-semibold px-2">
+                          {submitError}
+                        </div>
+                      )}
+
                       <button 
                         type="submit" 
                         disabled={isSubmitting}
                         className="mt-2 w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-[#629A13] text-white font-bold text-sm transition-all duration-300 hover:bg-[#528210] hover:shadow-[0_10px_25px_rgba(98,154,19,0.3)] hover:-translate-y-0.5 group disabled:opacity-70 disabled:hover:translate-y-0"
                       >
-                        <span>{isSubmitting ? "Submitting..." : "Request a Callback"}</span>
-                        {!isSubmitting && <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />}
+                        {isSubmitting ? (
+                          <Loader2 size={16} className="animate-spin" />
+                        ) : (
+                          <>
+                            <span>Request a Callback</span>
+                            <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+                          </>
+                        )}
                       </button>
 
                       <div className="text-center mt-3">

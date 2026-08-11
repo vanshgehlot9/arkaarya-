@@ -74,7 +74,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenPickup, onOpenCalculator }
         Logo is completely separate in its own prominent capsule on the left.
         Navigation & Actions are in a dedicated interactive glass capsule on the right.
       */}
-      <header className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between max-w-[1440px] mx-auto px-4 sm:px-8 pt-3.5 sm:pt-5 pointer-events-none transition-all duration-300">
+      <header className="fixed top-[44px] sm:top-[48px] left-0 right-0 z-50 flex items-center justify-between max-w-[1440px] mx-auto px-4 sm:px-8 pt-3.5 sm:pt-5 pointer-events-none transition-all duration-300">
         
         {/* ========================================================= */}
         {/* 1. SEPARATE STANDALONE BIG LOGO CAPSULE (Left)           */}

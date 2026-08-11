@@ -24,7 +24,7 @@ export const Services: React.FC<ServicesProps> = ({ onOpenPickup = () => {} }) =
         "ESG & Compliance",
       ],
       ctaText: "Explore ArkaArya Green",
-      link: "#green",
+      link: "/services/green",
     },
     {
       id: "02",
@@ -37,7 +37,7 @@ export const Services: React.FC<ServicesProps> = ({ onOpenPickup = () => {} }) =
         "Clean Energy Consulting",
       ],
       ctaText: "Explore ArkaArya Renew",
-      link: "#renew",
+      link: "/services/renew",
     },
     {
       id: "03",
@@ -50,7 +50,7 @@ export const Services: React.FC<ServicesProps> = ({ onOpenPickup = () => {} }) =
         "Enterprise Systems",
       ],
       ctaText: "Explore ArkaArya Quantum",
-      link: "#quantum",
+      link: "/services/quantum",
     }
   ];
 
@@ -358,7 +358,7 @@ const QuantumIllustration = ({ isHovered }: { isHovered: boolean }) => (
   <div className="relative w-full h-full flex items-center justify-center text-[#00264A]">
     
     {/* Grid Background */}
-    <div className="absolute inset-0 bg-[linear-gradient(to_right,#00264A06_1px,transparent_1px),linear-gradient(to_bottom,#00264A06_1px,transparent_1px)] bg-[size:16px_16px] pointer-events-none" />
+    <div className="absolute inset-0 pointer-events-none" />
 
     {/* Central CPU */}
     <motion.div 

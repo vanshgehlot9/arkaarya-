@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Outfit, Playfair_Display, Lora, DM_Sans } from "next/font/google";
+import { AnnouncementBar } from "@/components/AnnouncementBar";
 import "./globals.css";
 
 const inter = Inter({
@@ -46,7 +47,10 @@ export default function RootLayout({
       className={`${inter.variable} ${outfit.variable} ${lora.variable} ${dmSans.variable}`}
     >
       <body className="antialiased bg-[#F8FAF7] text-[#121212]">
-        {children}
+        <AnnouncementBar />
+        <div className="pt-[44px] sm:pt-[48px]">
+          {children}
+        </div>
       </body>
     </html>
   );

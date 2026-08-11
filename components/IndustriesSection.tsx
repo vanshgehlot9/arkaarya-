@@ -23,8 +23,6 @@ const ITIllustration = ({ isHovered }: { isHovered: boolean }) => (
     transition={{ duration: 0.3, ease: "easeOut" }}
     className="relative w-full h-full flex items-center justify-center text-[#00264A] will-change-transform"
   >
-    <div className="absolute inset-0 bg-[linear-gradient(to_right,#00264A10_1px,transparent_1px),linear-gradient(to_bottom,#00264A10_1px,transparent_1px)] bg-[size:20px_20px]" />
-    
     <div className="relative w-24 h-32 bg-white border-2 border-[#00264A] rounded-lg shadow-sm flex flex-col p-2 gap-2 z-10">
       {[1, 2, 3, 4].map((i) => (
         <div key={i} className="w-full h-5 border border-[#E3E8E4] rounded-sm flex items-center px-2 justify-between bg-[#F7F9F6]">
@@ -45,8 +43,6 @@ const HealthIllustration = ({ isHovered }: { isHovered: boolean }) => (
     transition={{ duration: 0.3, ease: "easeOut" }}
     className="relative w-full h-full flex items-center justify-center text-[#00264A] will-change-transform"
   >
-    <div className="absolute inset-0 bg-[linear-gradient(to_right,#00264A05_1px,transparent_1px)] bg-[size:10px_10px]" />
-    
     <div className="relative w-32 h-24 bg-white border-2 border-[#00264A] rounded-xl shadow-sm p-2 z-10 flex flex-col">
       <div className="w-full h-full bg-[#F7F9F6] border border-[#E3E8E4] rounded-md overflow-hidden relative">
         <svg className="w-full h-full absolute inset-0" viewBox="0 0 100 50">
@@ -125,8 +121,6 @@ const MfgIllustration = ({ isHovered }: { isHovered: boolean }) => (
     transition={{ duration: 0.3, ease: "easeOut" }}
     className="relative w-full h-full flex items-center justify-center text-[#00264A] will-change-transform"
   >
-    <div className="absolute inset-0 bg-[linear-gradient(to_right,#00264A10_1px,transparent_1px),linear-gradient(to_bottom,#00264A10_1px,transparent_1px)] bg-[size:15px_15px] skew-y-6" />
-    
     <div className="relative w-36 h-28 bg-white border-2 border-[#00264A] rounded-lg shadow-sm z-10 flex items-center p-3 gap-3">
       <div className="w-12 h-12 rounded-full border-4 border-[#00264A] border-dashed flex items-center justify-center">
          <div className={`w-full h-full rounded-full border-[6px] border-[#629A13] border-t-transparent border-b-transparent transition-transform duration-[3000ms] ${isHovered ? 'rotate-180' : 'rotate-0'}`} />
@@ -308,7 +302,7 @@ const IndustryCard = React.memo(({ ind }: IndustryCardProps) => {
 
       {/* CTA */}
       <a 
-        href={`#industry-${ind.id}`}
+        href={`/industries/${ind.id}`}
         className={`mt-auto inline-flex items-center gap-2 font-bold text-xs transition-colors duration-300 w-fit ${isHovered ? 'text-[#629A13]' : 'text-[#00264A]'}`}
       >
         <span className="tracking-wide">Explore Industry</span>
@@ -325,7 +319,7 @@ IndustryCard.displayName = "IndustryCard";
 // Industries Configuration
 // ==========================================
 
-const industries = [
+export const industries = [
   {
     id: "01",
     title: "IT & Data Centers",
@@ -466,10 +460,8 @@ export const IndustriesSection: React.FC<IndustriesSectionProps> = ({ onOpenPick
   return (
     <section id="industries" className="relative w-full py-24 sm:py-32 bg-[#F7F9F6] border-b border-[#E3E8E4] overflow-hidden">
       
-      {/* Optimized Background Elements (Removed heavy blurs) */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,#00264A04_1px,transparent_1px),linear-gradient(to_bottom,#00264A04_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
-
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-8 lg:px-10 mb-12">
+      {/* Section Background Grid removed */}
+      <div className="max-w-[1440px] mx-auto relative z-10 px-6 sm:px-8 lg:px-10 mb-12">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
           
           <motion.div 

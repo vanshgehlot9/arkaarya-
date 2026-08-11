@@ -98,9 +98,7 @@ export const WhyChooseUs: React.FC<WhyChooseUsProps> = ({ onOpenPickup = () => {
           transition={{ duration: 0.7, ease: "easeOut" }}
           className="relative w-full rounded-[2.5rem] bg-[#001A33] border border-[#00264A] shadow-[0_30px_60px_rgba(0,38,74,0.15)] overflow-hidden text-white"
         >
-          {/* Subtle tech background pattern */}
-          <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff08_1px,transparent_1px),linear-gradient(to_bottom,#ffffff08_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none" />
-          
+          {/* Grid Background Removed */}          
           <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-[#629A13]/10 rounded-full blur-3xl pointer-events-none translate-x-1/3 -translate-y-1/3" />
 
           <div className="relative z-10 p-10 sm:p-16 lg:p-20 flex flex-col lg:flex-row items-center gap-12 lg:gap-16">

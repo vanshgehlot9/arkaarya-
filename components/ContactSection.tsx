@@ -1,7 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { Mail, Phone, MapPin, Send, CheckCircle2, Clock, ShieldCheck, Building2 } from "lucide-react";
+
+import { Mail, Phone, MapPin, Send, CheckCircle2, Clock, ShieldCheck, Building2, Loader2 } from "lucide-react";
+import { submitContact } from "@/app/actions/submitContact";
 
 interface ContactSectionProps {
   onOpenPickup?: () => void;
@@ -19,9 +21,31 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenPickup = (
     message: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setIsSubmitting(true);
+    setSubmitError("");
+
+    const form = new FormData();
+    Object.entries(formState).forEach(([key, value]) => {
+      form.append(key, value);
+    });
+
+    try {
+      const result = await submitContact(form);
+      if (result.success) {
+        setSubmitted(true);
+      } else {
+        setSubmitError(result.error || "An error occurred");
+      }
+    } catch (err) {
+      setSubmitError("Failed to submit. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -222,16 +246,29 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenPickup = (
                   />
                 </div>
 
+                {submitError && (
+                  <div className="text-red-500 text-sm font-semibold p-2 bg-red-50 rounded-lg border border-red-100">
+                    {submitError}
+                  </div>
+                )}
+
                 <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
                   <span className="text-xs text-[#5E6672]">
                     * All inquiries protected by strict non-disclosure agreement.
                   </span>
                   <button
                     type="submit"
-                    className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-3.5 rounded-full bg-[#629A13] hover:bg-[#528210] text-white font-semibold text-sm btn-eco-glow transition-all active:scale-95 border border-[#629A13]"
+                    disabled={isSubmitting}
+                    className="w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3.5 rounded-xl bg-[#00264A] text-white font-bold text-sm transition-all duration-300 hover:bg-[#001A33] hover:shadow-[0_10px_25px_rgba(0,38,74,0.3)] hover:-translate-y-0.5 group disabled:opacity-70 disabled:hover:-translate-y-0 disabled:hover:shadow-none"
                   >
-                    <Send size={16} />
-                    <span>Submit Inquiry</span>
+                    {isSubmitting ? (
+                      <Loader2 size={18} className="animate-spin" />
+                    ) : (
+                      <>
+                        <span>Submit Corporate Inquiry</span>
+                        <Send size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+                      </>
+                    )}
                   </button>
                 </div>
               </form>
