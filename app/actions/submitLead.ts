@@ -27,7 +27,7 @@ export async function submitLead(formData: FormData) {
   } catch (error: unknown) {
     console.error("Lead submission error:", error);
     if (error instanceof z.ZodError) {
-      return { success: false, error: (error as z.ZodError<any>).errors[0].message };
+      return { success: false, error: (error as any).errors[0].message };
     }
     return { success: false, error: "An unexpected error occurred." };
   }
