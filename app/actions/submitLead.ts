@@ -24,10 +24,10 @@ export async function submitLead(formData: FormData) {
     const result = await DB.leads.create(validatedData);
 
     return { success: true, data: result };
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Lead submission error:", error);
     if (error instanceof z.ZodError) {
-      return { success: false, error: error.errors[0].message };
+      return { success: false, error: (error as z.ZodError<any>).errors[0].message };
     }
     return { success: false, error: "An unexpected error occurred." };
   }
