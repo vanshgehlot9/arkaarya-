@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, Code, Users, Leaf } from "lucide-react";
 
 interface HeroProps {
   onOpenPickup?: () => void;
@@ -14,7 +14,7 @@ export const Hero: React.FC<HeroProps> = ({
 }) => {
   return (
     <section 
-      className="relative w-full min-h-[580px] sm:min-h-[620px] lg:min-h-[660px] bg-white overflow-hidden flex items-center pt-28 sm:pt-32 lg:pt-24 pb-12 sm:pb-16 border-b border-[#E3E8E4]" 
+      className="relative w-full min-h-[580px] sm:min-h-[620px] lg:min-h-[660px] bg-white overflow-hidden flex items-center pt-12 sm:pt-16 lg:pt-12 pb-12 sm:pb-16 border-b border-[#E3E8E4]" 
       id="home"
     >
       {/* 
@@ -56,17 +56,33 @@ export const Hero: React.FC<HeroProps> = ({
 
           {/* Subtitle in Slate/Gray Secondary Text */}
           <p 
-            className="text-[#5E6672] text-sm sm:text-base leading-relaxed mb-7 max-w-sm sm:max-w-md font-sans"
+            className="text-[#5E6672] text-sm sm:text-base leading-relaxed mb-6 max-w-sm sm:max-w-md font-sans"
             style={{ fontFamily: "var(--font-sans)" }}
           >
             Preserving nature, responsibly recycling electronic waste, and recovering critical raw materials for a sustainable circular future.
           </p>
 
+          {/* New Icon Array */}
+          <div className="flex flex-wrap items-center gap-4 mb-7">
+            <div className="flex items-center gap-1.5 text-[13px] font-semibold text-[#00264A] bg-[#F8FAF7] border border-[#E3E8E4] px-3.5 py-2 rounded-lg shadow-sm">
+              <Code size={16} className="text-[#629A13]" />
+              IT Consulting & Software Solutions
+            </div>
+            <div className="flex items-center gap-1.5 text-[13px] font-semibold text-[#00264A] bg-[#F8FAF7] border border-[#E3E8E4] px-3.5 py-2 rounded-lg shadow-sm">
+              <Users size={16} className="text-[#629A13]" />
+              Workforce Solutions
+            </div>
+            <div className="flex items-center gap-1.5 text-[13px] font-semibold text-[#00264A] bg-[#F8FAF7] border border-[#E3E8E4] px-3.5 py-2 rounded-lg shadow-sm">
+              <Leaf size={16} className="text-[#629A13]" />
+              Bio Products
+            </div>
+          </div>
+
           {/* Action Buttons in Deep Blue & Eco Green */}
           <div className="flex flex-wrap items-center gap-3.5">
             <button
               onClick={onOpenPickup}
-              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#629A13] hover:bg-[#528210] text-white font-semibold text-xs sm:text-sm btn-eco-glow transition-all duration-200 active:scale-95 border border-[#629A13]"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-full bg-[#629A13] hover:bg-[#528210] text-white font-semibold text-xs sm:text-sm transition-all duration-200 active:scale-95 border border-[#629A13]"
             >
               <span>Schedule Pickup</span>
               <ArrowRight size={16} />

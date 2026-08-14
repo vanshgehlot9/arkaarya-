@@ -6,21 +6,64 @@ import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, ShieldCheck, CheckCircle2, Recycle, ShieldAlert, Cpu } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { industries } from "@/components/IndustriesSection";
+import { illustrationMap } from "@/components/IndustriesSection";
+import { createClient } from "@/lib/supabase-browser";
+import { Loader2 } from "lucide-react";
 
 export default function IndustryPage() {
   const router = useRouter();
   const params = useParams();
   const id = params?.id as string;
 
-  const industry = industries.find((ind) => ind.id === id);
+  const [industry, setIndustry] = React.useState<any>(null);
+  const [loading, setLoading] = React.useState(true);
+  const [error, setError] = React.useState(false);
 
-  // If the ID is invalid, show 404
-  if (!industry) {
+  React.useEffect(() => {
+    async function fetchIndustry() {
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from("industries")
+          .select("*")
+          .eq("display_id", id)
+          .single();
+
+        if (error || !data) {
+          setError(true);
+        } else {
+          setIndustry({
+            ...data,
+            desc: data.description,
+            illustration: illustrationMap[data.illustration_name]
+          });
+        }
+      } catch (err) {
+        console.error("Error fetching industry:", err);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    }
+    
+    if (id) {
+      fetchIndustry();
+    }
+  }, [id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8FAF7] text-[#00264A]">
+        <Loader2 className="w-12 h-12 animate-spin text-[#629A13] mb-4" />
+        <p className="font-bold tracking-widest text-sm animate-pulse">LOADING INDUSTRY</p>
+      </div>
+    );
+  }
+
+  if (error || !industry) {
     notFound();
   }
 
-  // The custom Framer Motion illustration for this industry
   const Illustration = industry.illustration;
 
   return (
@@ -58,7 +101,7 @@ export default function IndustryPage() {
               </div>
               
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-[#00264A] leading-[1.1]">
-                {industry.title.split(" & ").map((word, index, array) => (
+                {industry.title.split(" & ").map((word: string, index: number, array: string[]) => (
                   <React.Fragment key={index}>
                     {word} {index === 0 && array.length > 1 && <>&<br/></>}
                   </React.Fragment>

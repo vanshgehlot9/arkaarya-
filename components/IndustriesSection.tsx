@@ -5,8 +5,9 @@ import { motion, useScroll, useSpring } from "framer-motion";
 import { 
   ArrowRight, Server, Activity, Landmark, Laptop, Factory, 
   GraduationCap, Store, Package, Building, Plane, 
-  Cpu, Network, HeartPulse, Shield, ScanBarcode, CreditCard, Monitor 
+  Cpu, Network, HeartPulse, Shield, ScanBarcode, CreditCard, Monitor, Loader2
 } from "lucide-react";
+import { createClient } from "@/lib/supabase-browser";
 
 interface IndustriesSectionProps {
   onOpenPickup?: () => void;
@@ -51,7 +52,7 @@ const HealthIllustration = ({ isHovered }: { isHovered: boolean }) => (
             fill="none"
             stroke={isHovered ? "#629A13" : "#00264A40"}
             strokeWidth="2"
-            initial={{ pathLength: 1 }}
+            initial={{ pathLength: 1, strokeDashoffset: 100 }}
             animate={{ strokeDashoffset: isHovered ? [100, 0] : 100, strokeDasharray: "100 100" }}
             transition={{ duration: 1.5, repeat: isHovered ? Infinity : 0, ease: "linear" }}
           />
@@ -319,100 +320,59 @@ IndustryCard.displayName = "IndustryCard";
 // Industries Configuration
 // ==========================================
 
-export const industries = [
-  {
-    id: "01",
-    title: "IT & Data Centers",
-    desc: "Secure decommissioning of servers, networking hardware, and enterprise storage systems.",
-    icon: Server,
-    illustration: ITIllustration,
-    metadata: "SYS-01: NETWORK/STORAGE",
-  },
-  {
-    id: "02",
-    title: "Healthcare & MedTech",
-    desc: "Compliant disposal of diagnostic equipment, laboratory electronics, and patient monitors.",
-    icon: Activity,
-    illustration: HealthIllustration,
-    metadata: "SYS-02: MED/DIAGNOSTIC",
-  },
-  {
-    id: "03",
-    title: "Banking & Finance",
-    desc: "Cryptographic data destruction and secure recycling of ATMs, POS, and financial hardware.",
-    icon: Landmark,
-    illustration: BankIllustration,
-    metadata: "SYS-03: FIN/SECURE",
-  },
-  {
-    id: "04",
-    title: "Corporate & Enterprise",
-    desc: "Lifecycle management for office electronics, laptops, desktops, and communication arrays.",
-    icon: Laptop,
-    illustration: CorpIllustration,
-    metadata: "SYS-04: ENTERPRISE/IT",
-  },
-  {
-    id: "05",
-    title: "Manufacturing & Industrial",
-    desc: "Recycling of PLCs, industrial control panels, motors, and heavy automation electronics.",
-    icon: Factory,
-    illustration: MfgIllustration,
-    metadata: "SYS-05: HEAVY/AUTO",
-  },
-  {
-    id: "06",
-    title: "Education & Universities",
-    desc: "Bulk recycling programs for campus computer labs, smart boards, and research hardware.",
-    icon: GraduationCap,
-    illustration: EduIllustration,
-    metadata: "SYS-06: ACADEMIC/LAB",
-  },
-  {
-    id: "07",
-    title: "Retail & Supermarkets",
-    desc: "Management of barcode scanners, receipt printers, digital signage, and POS systems.",
-    icon: Store,
-    illustration: RetailIllustration,
-    metadata: "SYS-07: POS/SIGNAGE",
-  },
-  {
-    id: "08",
-    title: "E-Commerce & Logistics",
-    desc: "Disposal of warehouse automation tech, handheld scanners, and sorting equipment.",
-    icon: Package,
-    illustration: LogisticsIllustration,
-    metadata: "SYS-08: WAREHOUSE/LOG",
-  },
-  {
-    id: "09",
-    title: "Government & Public Sector",
-    desc: "High-security destruction and recycling for confidential infrastructure and servers.",
-    icon: Building,
-    illustration: GovIllustration,
-    metadata: "SYS-09: SEC/PUBLIC",
-  },
-  {
-    id: "10",
-    title: "Hospitality & Aviation",
-    desc: "Recycling of hotel technology, airport kiosks, display systems, and check-in electronics.",
-    icon: Plane,
-    illustration: HospIllustration,
-    metadata: "SYS-10: TRAVEL/HOSP",
-  },
-];
+export const iconMap: Record<string, any> = {
+  Server, Activity, Landmark, Laptop, Factory, GraduationCap, Store, Package, Building, Plane
+};
+
+export const illustrationMap: Record<string, any> = {
+  ITIllustration, HealthIllustration, BankIllustration, CorpIllustration, MfgIllustration, 
+  EduIllustration, RetailIllustration, LogisticsIllustration, GovIllustration, HospIllustration
+};
 
 export const IndustriesSection: React.FC<IndustriesSectionProps> = ({ onOpenPickup }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   
   // High-performance scroll tracking via Framer Motion
   // Replaces expensive React state updates on every scroll event
-  const { scrollXProgress } = useScroll({ container: scrollRef });
+  const { scrollXProgress } = useScroll({ container: scrollRef, layoutEffect: false });
   
   // Add a slight spring physics to the progress bar for smoothness
   const smoothProgress = useSpring(scrollXProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
   
   const [isHoveringRail, setIsHoveringRail] = useState(false);
+  const [industries, setIndustries] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchIndustries = async () => {
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from("industries")
+          .select("*")
+          .eq("is_published", true)
+          .order("display_order", { ascending: true });
+
+        if (error) throw error;
+
+        if (data) {
+          const mappedData = data.map((item: any) => ({
+            ...item,
+            id: item.display_id,
+            desc: item.description,
+            icon: iconMap[item.icon_name] || Server,
+            illustration: illustrationMap[item.illustration_name] || ITIllustration,
+          }));
+          setIndustries(mappedData);
+        }
+      } catch (err) {
+        console.error("Error fetching industries:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchIndustries();
+  }, []);
 
   // Throttled / Managed Custom Wheel Scroll
   useEffect(() => {
@@ -509,51 +469,64 @@ export const IndustriesSection: React.FC<IndustriesSectionProps> = ({ onOpenPick
         whileInView={{ opacity: 1, x: 0 }}
         viewport={{ once: true, margin: "-100px" }}
         transition={{ duration: 0.6, ease: "easeOut", delay: 0.1 }}
-        className="w-full relative"
+        className="w-full relative min-h-[400px]"
         onMouseEnter={() => setIsHoveringRail(true)}
         onMouseLeave={() => setIsHoveringRail(false)}
       >
-        <div 
-          ref={scrollRef}
-          className="flex gap-6 overflow-x-auto snap-x snap-mandatory hide-scrollbar px-6 sm:px-8 lg:px-10 pb-8 cursor-grab active:cursor-grabbing will-change-scroll"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-        >
-          {industries.map((ind) => (
-            <IndustryCard key={ind.id} ind={ind} />
-          ))}
-        </div>
+        {isLoading ? (
+          <div className="absolute inset-0 flex flex-col items-center justify-center text-[#629A13] gap-4">
+            <Loader2 className="w-10 h-10 animate-spin" />
+            <p className="text-[#00264A] font-medium text-sm animate-pulse">Loading Industries...</p>
+          </div>
+        ) : industries.length === 0 ? (
+          <div className="absolute inset-0 flex items-center justify-center text-[#5E6672] font-medium">
+            No industries published yet.
+          </div>
+        ) : (
+          <div 
+            ref={scrollRef}
+            className="flex gap-6 overflow-x-auto snap-x snap-mandatory hide-scrollbar px-6 sm:px-8 lg:px-10 pb-8 cursor-grab active:cursor-grabbing will-change-scroll"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {industries.map((ind) => (
+              <IndustryCard key={ind.id} ind={ind} />
+            ))}
+          </div>
+        )}
       </motion.div>
 
       {/* Bottom Navigation Controls */}
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-8 lg:px-10 mt-2">
-        <div className="flex items-center justify-between border-t border-[#E3E8E4] pt-6">
-          <span className="text-sm font-serif font-bold text-[#00264A]">01</span>
-          
-          <div className="flex-1 mx-6 h-px bg-[#E3E8E4] relative overflow-hidden">
-            <motion.div 
-              className="absolute top-0 left-0 h-full bg-[#629A13] w-full origin-left"
-              style={{ scaleX: smoothProgress }}
-            />
-          </div>
-          
-          <span className="text-sm font-serif font-bold text-[#00264A] mr-8">10</span>
+      {!isLoading && industries.length > 0 && (
+        <div className="max-w-[1440px] mx-auto px-6 sm:px-8 lg:px-10 mt-2">
+          <div className="flex items-center justify-between border-t border-[#E3E8E4] pt-6">
+            <span className="text-sm font-serif font-bold text-[#00264A]">{industries[0]?.id || "01"}</span>
+            
+            <div className="flex-1 mx-6 h-px bg-[#E3E8E4] relative overflow-hidden">
+              <motion.div 
+                className="absolute top-0 left-0 h-full bg-[#629A13] w-full origin-left"
+                style={{ scaleX: smoothProgress }}
+              />
+            </div>
+            
+            <span className="text-sm font-serif font-bold text-[#00264A] mr-8">{String(industries.length).padStart(2, '0')}</span>
 
-          <div className="flex gap-2">
-            <button 
-              onClick={() => scrollBy(-1)}
-              className="w-10 h-10 rounded-full border border-[#E3E8E4] bg-white text-[#00264A] flex items-center justify-center hover:bg-[#F7F9F6] hover:border-[#629A13] hover:text-[#629A13] transition-all"
-            >
-              <ArrowRight size={16} className="rotate-180" />
-            </button>
-            <button 
-              onClick={() => scrollBy(1)}
-              className="w-10 h-10 rounded-full border border-[#E3E8E4] bg-white text-[#00264A] flex items-center justify-center hover:bg-[#F7F9F6] hover:border-[#629A13] hover:text-[#629A13] transition-all"
-            >
-              <ArrowRight size={16} />
-            </button>
+            <div className="flex gap-2">
+              <button 
+                onClick={() => scrollBy(-1)}
+                className="w-10 h-10 rounded-full border border-[#E3E8E4] bg-white text-[#00264A] flex items-center justify-center hover:bg-[#F7F9F6] hover:border-[#629A13] hover:text-[#629A13] transition-all"
+              >
+                <ArrowRight size={16} className="rotate-180" />
+              </button>
+              <button 
+                onClick={() => scrollBy(1)}
+                className="w-10 h-10 rounded-full border border-[#E3E8E4] bg-white text-[#00264A] flex items-center justify-center hover:bg-[#F7F9F6] hover:border-[#629A13] hover:text-[#629A13] transition-all"
+              >
+                <ArrowRight size={16} />
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      )}
       
     </section>
   );

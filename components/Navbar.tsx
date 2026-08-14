@@ -1,66 +1,78 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 import { motion, AnimatePresence } from "framer-motion";
-import { UploadCloud, Calculator, Menu, X, ArrowRight, Sparkles } from "lucide-react";
+import { UploadCloud, Sparkles, Menu, X } from "lucide-react";
 
-interface NavbarProps {
-  onOpenPickup: () => void;
-  onOpenCalculator: () => void;
-}
-
-const navItems = [
-  { name: "Home", href: "#home" },
-  { name: "Industries", href: "#industries" },
-  { name: "Who We Are", href: "#about" },
-  { name: "Services", href: "#services" },
-  { name: "Lifecycle", href: "#lifecycle" },
-  { name: "Impact", href: "#impact" },
-  { name: "Trust & Clients", href: "#testimonials" },
-  { name: "Contact", href: "#contact" },
+const navLinks = [
+  { name: "Home", href: "/" },
+  { name: "Impact", href: "/#impact" },
+  { name: "Who We Are", href: "/#about" },
+  { name: "Services", href: "/#services" },
+  { name: "Industries", href: "/#industries" },
+  { name: "Social Activities", href: "/#social-activities" },
+  { name: "Trust & Clients", href: "/#testimonials" },
+  { name: "Careers", href: "/careers" },
+  { name: "Contact", href: "/#contact" },
 ];
 
-export const Navbar: React.FC<NavbarProps> = ({ onOpenPickup, onOpenCalculator }) => {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileMenu, setMobileMenu] = useState(false);
-  const [active, setActive] = useState("Home");
-  const [hovered, setHovered] = useState<string | null>(null);
+interface NavbarProps {
+  onOpenPickup?: () => void;
+  onOpenCalculator?: () => void;
+}
 
+export const Navbar = ({ onOpenPickup = () => { }, onOpenCalculator = () => { } }: NavbarProps) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
+  const [scrolled, setScrolled] = useState(false);
+  const [active, setActive] = useState("Home");
+
+  // Close mobile menu on route change
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
+  // Handle scroll for sticky background
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > 20) {
-        setScrolled(true);
-      } else {
-        setScrolled(false);
-      }
+      setScrolled(window.scrollY > 20);
     };
-
-    window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  // Intersection Observer for scroll spy
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const activeItem = navItems.find((item) => item.href === `#${entry.target.id}`);
-            if (activeItem) {
-              setActive(activeItem.name);
-            }
+        const visibleSections = entries.filter((entry) => entry.isIntersecting);
+        if (visibleSections.length > 0) {
+          visibleSections.sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+          const activeId = visibleSections[0].target.id;
+          const activeItem = navLinks.find(
+            (item) => item.href === `#${activeId}` || (activeId === "home" && item.href === "/")
+          );
+          if (activeItem) {
+            setActive(activeItem.name);
           }
-        });
+        }
       },
-      {
-        rootMargin: "-20% 0px -60% 0px",
-      }
+      { rootMargin: "-20% 0px -60% 0px" }
     );
 
-    navItems.forEach((item) => {
-      const element = document.querySelector(item.href);
-      if (element) {
-        observer.observe(element);
+    navLinks.forEach((item) => {
+      if (item.href.startsWith("#")) {
+        try {
+          const element = document.querySelector(item.href);
+          if (element) {
+            observer.observe(element);
+          }
+        } catch (e) {
+          // ignore invalid selectors
+        }
       }
     });
 
@@ -68,244 +80,138 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenPickup, onOpenCalculator }
   }, []);
 
   return (
-    <>
-      {/* 
-        FLOATING DUAL-CAPSULE SYSTEM
-        Logo is completely separate in its own prominent capsule on the left.
-        Navigation & Actions are in a dedicated interactive glass capsule on the right.
-      */}
-      <header className="fixed top-[44px] sm:top-[48px] left-0 right-0 z-50 flex items-center justify-between max-w-[1440px] mx-auto px-4 sm:px-8 pt-3.5 sm:pt-5 pointer-events-none transition-all duration-300">
-        
-        {/* ========================================================= */}
-        {/* 1. SEPARATE STANDALONE BIG LOGO CAPSULE (Left)           */}
-        {/* ========================================================= */}
-        <motion.div
-          initial={{ y: -30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="pointer-events-auto"
-        >
-          <Link
-            href="#home"
-            onClick={() => setActive("Home")}
-            className="flex items-center group transition-transform duration-300 active:scale-95"
-          >
-            <div
-              className={`bg-white/95 backdrop-blur-2xl border border-[#00264A]/12 rounded-full px-5 py-2.5 sm:px-7 sm:py-3 shadow-[0_12px_35px_rgba(0,38,74,0.08)] hover:shadow-[0_16px_45px_rgba(0,38,74,0.15)] hover:border-[#629A13]/50 hover:scale-[1.03] transition-all duration-300 flex items-center justify-center ${
-                scrolled ? "py-2 sm:py-2.5 px-4 sm:px-6" : ""
-              }`}
-            >
-              {/* BIG CLEAR LOGO */}
-              <img
-                src="/ArkaArya_Logo.png"
-                alt="ArkaArya Private Limited"
-                className="h-12 sm:h-15 md:h-18 w-auto object-contain transition-all duration-300 drop-shadow-xs"
-              />
-            </div>
-          </Link>
-        </motion.div>
-
-        {/* ========================================================= */}
-        {/* 2. SEPARATE STANDALONE NAVIGATION & ACTION CAPSULE (Right) */}
-        {/* ========================================================= */}
-        <motion.div
-          initial={{ y: -30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.5, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
-          className={`pointer-events-auto rounded-full transition-all duration-300 flex items-center gap-3 border ${
-            scrolled
-              ? "bg-white/95 backdrop-blur-2xl border-[#00264A]/12 shadow-[0_16px_45px_rgba(0,38,74,0.10)] py-2 sm:py-2.5 px-4 sm:px-6"
-              : "bg-white/90 backdrop-blur-xl border-[#00264A]/09 shadow-[0_10px_35px_rgba(0,38,74,0.06)] py-2.5 sm:py-3 px-4 sm:px-6"
-          }`}
-        >
-          {/* DESKTOP NAVIGATION WITH MAGNETIC HOVER GLIDER */}
-          <nav
-            className="hidden xl:flex items-center gap-1 relative py-0.5 px-1 rounded-full"
-            onMouseLeave={() => setHovered(null)}
-          >
-            {navItems.map((item) => {
-              const isActive = active === item.name;
-              const isHovered = hovered === item.name;
-
-              return (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  onClick={() => setActive(item.name)}
-                  onMouseEnter={() => setHovered(item.name)}
-                  className={`relative px-3.5 py-1.5 text-[13.5px] font-medium transition-colors duration-200 rounded-full select-none ${
-                    isActive
-                      ? "text-[#629A13] font-semibold"
-                      : "text-[#00264A] hover:text-[#00264A]"
-                  }`}
-                >
-                  {/* Magnetic Hover Glider */}
-                  {isHovered && !isActive && (
-                    <motion.div
-                      layoutId="navHoverGlider"
-                      className="absolute inset-0 bg-[#00264A]/06 rounded-full z-0 border border-[#00264A]/10"
-                      transition={{ type: "spring", stiffness: 450, damping: 35 }}
-                    />
-                  )}
-
-                  {/* Active Indicator Pill */}
-                  {isActive && (
-                    <motion.div
-                      layoutId="navActivePill"
-                      className="absolute inset-0 bg-[#EBF5DC] rounded-full z-0 border border-[#629A13]/35 shadow-xs"
-                      transition={{ type: "spring", stiffness: 450, damping: 35 }}
-                    />
-                  )}
-
-                  <span className="relative z-10 flex items-center gap-1.5">
-                    {isActive && <span className="w-1.5 h-1.5 rounded-full bg-[#629A13] animate-pulse" />}
-                    {item.name}
-                  </span>
-                </Link>
-              );
-            })}
-          </nav>
-
-          {/* Vertical Separator */}
-          <div className="hidden xl:block w-[1px] h-5 bg-[#E3E8E4] mx-0.5" />
-
-          {/* Action Buttons */}
-          <div className="flex items-center gap-2 sm:gap-2.5">
-            {/* Secondary CTA: Ghost Impact Calculator */}
-            <button
-              onClick={onOpenCalculator}
-              className="hidden md:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full text-xs sm:text-[13px] font-semibold text-[#00264A] bg-[#F8FAF7] hover:bg-[#F2F5F3] border border-[#E3E8E4] hover:border-[#00264A]/25 hover:-translate-y-0.5 transition-all duration-300 shadow-2xs group"
-              title="Calculate Carbon & Mineral Impact"
-            >
-              <Calculator size={15} className="text-[#629A13] group-hover:rotate-12 transition-transform duration-300" />
-              <span>Impact Calculator</span>
-            </button>
-
-            {/* Primary CTA: Premium Eco Green Rounded Button with Gloss Hover */}
-            <button
-              onClick={onOpenPickup}
-              className="relative overflow-hidden inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#629A13] to-[#528210] hover:from-[#528210] hover:to-[#456e0d] text-white font-semibold text-xs sm:text-[13.5px] btn-eco-glow hover:-translate-y-0.5 transition-all duration-300 active:scale-95 border border-[#629A13]/60 group shadow-sm"
-            >
-              {/* Shimmer Light Beam Effect on Hover */}
-              <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/25 to-transparent pointer-events-none" />
-              
-              <UploadCloud size={16} className="group-hover:scale-110 transition-transform duration-300" />
-              <span>Book a Pickup</span>
-              <ArrowRight size={14} className="opacity-80 group-hover:translate-x-0.5 transition-transform duration-300" />
-            </button>
-
-            {/* Mobile Hamburger Toggle */}
-            <button
-              onClick={() => setMobileMenu(true)}
-              className="xl:hidden p-2 rounded-full text-[#00264A] hover:bg-[#F2F5F3] transition-colors border border-[#E3E8E4]"
-              aria-label="Open menu"
-            >
-              <Menu size={20} />
-            </button>
-          </div>
-        </motion.div>
-      </header>
-
-      {/* Premium Mobile Slide-Out Drawer Menu */}
-      <AnimatePresence>
-        {mobileMenu && (
-          <div className="fixed inset-0 z-50 xl:hidden">
-            {/* Backdrop */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setMobileMenu(false)}
-              className="absolute inset-0 bg-[#001A33]/60 backdrop-blur-md"
+    <header className={cn(
+      "fixed top-0 left-0 right-0 z-50 h-[80px] md:h-[90px] transition-all duration-500 bg-white shadow-sm border-b border-[#E3E8E4]",
+      scrolled ? "shadow-md" : ""
+    )}>
+      <div className="mx-auto flex h-full max-w-[1440px] items-center justify-between px-5 md:px-8 lg:px-12">
+        {/* Logo - Aligned Left */}
+        <Link href="/" onClick={() => setActive("Home")} className="flex items-center gap-3 z-50 shrink-0 group">
+          <div className="relative h-12 md:h-14 transition-transform duration-500 group-hover:scale-105">
+            <img
+              src="/ArkaAryaPvtLtd_Logo_v3.0.png"
+              alt="ArkaArya Private Limited"
+              className="h-full w-auto object-contain"
             />
+          </div>
+        </Link>
 
-            {/* Drawer */}
+        {/* Desktop Navigation - Centered (Wait, might not fit centered with actions on right. Using standard alignment) */}
+        <nav className="hidden xl:flex items-center gap-4">
+          {navLinks.map((link) => {
+            const isActive = active === link.name;
+            return (
+              <Link
+                key={link.name}
+                href={link.href}
+                onClick={() => setActive(link.name)}
+                className={cn(
+                  "relative px-3 py-2 text-[13px] font-medium tracking-wide transition-all duration-300 whitespace-nowrap rounded-full",
+                  isActive ? "text-[#629A13]" : "text-[#00264A] hover:bg-[#F8FAF7]"
+                )}
+              >
+                {link.name}
+                {isActive && (
+                  <motion.div
+                    layoutId="navbar-indicator"
+                    className="absolute -bottom-1 left-3 right-3 h-[2px] bg-[#629A13] rounded-t-full"
+                    initial={false}
+                    transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                  />
+                )}
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* Desktop Actions - Aligned Right */}
+        <div className="hidden xl:flex items-center gap-3 shrink-0">
+          <button
+            onClick={onOpenCalculator}
+            className="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-full text-xs font-semibold text-[#00264A] bg-[#F8FAF7] hover:bg-[#F2F5F3] border border-[#E3E8E4] hover:border-[#00264A]/25 transition-all duration-300"
+          >
+            <Sparkles size={15} className="text-[#629A13]" />
+            <span>Impact Calculator</span>
+          </button>
+
+          <button
+            onClick={onOpenPickup}
+            className="inline-flex items-center justify-center gap-2 rounded-full bg-[#629A13] px-5 py-2.5 text-xs font-semibold text-white transition-all duration-300 hover:bg-[#528210] active:scale-95"
+          >
+            <UploadCloud size={16} />
+            Book a Pickup
+          </button>
+        </div>
+
+        {/* Mobile Menu Toggle */}
+        <div className="flex xl:hidden items-center gap-4 z-50">
+          <button
+            className="flex flex-col justify-center items-center w-10 h-10 rounded-full bg-white/90 shadow-sm border border-[#E3E8E4] backdrop-blur-sm"
+            onClick={() => setIsOpen(!isOpen)}
+            aria-label="Toggle menu"
+          >
+            <span className={cn("block w-5 h-[1.5px] bg-[#00264A] transition-all duration-300", isOpen ? "rotate-45 translate-y-[1.5px]" : "-translate-y-1")} />
+            <span className={cn("block w-5 h-[1.5px] bg-[#00264A] transition-all duration-300", isOpen ? "opacity-0" : "opacity-100")} />
+            <span className={cn("block w-5 h-[1.5px] bg-[#00264A] transition-all duration-300", isOpen ? "-rotate-45 -translate-y-[1.5px]" : "translate-y-1")} />
+          </button>
+        </div>
+
+        {/* Mobile Navigation Overlay */}
+        <AnimatePresence>
+          {isOpen && (
             <motion.div
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 28, stiffness: 280 }}
-              className="absolute top-0 right-0 bottom-0 w-full max-w-sm bg-white shadow-2xl border-l border-[#E3E8E4] flex flex-col justify-between p-6 sm:p-8 overflow-y-auto"
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.3, ease: "easeInOut" }}
+              className="absolute top-[80px] md:top-[90px] left-0 right-0 border-b border-[#E3E8E4] bg-white p-6 shadow-2xl xl:hidden"
             >
-              <div>
-                {/* Header with Big Logo */}
-                <div className="flex items-center justify-between mb-8 pb-4 border-b border-[#E3E8E4]">
-                  <div className="py-1">
-                    <img
-                      src="/ArkaArya_Logo.png"
-                      alt="ArkaArya Logo"
-                      className="h-12 w-auto object-contain"
-                    />
-                  </div>
-                  <button
-                    onClick={() => setMobileMenu(false)}
-                    className="p-2 rounded-full text-[#5E6672] hover:text-[#00264A] hover:bg-[#F2F5F3] transition-colors"
-                    aria-label="Close menu"
-                  >
-                    <X size={20} />
-                  </button>
-                </div>
-
-                {/* Navigation Items */}
-                <nav className="space-y-2">
-                  {navItems.map((item) => {
-                    const isActive = active === item.name;
-                    return (
-                      <Link
-                        key={item.name}
-                        href={item.href}
-                        onClick={() => {
-                          setActive(item.name);
-                          setMobileMenu(false);
-                        }}
-                        className={`flex items-center justify-between px-4 py-3.5 rounded-2xl text-sm font-semibold transition-all duration-200 ${
-                          isActive
-                            ? "bg-[#EBF5DC] text-[#629A13] border border-[#629A13]/30"
-                            : "text-[#00264A] hover:bg-[#F8FAF7]"
-                        }`}
-                      >
-                        <span>{item.name}</span>
-                        {isActive ? (
-                          <span className="w-2.5 h-2.5 rounded-full bg-[#629A13]" />
-                        ) : (
-                          <ArrowRight size={16} className="text-[#5E6672] opacity-40" />
-                        )}
-                      </Link>
-                    );
-                  })}
-                </nav>
+              <div className="flex flex-col gap-2">
+                {navLinks.map((link) => {
+                  const isActive = active === link.name;
+                  return (
+                    <Link
+                      key={link.name}
+                      href={link.href}
+                      onClick={() => {
+                        setActive(link.name);
+                        setIsOpen(false);
+                      }}
+                      className={cn(
+                        "px-4 py-3 rounded-xl text-sm font-semibold transition-all",
+                        isActive ? "bg-[#EBF5DC] text-[#629A13]" : "text-[#00264A] hover:bg-[#F8FAF7]"
+                      )}
+                    >
+                      {link.name}
+                    </Link>
+                  );
+                })}
               </div>
 
-              {/* Drawer Actions */}
-              <div className="pt-6 border-t border-[#E3E8E4] space-y-3">
+              <div className="mt-6 flex flex-col gap-3 pt-6 border-t border-[#E3E8E4]">
                 <button
                   onClick={() => {
-                    setMobileMenu(false);
+                    setIsOpen(false);
                     onOpenCalculator();
                   }}
-                  className="w-full flex items-center justify-center gap-2 py-3.5 rounded-full bg-[#F8FAF7] hover:bg-[#F2F5F3] text-[#00264A] font-semibold text-sm border border-[#E3E8E4] transition-colors"
+                  className="flex items-center justify-center gap-2 rounded-full border border-[#E3E8E4] bg-[#F8FAF7] px-6 py-3.5 text-center text-sm font-semibold text-[#00264A] transition-all hover:bg-[#F2F5F3]"
                 >
-                  <Sparkles size={16} className="text-[#629A13]" />
-                  <span>Simulate ESG Impact</span>
+                  <Sparkles size={16} className="text-[#629A13]" /> Simulate ESG Impact
                 </button>
-
                 <button
                   onClick={() => {
-                    setMobileMenu(false);
+                    setIsOpen(false);
                     onOpenPickup();
                   }}
-                  className="w-full flex items-center justify-center gap-2 py-4 rounded-full bg-[#629A13] hover:bg-[#528210] text-white font-semibold text-sm btn-eco-glow transition-all active:scale-95 border border-[#629A13]"
+                  className="flex items-center justify-center gap-2 rounded-full border border-[#629A13] bg-[#629A13] px-6 py-3.5 text-center text-sm font-semibold text-white shadow-lg transition-all hover:bg-[#528210]"
                 >
-                  <UploadCloud size={18} />
-                  <span>Book Certified Pickup</span>
+                  <UploadCloud size={18} /> Book Certified Pickup
                 </button>
               </div>
             </motion.div>
-          </div>
-        )}
-      </AnimatePresence>
-    </>
+          )}
+        </AnimatePresence>
+      </div>
+    </header>
   );
-};
-
-export default Navbar;
+}

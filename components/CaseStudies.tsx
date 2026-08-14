@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ArrowLeft, ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { createClient } from "@/lib/supabase-browser";
 
 // Types
 interface CaseStudy {
@@ -10,95 +11,66 @@ interface CaseStudy {
   category: string;
   title: string;
   description: string;
-  image: string;
+  cover_image: string;
   metrics: { value: string; label: string }[];
 }
-
-// Data
-const caseStudies: CaseStudy[] = [
-  {
-    id: "01",
-    category: "CORPORATE",
-    title: "Corporate E-Waste Recovery",
-    description: "Complete asset recovery and secure data sanitization for a Fortune 500 tech enterprise across 14 regional offices.",
-    image: "/corporate_ewaste_recovery.png",
-    metrics: [
-      { value: "12,500+", label: "Devices Recovered" },
-      { value: "98%", label: "Material Recovery" },
-      { value: "420+", label: "Tonnes CO₂ Impact" },
-    ],
-  },
-  {
-    id: "02",
-    category: "DATA CENTERS",
-    title: "Data Center Asset Recovery",
-    description: "End-of-life decommissioning of legacy server infrastructure with NIST-certified on-site data wiping.",
-    image: "/datacenter_asset_recovery.png",
-    metrics: [
-      { value: "8,200", label: "Drives Sanitized" },
-      { value: "Zero", label: "Data Breach Incidents" },
-      { value: "$1.2M", label: "Value Recovered" },
-    ],
-  },
-  {
-    id: "03",
-    category: "HEALTHCARE",
-    title: "Healthcare Equipment Recycling",
-    description: "Safe and compliant disposal of bio-hazardous electronic medical equipment and MRI systems.",
-    image: "/healthcare_equipment_recycling.png",
-    metrics: [
-      { value: "450+", label: "Systems Recycled" },
-      { value: "100%", label: "EPA Compliant" },
-      { value: "15", label: "Hospitals Served" },
-    ],
-  },
-  {
-    id: "04",
-    category: "MANUFACTURING",
-    title: "Manufacturing E-Waste Management",
-    description: "Closed-loop urban mining recovering precious metals from industrial robotic components and PLCs.",
-    image: "/manufacturing_ewaste_management.png",
-    metrics: [
-      { value: "2.4", label: "Metric Tonnes Gold" },
-      { value: "99%", label: "Landfill Diversion" },
-      { value: "12", label: "Facilities Integrated" },
-    ],
-  },
-  {
-    id: "05",
-    category: "SECURE ITAD",
-    title: "Secure IT Asset Disposal",
-    description: "Military-grade physical destruction and precious metal refining of classified communication devices.",
-    image: "/secure_it_asset_disposal.png",
-    metrics: [
-      { value: "35,000", label: "Assets Shredded" },
-      { value: "DoD", label: "Standard Compliant" },
-      { value: "24/7", label: "Secure Chain of Custody" },
-    ],
-  },
-];
 
 export const CaseStudies = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isClient, setIsClient] = useState(false);
+  const [caseStudies, setCaseStudies] = useState<CaseStudy[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     setIsClient(true);
+    fetchCaseStudies();
   }, []);
 
+  const fetchCaseStudies = async () => {
+    try {
+      const supabase = createClient();
+      const { data, error } = await supabase
+        .from("case_studies")
+        .select("*")
+        .eq("is_published", true)
+        .order("created_at", { ascending: true });
+
+      if (error) throw error;
+      if (data) {
+        // Map DB structure to UI structure
+        const formattedData = data.map((item, index) => {
+          // Format ID to 01, 02 etc.
+          const formattedId = String(index + 1).padStart(2, "0");
+          return {
+            ...item,
+            id: formattedId,
+          };
+        });
+        setCaseStudies(formattedData as CaseStudy[]);
+      }
+    } catch (err) {
+      console.error("Error fetching case studies:", err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleNext = () => {
+    if (caseStudies.length === 0) return;
     setDirection(1);
     setActiveIndex((prev) => (prev + 1) % caseStudies.length);
   };
 
   const handlePrev = () => {
+    if (caseStudies.length === 0) return;
     setDirection(-1);
     setActiveIndex((prev) => (prev - 1 + caseStudies.length) % caseStudies.length);
   };
 
   // Helper to determine the status of a card relative to active
   const getCardPosition = (index: number) => {
+    if (caseStudies.length === 0) return "hidden";
     if (index === activeIndex) return "active";
     if (index === (activeIndex - 1 + caseStudies.length) % caseStudies.length) return "prev";
     if (index === (activeIndex + 1) % caseStudies.length) return "next";
@@ -153,9 +125,16 @@ export const CaseStudies = () => {
 
         {/* 3D Stage Container */}
         <div className="relative h-[650px] sm:h-[600px] w-full flex items-center justify-center [perspective:1200px]">
-          
-          <AnimatePresence initial={false} custom={direction}>
-            {caseStudies.map((study, index) => {
+          {isLoading ? (
+            <div className="flex flex-col items-center justify-center text-[#629A13] gap-4">
+              <Loader2 className="w-10 h-10 animate-spin" />
+              <p className="text-[#00264A] font-medium text-sm animate-pulse">Loading Impact Stories...</p>
+            </div>
+          ) : caseStudies.length === 0 ? (
+            <div className="text-[#5E6672] font-medium">No case studies published yet.</div>
+          ) : (
+            <AnimatePresence initial={false} custom={direction}>
+              {caseStudies.map((study, index) => {
               const position = getCardPosition(index);
               const isActive = position === "active";
               const isPrev = position === "prev";
@@ -241,7 +220,7 @@ export const CaseStudies = () => {
                         </div>
                         
                         <motion.img 
-                          src={study.image} 
+                          src={study.cover_image} 
                           alt={study.title}
                           className="w-full h-full object-cover opacity-90 transition-transform duration-700"
                           variants={{
@@ -297,34 +276,37 @@ export const CaseStudies = () => {
               );
             })}
           </AnimatePresence>
+          )}
         </div>
 
         {/* Minimal Navigation Controls */}
-        <div className="flex items-center justify-center gap-8 mt-12 sm:mt-16">
-          <button 
-            onClick={handlePrev}
-            className="group flex items-center justify-center w-12 h-12 rounded-full border border-[#E3E8E4] bg-white text-[#00264A] hover:border-[#629A13] hover:bg-[#629A13] hover:text-white transition-all duration-300 shadow-sm active:scale-95"
-            aria-label="Previous Case Study"
-          >
-            <ChevronLeft size={20} className="group-hover:-translate-x-0.5 transition-transform" />
-          </button>
-          
-          <div className="flex items-center gap-2 font-dm-sans font-medium text-sm tracking-widest text-[#5E6672]">
-            <span className="text-[#00264A] font-bold">
-              {caseStudies[activeIndex].id}
-            </span>
-            <span className="opacity-40">/</span>
-            <span className="opacity-60">0{caseStudies.length}</span>
+        {!isLoading && caseStudies.length > 0 && (
+          <div className="flex items-center justify-center gap-8 mt-12 sm:mt-16">
+            <button 
+              onClick={handlePrev}
+              className="group flex items-center justify-center w-12 h-12 rounded-full border border-[#E3E8E4] bg-white text-[#00264A] hover:border-[#629A13] hover:bg-[#629A13] hover:text-white transition-all duration-300 shadow-sm active:scale-95"
+              aria-label="Previous Case Study"
+            >
+              <ChevronLeft size={20} className="group-hover:-translate-x-0.5 transition-transform" />
+            </button>
+            
+            <div className="flex items-center gap-2 font-dm-sans font-medium text-sm tracking-widest text-[#5E6672]">
+              <span className="text-[#00264A] font-bold">
+                {caseStudies[activeIndex]?.id}
+              </span>
+              <span className="opacity-40">/</span>
+              <span className="opacity-60">0{caseStudies.length}</span>
+            </div>
+            
+            <button 
+              onClick={handleNext}
+              className="group flex items-center justify-center w-12 h-12 rounded-full border border-[#E3E8E4] bg-white text-[#00264A] hover:border-[#629A13] hover:bg-[#629A13] hover:text-white transition-all duration-300 shadow-sm active:scale-95"
+              aria-label="Next Case Study"
+            >
+              <ChevronRight size={20} className="group-hover:translate-x-0.5 transition-transform" />
+            </button>
           </div>
-          
-          <button 
-            onClick={handleNext}
-            className="group flex items-center justify-center w-12 h-12 rounded-full border border-[#E3E8E4] bg-white text-[#00264A] hover:border-[#629A13] hover:bg-[#629A13] hover:text-white transition-all duration-300 shadow-sm active:scale-95"
-            aria-label="Next Case Study"
-          >
-            <ChevronRight size={20} className="group-hover:translate-x-0.5 transition-transform" />
-          </button>
-        </div>
+        )}
 
       </div>
     </section>

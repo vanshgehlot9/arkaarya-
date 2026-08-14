@@ -405,6 +405,7 @@ const QuantumIllustration = ({ isHovered }: { isHovered: boolean }) => (
             stroke={isHovered ? "#629A13" : "#E3E8E4"}
             strokeWidth="1.5"
             strokeDasharray="4 4"
+            initial={{ strokeDashoffset: 0 }}
             animate={{ strokeDashoffset: isHovered ? [0, -20] : 0 }}
             transition={{ duration: 1.5, ease: "linear", repeat: Infinity }}
           />

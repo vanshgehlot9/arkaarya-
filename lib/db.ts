@@ -18,14 +18,28 @@ if (process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KE
 }
 
 export type PickupRequestData = {
-  companyName: string;
-  contactPerson: string;
-  email: string;
-  phone: string;
+  pickupId: string;
+  pickupType: string;
+  condition: string;
+  categories: string[];
+  quantity: string;
+  items?: string;
+  address: string;
   state: string;
   city: string;
-  estimatedWeight: string;
-  notes: string;
+  pincode: string;
+  coordinates?: string;
+  date: string;
+  time: string;
+  urgency: string;
+  need: string;
+  name: string;
+  company?: string;
+  phone: string;
+  email?: string;
+  dataDestruction?: string;
+  photos?: string[];
+  notes?: string;
 };
 
 export type LeadData = {
@@ -50,14 +64,29 @@ export const DB = {
           .from("pickup_requests")
           .insert([
             {
-              company_name: data.companyName,
-              contact_person: data.contactPerson,
-              email: data.email,
-              phone: data.phone,
+              pickup_id: data.pickupId,
+              pickup_type: data.pickupType,
+              condition: data.condition,
+              categories: data.categories,
+              quantity: data.quantity,
+              estimated_weight: data.quantity,
+              items: data.items || null,
+              address: data.address,
               state: data.state,
               city: data.city,
-              estimated_weight: data.estimatedWeight,
-              notes: data.notes,
+              pincode: data.pincode,
+              coordinates: data.coordinates || null,
+              preferred_date: data.date,
+              preferred_time: data.time,
+              urgency: data.urgency,
+              need: data.need,
+              contact_person: data.name,
+              company_name: data.company || null,
+              phone: data.phone,
+              email: data.email || null,
+              data_destruction: data.dataDestruction || null,
+              photos: data.photos || null,
+              notes: data.notes || null,
               status: "pending",
               created_at: new Date().toISOString(),
             },
@@ -70,13 +99,35 @@ export const DB = {
         }
         return result[0];
       } else {
-        // FALLBACK / OTHER DB IMPLEMENTATION (e.g. Prisma)
-        // If NEXT_PUBLIC_SUPABASE_URL is removed, you can put Prisma logic here
-        // e.g., return await prisma.pickupRequest.create({ data });
+        // FALLBACK / OTHER DB IMPLEMENTATION
         console.log("Mock DB Insert [PickupRequest]:", data);
         return { id: "mock-id", ...data };
       }
     },
+  },
+
+  storage: {
+    uploadPickupPhoto: async (file: File, pickupId: string, index: number) => {
+      if (supabase) {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${pickupId}_${index}_${Date.now()}.${fileExt}`;
+        const { data, error } = await supabase.storage
+          .from("pickup-photos")
+          .upload(fileName, file, { upsert: true });
+
+        if (error) {
+          console.error("Supabase Storage Error:", error);
+          return null;
+        }
+
+        const { data: { publicUrl } } = supabase.storage
+          .from("pickup-photos")
+          .getPublicUrl(fileName);
+
+        return publicUrl;
+      }
+      return null;
+    }
   },
 
   leads: {

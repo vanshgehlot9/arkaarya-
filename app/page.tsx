@@ -14,6 +14,7 @@ import { WhyChooseUs } from "@/components/WhyChooseUs";
 import { Testimonials } from "@/components/Testimonials";
 import { ContactSection } from "@/components/ContactSection";
 import { Footer } from "@/components/Footer";
+import { SocialActivities } from "@/components/SocialActivities";
 import { ImpactCalculator } from "@/components/ImpactCalculator";
 import { LeadPopup } from "@/components/LeadPopup";
 import { WhatsAppWidget } from "@/components/WhatsAppWidget";
@@ -44,7 +45,7 @@ export default function Home() {
       />
 
       {/* Main Page Flow — Professional Corporate Narrative */}
-      <main className="flex-grow">
+      <main className="flex-grow pt-[80px] md:pt-[90px]">
 
         {/* 1. HERO — First Impression & Primary CTA */}
         <Hero
@@ -69,6 +70,9 @@ export default function Home() {
 
         {/* 6. INDUSTRIES — Horizontal Showcase of Sectors Served */}
         <IndustriesSection onOpenPickup={handleOpenPickup} />
+
+        {/* 6.5 SOCIAL ACTIVITIES — Corporate Responsibility & Community */}
+        <SocialActivities />
 
         {/* 7. DIFFERENTIATORS — Why Choose ArkaArya */}
         <WhyChooseUs onOpenPickup={handleOpenPickup} />

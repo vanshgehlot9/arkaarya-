@@ -157,6 +157,7 @@ export const LeadPopup = () => {
                       stroke="#629A13" 
                       strokeWidth="2"
                       strokeDasharray="4 4"
+                      initial={{ strokeDashoffset: 0 }}
                       animate={{ strokeDashoffset: [0, -40] }}
                       transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                     />

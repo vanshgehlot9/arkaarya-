@@ -6,24 +6,38 @@ import { DB } from "@/lib/db";
 const contactSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
-  company: z.string().min(2, "Company name is required"),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+  company: z.string().min(1, "Company name is required"),
+  message: z.string().optional(),
 });
 
 export async function submitContact(formData: FormData) {
   try {
-    const rawData = {
-      name: formData.get("name") as string,
-      email: formData.get("email") as string,
-      company: formData.get("company") as string,
-      message: formData.get("message") as string,
-    };
+    const name = formData.get("name") as string || "";
+    const email = formData.get("email") as string || "";
+    const company = formData.get("company") as string || "";
+    const phone = formData.get("phone") as string || "";
+    const service = formData.get("service") as string || "";
+    const volume = formData.get("volume") as string || "";
+    const message = formData.get("message") as string || "";
 
-    // Validate using Zod
-    const validatedData = contactSchema.parse(rawData);
+    // Validate core fields
+    const validatedData = contactSchema.parse({ name, email, company, message });
 
-    // Save to Database via abstraction layer
-    const result = await DB.contactMessages.create(validatedData);
+    // Build a comprehensive message that includes all the form fields
+    const fullMessage = [
+      service ? `Service: ${service}` : "",
+      volume ? `Volume: ${volume}` : "",
+      phone ? `Phone: ${phone}` : "",
+      message ? `\nMessage: ${message}` : "",
+    ].filter(Boolean).join("\n");
+
+    // Save to Database
+    const result = await DB.contactMessages.create({
+      name: validatedData.name,
+      email: validatedData.email,
+      company: validatedData.company,
+      message: fullMessage || "Corporate Inquiry (no additional details)",
+    });
 
     return { success: true, data: result };
   } catch (error: unknown) {
@@ -31,6 +45,6 @@ export async function submitContact(formData: FormData) {
     if (error instanceof z.ZodError) {
       return { success: false, error: (error as any).errors[0].message };
     }
-    return { success: false, error: "An unexpected error occurred." };
+    return { success: false, error: error instanceof Error ? error.message : "An unexpected error occurred." };
   }
 }

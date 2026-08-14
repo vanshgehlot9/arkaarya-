@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
-import { Truck, TreePine, Recycle, ShieldCheck, Sparkles, CheckCircle2, ArrowUpRight } from "lucide-react";
+import { Truck, TreePine, Recycle, ShieldCheck, Sparkles, CheckCircle2, ArrowUpRight, Loader2 } from "lucide-react";
+import { createClient } from "@/lib/supabase-browser";
 
 export const StatsBar: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -14,8 +15,55 @@ export const StatsBar: React.FC = () => {
   const [complianceCount, setComplianceCount] = useState(0);
   const [isHoveredCard, setIsHoveredCard] = useState<number | null>(null);
 
+  const [targets, setTargets] = useState({
+    devices: 0,
+    co2: 0,
+    recovery: 0,
+    compliance: 0,
+  });
+  const [labels, setLabels] = useState<any>({});
+  const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
-    if (!isInView) return;
+    const fetchStats = async () => {
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from("statistics")
+          .select("*")
+          .eq("is_active", true);
+
+        if (error) throw error;
+        
+        if (data) {
+          let tempTargets = { ...targets };
+          let tempLabels: any = {};
+          data.forEach((stat: any) => {
+            if (stat.value_key === 'devices_recycled') tempTargets.devices = Number(stat.numeric_value);
+            if (stat.value_key === 'co2_offset') tempTargets.co2 = Number(stat.numeric_value);
+            if (stat.value_key === 'material_recovery') tempTargets.recovery = Number(stat.numeric_value);
+            if (stat.value_key === 'cpcb_compliance') tempTargets.compliance = Number(stat.numeric_value);
+
+            tempLabels[stat.value_key] = {
+              label: stat.label,
+              unit: stat.unit,
+              desc: stat.description,
+            };
+          });
+          setTargets(tempTargets);
+          setLabels(tempLabels);
+        }
+      } catch (err) {
+        console.error("Error fetching stats:", err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchStats();
+  }, []);
+
+  useEffect(() => {
+    if (!isInView || isLoading) return;
 
     const duration = 2400; // 2.4s non-linear natural count-up
     const startTime = performance.now();
@@ -27,24 +75,24 @@ export const StatsBar: React.FC = () => {
       // Non-linear natural ease-out (accelerate smoothly then brake to landing)
       const ease = 1 - Math.pow(1 - progress, 3.5);
 
-      setDevicesCount(Math.floor(50000 * ease));
-      setCo2Count(Math.floor(1200 * ease));
-      setRecoveryCount(Number((98.4 * ease).toFixed(1)));
-      setComplianceCount(Math.floor(100 * ease));
+      setDevicesCount(Math.floor(targets.devices * ease));
+      setCo2Count(Math.floor(targets.co2 * ease));
+      setRecoveryCount(Number((targets.recovery * ease).toFixed(1)));
+      setComplianceCount(Math.floor(targets.compliance * ease));
 
       if (progress < 1) {
         requestAnimationFrame(animateCounters);
       } else {
-        setDevicesCount(50000);
-        setCo2Count(1200);
-        setRecoveryCount(98.4);
-        setComplianceCount(100);
+        setDevicesCount(targets.devices);
+        setCo2Count(targets.co2);
+        setRecoveryCount(targets.recovery);
+        setComplianceCount(targets.compliance);
       }
     };
 
     const animId = requestAnimationFrame(animateCounters);
     return () => cancelAnimationFrame(animId);
-  }, [isInView]);
+  }, [isInView, isLoading, targets]);
 
   return (
     <section 
@@ -71,7 +119,12 @@ export const StatsBar: React.FC = () => {
         </div>
 
         {/* 4 Interactive Metric Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7">
+        {isLoading ? (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="w-10 h-10 animate-spin text-[#629A13]" />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7">
           
           {/* ========================================================= */}
           {/* CARD 1: DEVICES RECYCLED (Miniature Pickup Truck Loading) */}
@@ -157,13 +210,13 @@ export const StatsBar: React.FC = () => {
             <div>
               <div className="text-3xl sm:text-4xl font-extrabold text-[#00264A] tracking-tight font-display mb-1.5 flex items-baseline gap-1">
                 <span>{devicesCount.toLocaleString("en-IN")}</span>
-                <span className="text-[#629A13] text-2xl font-bold">+</span>
+                <span className="text-[#629A13] text-2xl font-bold">{labels.devices_recycled?.unit || "+"}</span>
               </div>
               <h3 className="text-xs font-bold text-[#629A13] uppercase tracking-wider mb-1">
-                Devices Responsibly Recycled
+                {labels.devices_recycled?.label || "Devices Responsibly Recycled"}
               </h3>
               <p className="text-xs text-[#5E6672] leading-relaxed">
-                Smartphones, enterprise servers, laptops, and networking hardware processed with data sanitization.
+                {labels.devices_recycled?.desc || "Smartphones, enterprise servers, laptops, and networking hardware processed with data sanitization."}
               </p>
             </div>
           </motion.div>
@@ -223,13 +276,13 @@ export const StatsBar: React.FC = () => {
             <div>
               <div className="text-3xl sm:text-4xl font-extrabold text-[#00264A] tracking-tight font-display mb-1.5 flex items-baseline gap-1">
                 <span>{co2Count.toLocaleString("en-IN")}</span>
-                <span className="text-sm font-semibold text-[#5E6672]">Metric Tonnes</span>
+                <span className="text-sm font-semibold text-[#5E6672]">{labels.co2_offset?.unit || "Metric Tonnes"}</span>
               </div>
               <h3 className="text-xs font-bold text-[#629A13] uppercase tracking-wider mb-1">
-                Direct CO₂ Emissions Offset
+                {labels.co2_offset?.label || "Direct CO₂ Emissions Offset"}
               </h3>
               <p className="text-xs text-[#5E6672] leading-relaxed">
-                Equivalent to planting 54,000+ urban trees by eliminating raw virgin mining dependencies.
+                {labels.co2_offset?.desc || "Equivalent to planting 54,000+ urban trees by eliminating raw virgin mining dependencies."}
               </p>
             </div>
           </motion.div>
@@ -269,8 +322,9 @@ export const StatsBar: React.FC = () => {
                     stroke="#629A13"
                     strokeWidth="8"
                     strokeDasharray={2 * Math.PI * 40}
+                    style={{ strokeDashoffset: 2 * Math.PI * 40 }}
                     initial={{ strokeDashoffset: 2 * Math.PI * 40 }}
-                    animate={isInView ? { strokeDashoffset: 2 * Math.PI * 40 * (1 - 0.984) } : {}}
+                    animate={isInView && !isLoading ? { strokeDashoffset: 2 * Math.PI * 40 * (1 - ((targets.recovery || 98.4) / 100)) } : { strokeDashoffset: 2 * Math.PI * 40 }}
                     transition={{ duration: 2.2, ease: [0.16, 1, 0.3, 1] }}
                     strokeLinecap="round"
                   />
@@ -279,7 +333,7 @@ export const StatsBar: React.FC = () => {
                 {/* Inner Icon & Minerals */}
                 <div className="absolute inset-0 flex flex-col items-center justify-center">
                   <Recycle size={24} className="text-[#00264A] group-hover:rotate-180 transition-transform duration-700" />
-                  <span className="text-[10px] font-bold text-[#629A13] mt-0.5 font-mono">98.4%</span>
+                  <span className="text-[10px] font-bold text-[#629A13] mt-0.5 font-mono">{targets.recovery || 98.4}%</span>
                 </div>
               </div>
 
@@ -293,14 +347,14 @@ export const StatsBar: React.FC = () => {
             {/* Metric Value & Label */}
             <div>
               <div className="text-3xl sm:text-4xl font-extrabold text-[#00264A] tracking-tight font-display mb-1.5 flex items-baseline gap-1">
-                <span>{recoveryCount}%</span>
+                <span>{recoveryCount}{labels.material_recovery?.unit || "%"}</span>
                 <span className="text-sm font-semibold text-[#629A13]">Yield</span>
               </div>
               <h3 className="text-xs font-bold text-[#629A13] uppercase tracking-wider mb-1">
-                Critical Material Recovery Rate
+                {labels.material_recovery?.label || "Critical Material Recovery Rate"}
               </h3>
               <p className="text-xs text-[#5E6672] leading-relaxed">
-                Forensic extraction of precious metals, high-grade copper, rare earths, and clean circular polymers.
+                {labels.material_recovery?.desc || "Forensic extraction of precious metals, high-grade copper, rare earths, and clean circular polymers."}
               </p>
             </div>
           </motion.div>
@@ -356,19 +410,19 @@ export const StatsBar: React.FC = () => {
             {/* Metric Value & Label */}
             <div>
               <div className="text-3xl sm:text-4xl font-extrabold text-[#00264A] tracking-tight font-display mb-1.5 flex items-baseline gap-1">
-                <span>{complianceCount}%</span>
+                <span>{complianceCount}{labels.cpcb_compliance?.unit || "%"}</span>
                 <span className="text-sm font-bold text-[#629A13]">Compliant</span>
               </div>
               <h3 className="text-xs font-bold text-[#629A13] uppercase tracking-wider mb-1">
-                CPCB & Pan-India EPR Certified
+                {labels.cpcb_compliance?.label || "CPCB & Pan-India EPR Certified"}
               </h3>
               <p className="text-xs text-[#5E6672] leading-relaxed">
-                100% legally audited recycling certificates with traceable mass-balance compliance for corporate audit readiness.
+                {labels.cpcb_compliance?.desc || "100% legally audited recycling certificates with traceable mass-balance compliance for corporate audit readiness."}
               </p>
             </div>
           </motion.div>
-
         </div>
+        )}
 
         {/* Bottom Trust Assurance Bar */}
         <div className="mt-10 pt-6 border-t border-[#E3E8E4] flex flex-wrap items-center justify-between gap-4 text-xs text-[#5E6672]">

@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Inter, Outfit, Playfair_Display, Lora, DM_Sans } from "next/font/google";
-import { AnnouncementBar } from "@/components/AnnouncementBar";
 import "./globals.css";
 
 const inter = Inter({
@@ -32,7 +31,7 @@ export const metadata: Metadata = {
   description:
     "India's premier certified e-waste management enterprise. Closed-loop urban mining, ITAD, and statutory EPR fulfillment combining industrial trust with environmental responsibility.",
   icons: {
-    icon: "/ArkaArya_Logo.png",
+    icon: "/ArkaAryaPvtLtd_Logo_v3.0.png",
   },
 };
 
@@ -47,10 +46,7 @@ export default function RootLayout({
       className={`${inter.variable} ${outfit.variable} ${lora.variable} ${dmSans.variable}`}
     >
       <body className="antialiased bg-[#F8FAF7] text-[#121212]">
-        <AnnouncementBar />
-        <div className="pt-[44px] sm:pt-[48px]">
-          {children}
-        </div>
+        {children}
       </body>
     </html>
   );

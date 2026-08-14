@@ -56,7 +56,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPickup = () => {} }) => {
             <div className="flex items-center gap-3">
               <div className="bg-white px-3 py-1.5 rounded-xl flex items-center justify-center shadow-sm border border-[#E3E8E4]">
                 <img 
-                  src="/ArkaArya_Logo.png" 
+                  src="/ArkaAryaPvtLtd_Logo_v3.0.png" 
                   alt="ArkaArya Logo" 
                   className="h-8 sm:h-9 w-auto object-contain"
                 />
@@ -90,37 +90,42 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPickup = () => {} }) => {
             </h4>
             <ul className="space-y-2.5 text-sm text-[#E6ECF2]">
               <li>
-                <Link href="#home" className="hover:text-[#629A13] transition-colors">
+                <Link href="/" className="hover:text-[#629A13] transition-colors">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="#about" className="hover:text-[#629A13] transition-colors">
+                <Link href="/#about" className="hover:text-[#629A13] transition-colors">
                   Who We Are
                 </Link>
               </li>
               <li>
-                <Link href="#services" className="hover:text-[#629A13] transition-colors">
+                <Link href="/#services" className="hover:text-[#629A13] transition-colors">
                   Our Services
                 </Link>
               </li>
               <li>
-                <Link href="#lifecycle" className="hover:text-[#629A13] transition-colors">
+                <Link href="/#lifecycle" className="hover:text-[#629A13] transition-colors">
                   Recycling Lifecycle
                 </Link>
               </li>
               <li>
-                <Link href="#impact" className="hover:text-[#629A13] transition-colors">
+                <Link href="/#impact" className="hover:text-[#629A13] transition-colors">
                   Measurable Impact
                 </Link>
               </li>
               <li>
-                <Link href="#testimonials" className="hover:text-[#629A13] transition-colors">
+                <Link href="/#testimonials" className="hover:text-[#629A13] transition-colors">
                   Trust & Endorsements
                 </Link>
               </li>
               <li>
-                <Link href="#contact" className="hover:text-[#629A13] transition-colors">
+                <Link href="/careers" className="hover:text-[#629A13] transition-colors">
+                  Careers
+                </Link>
+              </li>
+              <li>
+                <Link href="/#contact" className="hover:text-[#629A13] transition-colors">
                   Contact Us
                 </Link>
               </li>
