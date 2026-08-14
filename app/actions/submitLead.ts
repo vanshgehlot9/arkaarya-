@@ -32,7 +32,7 @@ export async function submitLead(formData: FormData) {
   } catch (error: unknown) {
     console.error("Lead submission error:", error);
     if (error instanceof z.ZodError) {
-      const firstError = error.errors?.[0]?.message;
+      const firstError = (error as any).errors?.[0]?.message;
       return { success: false, error: firstError || "Validation failed." };
     }
     return { success: false, error: error instanceof Error ? error.message : "An unexpected error occurred." };
