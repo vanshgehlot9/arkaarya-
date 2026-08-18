@@ -135,7 +135,7 @@ export default function CaseStudiesClient({ initialData }: { initialData: any[] 
                 >
                   <Edit size={16} /> Edit
                 </button>
-                <Link href={`/impact/${study.slug}`} className="flex-1 py-2 bg-[#00264A] text-white rounded-lg text-sm font-semibold hover:bg-[#001A33] flex items-center justify-center gap-2 transition-colors">
+                <Link href={`/case-studies/${study.id}`} className="flex-1 py-2 bg-[#00264A] text-white rounded-lg text-sm font-semibold hover:bg-[#001A33] flex items-center justify-center gap-2 transition-colors">
                   <Eye size={16} /> Preview
                 </Link>
               </div>

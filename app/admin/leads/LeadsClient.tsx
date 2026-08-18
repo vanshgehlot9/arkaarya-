@@ -12,7 +12,7 @@ export default function LeadsClient({ initialData }: { initialData: any[] }) {
   const filteredLeads = leads.filter((lead) => {
     const query = searchQuery.toLowerCase();
     return (
-      (lead.name && lead.name.toLowerCase().includes(query)) ||
+      (lead.full_name && lead.full_name.toLowerCase().includes(query)) ||
       (lead.email && lead.email.toLowerCase().includes(query)) ||
       (lead.company_name && lead.company_name.toLowerCase().includes(query))
     );
@@ -92,7 +92,9 @@ export default function LeadsClient({ initialData }: { initialData: any[] }) {
                 filteredLeads.map((lead) => (
                   <tr key={lead.id} className="hover:bg-gray-50/50 transition-colors">
                     <td className="px-6 py-4">
-                      <div className="font-medium text-[#00264A]">{lead.name || "N/A"}</div>
+                      <div className="font-medium text-[#00264A] capitalize">
+                        {lead.full_name || lead.name || (lead.email ? lead.email.split('@')[0] : "Unknown")}
+                      </div>
                       <div className="flex items-center gap-3 mt-1 text-xs text-gray-500">
                         <a href={`mailto:${lead.email}`} className="flex items-center gap-1 hover:text-[#629A13]">
                           <Mail size={12} /> {lead.email}

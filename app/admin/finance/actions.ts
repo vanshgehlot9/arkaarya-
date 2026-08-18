@@ -30,8 +30,7 @@ export async function addTransaction(formData: FormData) {
         category,
         description,
         amount,
-        created_at: new Date(date).toISOString(),
-        reference_id: reference_id || null,
+        transaction_date: new Date(date).toISOString(),
       }
     ]);
 

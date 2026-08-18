@@ -10,8 +10,8 @@ export async function addIndustry(formData: FormData) {
   const description = formData.get("description") as string;
   const icon_name = formData.get("icon_name") as string;
   const illustration_name = formData.get("illustration_name") as string;
-  const theme_color = formData.get("theme_color") as string;
-  const is_active = formData.get("is_active") === "true";
+  const theme_color = "blue";
+  const is_active = true;
 
   const { error } = await supabase.from("industries").insert([
     {
@@ -42,8 +42,6 @@ export async function updateIndustry(formData: FormData) {
   const description = formData.get("description") as string;
   const icon_name = formData.get("icon_name") as string;
   const illustration_name = formData.get("illustration_name") as string;
-  const theme_color = formData.get("theme_color") as string;
-  const is_active = formData.get("is_active") === "true";
 
   const { error } = await supabase
     .from("industries")
@@ -52,8 +50,6 @@ export async function updateIndustry(formData: FormData) {
       description,
       icon_name,
       illustration_name,
-      theme_color,
-      is_active,
     })
     .eq("id", id);
 

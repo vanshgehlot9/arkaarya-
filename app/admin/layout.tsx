@@ -1,7 +1,8 @@
 import React from "react";
 import Link from "next/link";
-import { LayoutDashboard, Users, Briefcase, Truck, FileText, Settings, DollarSign, LogOut, Building2, HeartHandshake, Star, BarChart, ShieldCheck } from "lucide-react";
+import { LayoutDashboard, Users, Briefcase, Truck, FileText, Settings, DollarSign, LogOut, Building2, HeartHandshake, Star, BarChart, ShieldCheck, Scale, Inbox } from "lucide-react";
 import { createClient } from "@/lib/supabase-server";
+import AutoAdjustZoom from "./AutoAdjustZoom";
 
 export default async function AdminLayout({
   children,
@@ -18,7 +19,8 @@ export default async function AdminLayout({
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAF7] flex">
+    <div className="min-h-screen bg-[#F8FAF7] flex relative">
+      <AutoAdjustZoom />
       {/* Sidebar Navigation */}
       <aside className="w-64 bg-white border-r border-[#E3E8E4] flex flex-col fixed inset-y-0 z-10 overflow-y-auto print:hidden">
         <div className="p-6">
@@ -40,6 +42,10 @@ export default async function AdminLayout({
               <Truck size={18} />
               Pickups
             </Link>
+            <Link href="/admin/inbox" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-[#4A5568] hover:bg-[#F8FAF7] hover:text-[#00264A] transition-colors">
+              <Inbox size={18} />
+              Inbox (Contact)
+            </Link>
             <Link href="/admin/finance" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-[#4A5568] hover:bg-[#F8FAF7] hover:text-[#00264A] transition-colors">
               <DollarSign size={18} />
               Finance
@@ -54,6 +60,14 @@ export default async function AdminLayout({
             <Link href="/admin/industries" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-[#4A5568] hover:bg-[#F8FAF7] hover:text-[#00264A] transition-colors">
               <Building2 size={18} />
               Industries
+            </Link>
+            <Link href="/admin/services" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-[#4A5568] hover:bg-[#F8FAF7] hover:text-[#00264A] transition-colors">
+              <LayoutDashboard size={18} />
+              Services
+            </Link>
+            <Link href="/admin/legal" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-[#4A5568] hover:bg-[#F8FAF7] hover:text-[#00264A] transition-colors">
+              <Scale size={18} />
+              Legal & Compliance
             </Link>
             <Link href="/admin/case-studies" className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-[#4A5568] hover:bg-[#F8FAF7] hover:text-[#00264A] transition-colors">
               <FileText size={18} />

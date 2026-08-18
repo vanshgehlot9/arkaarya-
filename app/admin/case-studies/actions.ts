@@ -60,7 +60,7 @@ export async function addCaseStudy(formData: FormData) {
   }
 
   revalidatePath("/admin/case-studies");
-  revalidatePath("/impact");
+  revalidatePath("/");
   
   return { success: true };
 }
@@ -112,7 +112,7 @@ export async function updateCaseStudy(formData: FormData) {
   }
 
   revalidatePath("/admin/case-studies");
-  revalidatePath("/impact");
+  revalidatePath("/");
   return { success: true };
 }
 
@@ -130,7 +130,7 @@ export async function toggleCaseStudyPublished(id: string, is_published: boolean
   }
 
   revalidatePath("/admin/case-studies");
-  revalidatePath("/impact");
+  revalidatePath("/");
   return { success: true };
 }
 
@@ -148,6 +148,6 @@ export async function deleteCaseStudy(id: string) {
   }
 
   revalidatePath("/admin/case-studies");
-  revalidatePath("/impact");
+  revalidatePath("/");
   return { success: true };
 }

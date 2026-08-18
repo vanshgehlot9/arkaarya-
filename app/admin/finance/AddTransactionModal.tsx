@@ -118,11 +118,6 @@ export const AddTransactionModal = () => {
                   <input type="text" name="description" required className="w-full px-4 py-2.5 rounded-xl border border-[#E3E8E4] focus:border-[#629A13] focus:ring-1 focus:ring-[#629A13] bg-[#F8FAF7]" placeholder="Brief description..." />
                 </div>
 
-                <div className="space-y-1">
-                  <label className="text-sm font-semibold text-[#00264A]">Reference ID (Optional)</label>
-                  <input type="text" name="reference_id" className="w-full px-4 py-2.5 rounded-xl border border-[#E3E8E4] focus:border-[#629A13] focus:ring-1 focus:ring-[#629A13] bg-[#F8FAF7]" placeholder="Invoice # or Receipt #" />
-                </div>
-
                 <div className="pt-4 flex gap-3">
                   <button 
                     type="button" 

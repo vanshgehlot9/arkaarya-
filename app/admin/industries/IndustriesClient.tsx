@@ -17,7 +17,6 @@ type Industry = {
 
 const iconOptions = ["Database", "Activity", "Building2", "Cpu", "Wifi", "Server", "Smartphone", "Shield", "Briefcase", "Monitor", "Cloud", "Lock"];
 const illustrationOptions = ["ITIllustration", "HealthcareIllustration", "EnterpriseIllustration", "TelecomIllustration"];
-const colorOptions = ["blue", "emerald", "purple", "orange", "indigo", "rose", "amber", "cyan"];
 
 export default function IndustriesClient({ initialData }: { initialData: Industry[] }) {
   const [industries, setIndustries] = useState<Industry[]>(initialData);
@@ -40,8 +39,6 @@ export default function IndustriesClient({ initialData }: { initialData: Industr
     setIsLoading(true);
 
     const formData = new FormData(e.currentTarget);
-    formData.set("is_active", formData.get("is_active") === "on" ? "true" : "false");
-
     if (editingIndustry) {
       formData.set("id", editingIndustry.id);
       const res = await updateIndustry(formData);
@@ -52,8 +49,6 @@ export default function IndustriesClient({ initialData }: { initialData: Industr
           description: formData.get("description") as string,
           icon_name: formData.get("icon_name") as string,
           illustration_name: formData.get("illustration_name") as string,
-          theme_color: formData.get("theme_color") as string,
-          is_active: formData.get("is_active") === "true",
         } : i));
         handleCloseModal();
       }
@@ -102,17 +97,15 @@ export default function IndustriesClient({ initialData }: { initialData: Industr
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="bg-[#F8FAF7] border-b border-[#E3E8E4] text-xs uppercase tracking-wider text-[#5E6672] font-semibold">
-                <th className="p-4 pl-6">Name</th>
+                <th className="p-4 pl-6 w-1/2">Name</th>
                 <th className="p-4">Icon / Illustration</th>
-                <th className="p-4">Color</th>
-                <th className="p-4">Status</th>
                 <th className="p-4 pr-6 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#E3E8E4]">
               {industries.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="p-8 text-center text-[#5E6672]">
+                  <td colSpan={3} className="p-8 text-center text-[#5E6672]">
                     No industries found.
                   </td>
                 </tr>
@@ -121,31 +114,11 @@ export default function IndustriesClient({ initialData }: { initialData: Industr
                   <tr key={industry.id} className="hover:bg-[#F8FAF7]/50 transition-colors">
                     <td className="p-4 pl-6">
                       <div className="font-semibold text-[#00264A]">{industry.name}</div>
-                      <div className="text-xs text-[#5E6672] max-w-xs truncate">{industry.description}</div>
+                      <div className="text-xs text-[#5E6672] max-w-xs truncate mt-1">{industry.description}</div>
                     </td>
                     <td className="p-4">
                       <div className="text-sm font-medium">{industry.icon_name}</div>
                       <div className="text-xs text-[#5E6672]">{industry.illustration_name}</div>
-                    </td>
-                    <td className="p-4">
-                      <span className="inline-flex items-center gap-1.5 text-xs font-medium px-2 py-1 rounded-md bg-gray-100">
-                        <div className={`w-2 h-2 rounded-full bg-${industry.theme_color}-500`} />
-                        {industry.theme_color}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <button
-                        onClick={() => handleToggleActive(industry.id, industry.is_active)}
-                        className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors ${
-                          industry.is_active ? "bg-[#629A13]" : "bg-gray-300"
-                        }`}
-                      >
-                        <span
-                          className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white transition-transform ${
-                            industry.is_active ? "translate-x-5" : "translate-x-1"
-                          }`}
-                        />
-                      </button>
                     </td>
                     <td className="p-4 pr-6">
                       <div className="flex items-center justify-end gap-2">
@@ -234,29 +207,6 @@ export default function IndustriesClient({ initialData }: { initialData: Industr
                   </select>
                 </div>
 
-                <div>
-                  <label className="block text-sm font-semibold text-[#00264A] mb-1.5">Theme Color</label>
-                  <select
-                    name="theme_color"
-                    defaultValue={editingIndustry?.theme_color || "blue"}
-                    className="w-full px-4 py-2.5 rounded-lg border border-[#E3E8E4] focus:outline-none focus:ring-2 focus:ring-[#629A13] text-sm bg-white"
-                  >
-                    {colorOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}
-                  </select>
-                </div>
-
-                <div className="flex items-center gap-3 mt-8">
-                  <input
-                    type="checkbox"
-                    name="is_active"
-                    id="is_active"
-                    defaultChecked={editingIndustry ? editingIndustry.is_active : true}
-                    className="w-4 h-4 text-[#629A13] border-gray-300 rounded focus:ring-[#629A13]"
-                  />
-                  <label htmlFor="is_active" className="text-sm font-medium text-[#00264A]">
-                    Active on Website
-                  </label>
-                </div>
               </div>
 
               <div className="pt-4 flex justify-end gap-3 border-t border-[#E3E8E4] mt-6">

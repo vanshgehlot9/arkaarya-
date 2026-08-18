@@ -16,13 +16,44 @@ type Activity = {
   created_at: string;
 };
 
-const categoryOptions = ["Community", "Environment", "Team", "Events"];
+const categoryOptions = ["Community", "Environment", "Team", "Events", "Feed"];
 
 export default function SocialActivitiesClient({ initialData }: { initialData: Activity[] }) {
   const [activities, setActivities] = useState<Activity[]>(initialData);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingActivity, setEditingActivity] = useState<Activity | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isUploadingMedia, setIsUploadingMedia] = useState(false);
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setIsUploadingMedia(true);
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!res.ok) throw new Error("Upload failed");
+
+      const data = await res.json();
+      
+      const urlInput = document.getElementById("media_url_input") as HTMLInputElement;
+      if (urlInput) {
+        urlInput.value = data.url;
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Failed to upload file");
+    } finally {
+      setIsUploadingMedia(false);
+    }
+  };
 
   const handleOpenModal = (activity: Activity | null = null) => {
     setEditingActivity(activity);
@@ -144,7 +175,7 @@ export default function SocialActivitiesClient({ initialData }: { initialData: A
                         {activity.category}
                       </div>
                       <div className="text-xs text-[#5E6672]">
-                        {activity.activity_date ? new Date(activity.activity_date).toLocaleDateString() : "No date"}
+                        {activity.activity_date ? new Date(activity.activity_date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' }) : "No date"}
                       </div>
                     </td>
                     <td className="p-4">
@@ -228,14 +259,31 @@ export default function SocialActivitiesClient({ initialData }: { initialData: A
 
                 <div className="col-span-2">
                   <label className="block text-sm font-semibold text-[#00264A] mb-1.5">Media URL (Image or Video)</label>
-                  <input
-                    type="text"
-                    name="media_url"
-                    required
-                    defaultValue={editingActivity?.media_url || ""}
-                    className="w-full px-4 py-2.5 rounded-lg border border-[#E3E8E4] focus:outline-none focus:ring-2 focus:ring-[#629A13] focus:border-transparent text-sm"
-                    placeholder="/images/example.jpg or https://..."
-                  />
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <input
+                      id="media_url_input"
+                      type="text"
+                      name="media_url"
+                      required
+                      defaultValue={editingActivity?.media_url || ""}
+                      className="flex-1 px-4 py-2.5 rounded-lg border border-[#E3E8E4] focus:outline-none focus:ring-2 focus:ring-[#629A13] focus:border-transparent text-sm"
+                      placeholder="/images/example.jpg or https://..."
+                    />
+                    <label className={`flex items-center justify-center px-4 py-2.5 bg-[#F8FAF7] hover:bg-gray-100 text-[#00264A] rounded-lg cursor-pointer transition-colors border border-[#E3E8E4] font-semibold text-sm shrink-0 ${isUploadingMedia ? 'opacity-70 pointer-events-none' : ''}`}>
+                      {isUploadingMedia ? (
+                        <span className="flex items-center gap-2">Uploading...</span>
+                      ) : (
+                        <span className="flex items-center gap-2">Upload File</span>
+                      )}
+                      <input 
+                        type="file" 
+                        className="hidden" 
+                        accept="image/*,video/*" 
+                        onChange={handleFileUpload} 
+                        disabled={isUploadingMedia} 
+                      />
+                    </label>
+                  </div>
                 </div>
 
                 <div>

@@ -15,12 +15,12 @@ const applicationSchema = z.object({
 export async function submitApplication(formData: FormData) {
   try {
     const rawData = {
-      jobId: formData.get("jobId") as string,
-      name: formData.get("name") as string,
-      email: formData.get("email") as string,
-      phone: formData.get("phone") as string,
-      interest: formData.get("interest") as string,
-      message: formData.get("message") as string,
+      jobId: formData.get("jobId")?.toString() || undefined,
+      name: formData.get("name")?.toString() || "",
+      email: formData.get("email")?.toString() || "",
+      phone: formData.get("phone")?.toString() || "",
+      interest: formData.get("interest")?.toString() || undefined,
+      message: formData.get("message")?.toString() || undefined,
     };
 
     const validatedData = applicationSchema.parse(rawData);
@@ -53,7 +53,7 @@ export async function submitApplication(formData: FormData) {
     return { success: true };
   } catch (error) {
     if (error instanceof z.ZodError) {
-      return { success: false, error: (error as any).errors[0].message };
+      return { success: false, error: (error as any).errors?.[0]?.message || "Validation failed." };
     }
     console.error("Submit application error:", error);
     return { success: false, error: "Failed to submit application. Please try again." };

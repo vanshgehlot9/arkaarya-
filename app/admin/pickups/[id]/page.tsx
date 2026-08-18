@@ -148,7 +148,7 @@ export default async function PickupDetailsPage({ params }: { params: { id: stri
             <div className="space-y-4">
               <div>
                 <p className="text-xs text-gray-500 uppercase tracking-wider font-bold mb-1">Preferred Date</p>
-                <p className="font-semibold text-[#00264A]">{pickup.preferred_date ? new Date(pickup.preferred_date).toLocaleDateString() : "Anytime"}</p>
+                <p className="font-semibold text-[#00264A]">{pickup.preferred_date ? new Date(pickup.preferred_date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' }) : "Anytime"}</p>
               </div>
               <div>
                 <p className="text-xs text-gray-500 uppercase tracking-wider font-bold mb-1">Preferred Time</p>

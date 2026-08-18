@@ -8,20 +8,22 @@ export default function FinanceClient({ initialData }: { initialData: any[] }) {
   const [transactions, setTransactions] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
 
+  const [filterType, setFilterType] = useState("All");
+  const [showFilters, setShowFilters] = useState(false);
+
   const filteredTransactions = transactions.filter((tx) => {
     const query = searchQuery.toLowerCase();
-    return (
-      (tx.description && tx.description.toLowerCase().includes(query)) ||
-      (tx.category && tx.category.toLowerCase().includes(query)) ||
-      (tx.reference_id && tx.reference_id.toLowerCase().includes(query))
-    );
+    const matchesSearch = (tx.description && tx.description.toLowerCase().includes(query)) ||
+                          (tx.category && tx.category.toLowerCase().includes(query));
+    const matchesType = filterType === "All" || tx.type === filterType;
+    return matchesSearch && matchesType;
   });
 
   // Calculate totals from current state
   let totalIncome = 0;
   let totalExpense = 0;
 
-  transactions.forEach((t) => {
+  filteredTransactions.forEach((t) => {
     if (t.type === 'Income') totalIncome += t.amount;
     if (t.type === 'Expense') totalExpense += t.amount;
   });
@@ -44,6 +46,32 @@ export default function FinanceClient({ initialData }: { initialData: any[] }) {
     } else {
       alert("Error deleting transaction");
     }
+  };
+
+  const handleExportCSV = () => {
+    if (filteredTransactions.length === 0) {
+      alert("No data to export");
+      return;
+    }
+
+    const headers = ["Date", "Type", "Category", "Description", "Amount (INR)"];
+    const csvContent = [
+      headers.join(","),
+      ...filteredTransactions.map(tx => {
+        const date = new Date(tx.transaction_date || tx.created_at).toISOString().split('T')[0];
+        // Wrap strings in quotes to handle commas
+        return `"${date}","${tx.type}","${tx.category}","${tx.description.replace(/"/g, '""')}","${tx.amount}"`;
+      })
+    ].join("\n");
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `finance_report_${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   return (
@@ -92,7 +120,7 @@ export default function FinanceClient({ initialData }: { initialData: any[] }) {
       </div>
 
       {/* Toolbar */}
-      <div className="bg-white p-4 rounded-2xl shadow-sm border border-[#E3E8E4] flex flex-col sm:flex-row justify-between gap-4 mt-6">
+      <div className="bg-white p-4 rounded-2xl shadow-sm border border-[#E3E8E4] flex flex-col sm:flex-row justify-between items-center gap-4 mt-6">
         <div className="relative w-full sm:max-w-md">
           <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
           <input 
@@ -103,12 +131,37 @@ export default function FinanceClient({ initialData }: { initialData: any[] }) {
             className="w-full pl-10 pr-4 py-2 rounded-lg border border-[#E3E8E4] focus:outline-none focus:border-[#629A13] text-sm"
           />
         </div>
-        <div className="flex gap-3">
-          <button onClick={() => alert('Filters coming soon!')} className="flex items-center gap-2 px-4 py-2 bg-white border border-[#E3E8E4] rounded-lg text-sm font-semibold text-[#00264A] hover:bg-[#F8FAF7]">
-            <Filter size={16} />
-            Filter
-          </button>
-          <button onClick={() => alert('Exporting Report coming soon!')} className="px-4 py-2 bg-[#00264A] text-white rounded-lg text-sm font-semibold hover:bg-[#001A33]">
+        <div className="flex gap-3 relative w-full sm:w-auto">
+          <div className="relative">
+            <button 
+              onClick={() => setShowFilters(!showFilters)} 
+              className={`flex items-center gap-2 px-4 py-2 border rounded-lg text-sm font-semibold transition-colors ${showFilters ? 'bg-[#F8FAF7] border-[#629A13] text-[#629A13]' : 'bg-white border-[#E3E8E4] text-[#00264A] hover:bg-[#F8FAF7]'}`}
+            >
+              <Filter size={16} />
+              Filter
+            </button>
+            {showFilters && (
+              <div className="absolute right-0 top-12 w-48 bg-white border border-[#E3E8E4] shadow-lg rounded-xl p-3 z-20">
+                <p className="text-xs font-bold text-[#4A5568] uppercase tracking-wider mb-2">Transaction Type</p>
+                <div className="space-y-1">
+                  {['All', 'Income', 'Expense'].map(type => (
+                    <label key={type} className="flex items-center gap-2 text-sm text-[#00264A] p-2 hover:bg-[#F8FAF7] rounded-lg cursor-pointer">
+                      <input 
+                        type="radio" 
+                        name="filterType" 
+                        value={type} 
+                        checked={filterType === type}
+                        onChange={(e) => setFilterType(e.target.value)}
+                        className="text-[#629A13] focus:ring-[#629A13]"
+                      />
+                      {type}
+                    </label>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+          <button onClick={handleExportCSV} className="px-4 py-2 bg-[#00264A] text-white rounded-lg text-sm font-semibold hover:bg-[#001A33] transition-colors whitespace-nowrap">
             Export Report
           </button>
         </div>
@@ -126,7 +179,6 @@ export default function FinanceClient({ initialData }: { initialData: any[] }) {
                 <th className="px-6 py-4 font-semibold">Date</th>
                 <th className="px-6 py-4 font-semibold">Description</th>
                 <th className="px-6 py-4 font-semibold">Category</th>
-                <th className="px-6 py-4 font-semibold">Reference</th>
                 <th className="px-6 py-4 font-semibold text-right">Amount</th>
                 <th className="px-6 py-4 font-semibold text-right">Actions</th>
               </tr>
@@ -134,7 +186,7 @@ export default function FinanceClient({ initialData }: { initialData: any[] }) {
             <tbody className="divide-y divide-[#E3E8E4]">
               {filteredTransactions.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-[#4A5568]">
+                  <td colSpan={5} className="px-6 py-12 text-center text-[#4A5568]">
                     <div className="flex flex-col items-center justify-center">
                       <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mb-3">
                         <DollarSign size={24} className="text-gray-400" />
@@ -147,7 +199,7 @@ export default function FinanceClient({ initialData }: { initialData: any[] }) {
                 filteredTransactions.map((tx) => (
                   <tr key={tx.id} className="hover:bg-gray-50/50 transition-colors group">
                     <td className="px-6 py-4 text-[#4A5568]">
-                      {new Date(tx.created_at).toLocaleDateString('en-IN', {
+                      {new Date(tx.transaction_date || tx.created_at).toLocaleDateString('en-IN', {
                         day: 'numeric', month: 'short', year: 'numeric'
                       })}
                     </td>
@@ -158,9 +210,6 @@ export default function FinanceClient({ initialData }: { initialData: any[] }) {
                       <span className="bg-gray-100 text-gray-600 px-2.5 py-1 rounded-md text-xs font-medium">
                         {tx.category}
                       </span>
-                    </td>
-                    <td className="px-6 py-4 text-[#4A5568]">
-                      {tx.reference_id || "-"}
                     </td>
                     <td className="px-6 py-4 text-right">
                       <span className={`font-bold ${tx.type === 'Income' ? 'text-green-600' : 'text-[#00264A]'}`}>

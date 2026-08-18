@@ -11,7 +11,7 @@ export default async function FinancePage() {
   const { data: transactions, error } = await supabase
     .from("finance_transactions")
     .select("*")
-    .order("created_at", { ascending: false });
+    .order("transaction_date", { ascending: false });
 
   if (error) {
     console.error("Error fetching transactions:", error);

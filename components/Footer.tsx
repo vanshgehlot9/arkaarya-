@@ -1,14 +1,37 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { Recycle } from "lucide-react";
+import { createClient } from "@/lib/supabase-browser";
 
 interface FooterProps {
   onOpenPickup?: () => void;
 }
 
 export const Footer: React.FC<FooterProps> = ({ onOpenPickup = () => {} }) => {
+  const [legalLinks, setLegalLinks] = useState<any[]>([]);
+
+  useEffect(() => {
+    const fetchLegalLinks = async () => {
+      try {
+        const supabase = createClient();
+        const { data, error } = await supabase
+          .from("legal_documents")
+          .select("title, slug")
+          .eq("status", "published")
+          .order("title", { ascending: true });
+        
+        if (!error && data) {
+          setLegalLinks(data);
+        }
+      } catch (err) {
+        console.error("Failed to fetch legal links:", err);
+      }
+    };
+    fetchLegalLinks();
+  }, []);
+
   const scrollToTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
 
   return (
@@ -118,14 +141,10 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPickup = () => {} }) => {
           <div>
             <h4 className="text-xs font-semibold uppercase tracking-widest text-[#3B5A72] mb-5">Legal</h4>
             <ul className="space-y-3">
-              {[
-                { name: "Terms & Conditions", href: "/terms-and-conditions" },
-                { name: "Privacy Policy", href: "/privacy-policy" },
-                { name: "Refund & Cancellation", href: "/refund-cancellation-policy" },
-              ].map((l) => (
-                <li key={l.name}>
-                  <Link href={l.href} className="text-sm text-[#7A9AB4] hover:text-white transition-colors duration-150">
-                    {l.name}
+              {legalLinks.map((l: any) => (
+                <li key={l.slug}>
+                  <Link href={`/legal/${l.slug}`} className="text-sm text-[#7A9AB4] hover:text-white transition-colors duration-150">
+                    {l.title}
                   </Link>
                 </li>
               ))}

@@ -43,7 +43,7 @@ export async function submitEPRInquiry(formData: FormData) {
   } catch (error: unknown) {
     console.error("EPR submission error:", error);
     if (error instanceof z.ZodError) {
-      return { success: false, error: (error as any).errors[0].message };
+      return { success: false, error: (error as any).errors?.[0]?.message || "Validation failed." };
     }
     return { success: false, error: error instanceof Error ? error.message : "An unexpected error occurred. Please try again." };
   }

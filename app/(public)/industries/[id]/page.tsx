@@ -115,10 +115,10 @@ export default function IndustryPage() {
               <div className="flex flex-wrap gap-4 mt-6">
                 <button 
                   onClick={() => router.push("/pickup")}
-                  className="btn-pill btn-pill-lime"
+                  className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[#629A13] text-white font-bold hover:bg-[#75B518] transition-all shadow-sm btn-eco-glow group/btn"
                 >
-                  <span className="font-bold">Schedule Certified Pickup</span>
-                  <ArrowRight size={16} />
+                  <span>Schedule Certified Pickup</span>
+                  <ArrowRight size={16} className="group-hover/btn:translate-x-1.5 transition-transform" />
                 </button>
               </div>
               
