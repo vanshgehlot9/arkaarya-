@@ -1,23 +1,26 @@
 "use client";
 
 import React, { useState } from "react";
+import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
-import { IndustriesSection } from "@/components/IndustriesSection";
 import { StatsBar } from "@/components/StatsBar";
-import { WhoWeAre } from "@/components/WhoWeAre";
-import { Services } from "@/components/Services";
-import { Timeline } from "@/components/Timeline";
-import { CaseStudies } from "@/components/CaseStudies";
-import { WhyChooseUs } from "@/components/WhyChooseUs";
-import { Testimonials } from "@/components/Testimonials";
-import { ContactSection } from "@/components/ContactSection";
-import { Footer } from "@/components/Footer";
-import { SocialActivities } from "@/components/SocialActivities";
-import { ImpactCalculator } from "@/components/ImpactCalculator";
-import { LeadPopup } from "@/components/LeadPopup";
-import { WhatsAppWidget } from "@/components/WhatsAppWidget";
+
+// Lazy-load heavy sections below the fold for faster initial page load
+const WhoWeAre = dynamic(() => import("@/components/WhoWeAre").then(m => ({ default: m.WhoWeAre })));
+const Services = dynamic(() => import("@/components/Services").then(m => ({ default: m.Services })));
+const Timeline = dynamic(() => import("@/components/Timeline").then(m => ({ default: m.Timeline })));
+const CaseStudies = dynamic(() => import("@/components/CaseStudies").then(m => ({ default: m.CaseStudies })));
+const IndustriesSection = dynamic(() => import("@/components/IndustriesSection").then(m => ({ default: m.IndustriesSection })));
+const SocialActivities = dynamic(() => import("@/components/SocialActivities").then(m => ({ default: m.SocialActivities })));
+const WhyChooseUs = dynamic(() => import("@/components/WhyChooseUs").then(m => ({ default: m.WhyChooseUs })));
+const Testimonials = dynamic(() => import("@/components/Testimonials").then(m => ({ default: m.Testimonials })));
+const ContactSection = dynamic(() => import("@/components/ContactSection").then(m => ({ default: m.ContactSection })));
+const Footer = dynamic(() => import("@/components/Footer").then(m => ({ default: m.Footer })));
+const ImpactCalculator = dynamic(() => import("@/components/ImpactCalculator").then(m => ({ default: m.ImpactCalculator })));
+const LeadPopup = dynamic(() => import("@/components/LeadPopup").then(m => ({ default: m.LeadPopup })));
+const WhatsAppWidget = dynamic(() => import("@/components/WhatsAppWidget").then(m => ({ default: m.WhatsAppWidget })));
 
 export default function Home() {
   const router = useRouter();

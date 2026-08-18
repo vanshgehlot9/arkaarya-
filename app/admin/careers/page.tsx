@@ -8,13 +8,22 @@ export const revalidate = 0;
 export default async function CareersAdminPage() {
   const supabase = createAdminClient();
 
-  const { data: jobs, error } = await supabase
+  const { data: jobs, error: jobsError } = await supabase
     .from("jobs")
     .select("*")
     .order("created_at", { ascending: false });
 
-  if (error) {
-    console.error("Error fetching jobs:", error);
+  if (jobsError) {
+    console.error("Error fetching jobs:", jobsError);
+  }
+
+  const { data: applications, error: appsError } = await supabase
+    .from("job_applications")
+    .select("*, jobs(title)")
+    .order("created_at", { ascending: false });
+
+  if (appsError) {
+    console.error("Error fetching job applications:", appsError);
   }
 
   return (
@@ -28,7 +37,7 @@ export default async function CareersAdminPage() {
           <AddJobModal />
         </div>
       </div>
-      <CareersClient initialData={jobs || []} />
+      <CareersClient initialData={jobs || []} initialApplications={applications || []} />
     </div>
   );
 }

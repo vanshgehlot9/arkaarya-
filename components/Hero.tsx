@@ -26,9 +26,7 @@ export const Hero: React.FC<HeroProps> = ({
           alt="ArkaArya Circular Economy & Clean Energy"
           className="w-full h-full object-cover object-[center_right] lg:object-right"
         />
-        {/* Crisp text contrast and top frosted header blending */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white via-white/95 sm:via-white/80 to-transparent lg:w-[65%] w-full" />
-        <div className="absolute top-0 left-0 right-0 h-28 bg-gradient-to-b from-white/90 via-white/40 to-transparent" />
+      
       </div>
 
       {/* Foreground Content Container */}

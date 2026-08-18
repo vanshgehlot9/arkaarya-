@@ -147,7 +147,7 @@ export default function FinanceClient({ initialData }: { initialData: any[] }) {
                 filteredTransactions.map((tx) => (
                   <tr key={tx.id} className="hover:bg-gray-50/50 transition-colors group">
                     <td className="px-6 py-4 text-[#4A5568]">
-                      {new Date(tx.date).toLocaleDateString('en-IN', {
+                      {new Date(tx.created_at).toLocaleDateString('en-IN', {
                         day: 'numeric', month: 'short', year: 'numeric'
                       })}
                     </td>

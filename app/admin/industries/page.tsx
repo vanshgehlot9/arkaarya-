@@ -10,11 +10,7 @@ export const metadata = {
 export default async function AdminIndustriesPage() {
   const supabase = createAdminClient();
   
-  // Verify auth
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) {
-    redirect("/auth");
-  }
+
 
   // Fetch industries
   const { data: industries, error } = await supabase

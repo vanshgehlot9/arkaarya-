@@ -12,9 +12,7 @@ const navLinks = [
   { name: "Impact", href: "/#impact" },
   { name: "Who We Are", href: "/#about" },
   { name: "Services", href: "/#services" },
-  { name: "Industries", href: "/#industries" },
   { name: "Social Activities", href: "/#social-activities" },
-  { name: "Trust & Clients", href: "/#testimonials" },
   { name: "Careers", href: "/careers" },
   { name: "Contact", href: "/#contact" },
 ];

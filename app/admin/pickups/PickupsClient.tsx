@@ -133,9 +133,28 @@ export default function PickupsClient({ initialData }: { initialData: any[] }) {
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`px-2.5 py-1 rounded-full text-xs font-semibold border ${getStatusColor(pickup.status)}`}>
-                        {formatStatus(pickup.status)}
-                      </span>
+                      <select 
+                        value={pickup.status || "pending"}
+                        onChange={async (e) => {
+                          const newStatus = e.target.value;
+                          // Optimistic update
+                          setPickups(pickups.map(p => p.id === pickup.id ? { ...p, status: newStatus } : p));
+                          const formData = new FormData();
+                          formData.append("id", pickup.id);
+                          formData.append("status", newStatus);
+                          formData.append("notes", "Status updated from list view");
+                          const { updatePickupStatus } = await import("./actions");
+                          await updatePickupStatus(formData);
+                        }}
+                        className={`px-2.5 py-1.5 rounded-md text-xs font-semibold border focus:outline-none focus:ring-2 focus:ring-[#629A13]/50 transition-colors ${getStatusColor(pickup.status)}`}
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="assigned">Assigned</option>
+                        <option value="in_transit">In Transit</option>
+                        <option value="received">Received</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                      </select>
                     </td>
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2 relative">

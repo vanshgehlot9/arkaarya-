@@ -28,8 +28,8 @@ export default function LoginPage() {
       <div className="bg-white p-8 rounded-3xl shadow-xl w-full max-w-md border border-[#E3E8E4]">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="w-8 h-8 rounded-full bg-[#00264A]"></div>
-            <span className="text-2xl font-bold text-[#00264A]">ArkaArya</span>
+            <img src="/ArkaAryaPvtLtd_Logo_v3.0.png" alt="ArkaArya Logo" className="h-8 w-auto object-contain" />
+            <span className="text-xl font-bold text-[#00264A] ml-2">ArkaArya Admin</span>
           </div>
           <h1 className="text-2xl font-bold text-[#00264A]">Admin Portal</h1>
           <p className="text-[#4A5568] mt-2">Sign in to manage operations</p>

@@ -95,3 +95,20 @@ export async function deleteJob(id: string) {
   return { success: true };
 }
 
+export async function updateApplicationStatus(id: string, status: string) {
+  const supabase = createAdminClient();
+  
+  const { error } = await supabase
+    .from("job_applications")
+    .update({ status })
+    .eq("id", id);
+
+  if (error) {
+    console.error("Error updating application status:", error);
+    return { error: error.message };
+  }
+
+  revalidatePath("/admin/careers");
+  return { success: true };
+}
+

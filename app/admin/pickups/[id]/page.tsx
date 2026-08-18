@@ -3,6 +3,8 @@ import { notFound } from "next/navigation";
 import { createAdminClient } from "@/lib/supabase-admin";
 import { ArrowLeft, MapPin, Building, Phone, Mail, Box, Clock, ShieldAlert, FileText, CheckCircle2 } from "lucide-react";
 import { UpdatePickupStatusModal } from "../UpdatePickupStatusModal";
+import { PickupOperations } from "./PickupOperations";
+import { PrintButton } from "./PrintButton";
 import Link from "next/link";
 
 export const revalidate = 0;
@@ -38,11 +40,11 @@ export default async function PickupDetailsPage({ params }: { params: { id: stri
   };
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto pb-12">
+    <div className="space-y-6 max-w-5xl mx-auto pb-12 print:pb-0">
       
       {/* Header & Breadcrumb */}
       <div className="flex items-center gap-4">
-        <Link href="/admin/pickups" className="p-2 bg-white border border-[#E3E8E4] rounded-lg text-gray-500 hover:text-[#00264A] hover:bg-gray-50 transition-colors">
+        <Link href="/admin/pickups" className="p-2 bg-white border border-[#E3E8E4] rounded-lg text-gray-500 hover:text-[#00264A] hover:bg-gray-50 transition-colors print:hidden">
           <ArrowLeft size={20} />
         </Link>
         <div>
@@ -58,10 +60,8 @@ export default async function PickupDetailsPage({ params }: { params: { id: stri
             })}
           </p>
         </div>
-        <div className="ml-auto flex gap-3">
-          <button className="px-4 py-2 bg-white border border-[#E3E8E4] rounded-lg text-sm font-semibold text-[#00264A] hover:bg-[#F8FAF7] shadow-sm">
-            Download PDF
-          </button>
+        <div className="ml-auto flex gap-3 print:hidden">
+          <PrintButton />
           <UpdatePickupStatusModal id={pickup.id} currentStatus={pickup.status} />
         </div>
       </div>
@@ -157,38 +157,8 @@ export default async function PickupDetailsPage({ params }: { params: { id: stri
             </div>
           </div>
 
-          {/* Quick Actions (Placeholders for future) */}
-          <div className="bg-white rounded-2xl shadow-sm border border-[#E3E8E4] p-6">
-            <h2 className="font-bold text-[#00264A] mb-4">Operations</h2>
-            <div className="space-y-3">
-              <button className="w-full flex items-center justify-between p-3 rounded-xl border border-[#E3E8E4] hover:border-[#629A13] hover:bg-[#F8FAF7] transition-colors text-left group">
-                <div>
-                  <p className="font-semibold text-[#00264A] text-sm group-hover:text-[#629A13]">Assign Driver</p>
-                  <p className="text-xs text-gray-500">Dispatch logistics team</p>
-                </div>
-                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 group-hover:bg-[#629A13]/10 group-hover:text-[#629A13]">
-                  +
-                </div>
-              </button>
-              
-              <button className="w-full flex items-center justify-between p-3 rounded-xl border border-[#E3E8E4] hover:border-[#629A13] hover:bg-[#F8FAF7] transition-colors text-left group">
-                <div>
-                  <p className="font-semibold text-[#00264A] text-sm group-hover:text-[#629A13]">Generate EPR Certificate</p>
-                  <p className="text-xs text-gray-500">Draft compliance docs</p>
-                </div>
-                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-400 group-hover:bg-[#629A13]/10 group-hover:text-[#629A13]">
-                  <CheckCircle2 size={16} />
-                </div>
-              </button>
-
-              <button className="w-full flex items-center justify-between p-3 rounded-xl border border-red-100 bg-red-50 hover:bg-red-100 transition-colors text-left group mt-4">
-                <div className="flex items-center gap-2">
-                  <ShieldAlert size={16} className="text-red-600" />
-                  <p className="font-semibold text-red-700 text-sm">Cancel Request</p>
-                </div>
-              </button>
-            </div>
-          </div>
+          {/* Quick Actions */}
+          <PickupOperations id={pickup.id} currentStatus={pickup.status || 'pending'} />
 
         </div>
 

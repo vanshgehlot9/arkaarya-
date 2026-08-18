@@ -25,22 +25,6 @@ export async function updatePickupStatus(formData: FormData) {
     return { error: updateError.message };
   }
 
-  // Insert a history record
-  const { error: historyError } = await supabase
-    .from("pickup_status_history")
-    .insert([
-      {
-        pickup_id: id,
-        status,
-        notes,
-      }
-    ]);
-
-  if (historyError) {
-    console.error("Error adding pickup status history:", historyError);
-    return { error: historyError.message };
-  }
-
   revalidatePath(`/admin/pickups/${id}`);
   revalidatePath("/admin/pickups");
   

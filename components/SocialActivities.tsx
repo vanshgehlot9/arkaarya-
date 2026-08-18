@@ -8,7 +8,7 @@ import { createClient } from "@/lib/supabase-browser";
 
 // --- Types ---
 type MediaType = "image" | "video";
-type Category = "All" | "Community" | "Environment" | "Team" | "Events";
+type Category = "All" | "Community" | "Environment" | "Team" | "Events" | "News Feeds";
 
 interface Activity {
   id: string;
@@ -22,7 +22,7 @@ interface Activity {
 
 // Fetch dynamically via Supabase
 
-const categories: Category[] = ["All", "Community", "Environment", "Team", "Events"];
+const categories: Category[] = ["All", "Community", "Environment", "Team", "Events", "News Feeds"];
 
 export const SocialActivities = () => {
   const [activities, setActivities] = useState<Activity[]>([]);

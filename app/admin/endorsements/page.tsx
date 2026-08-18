@@ -10,11 +10,7 @@ export const metadata = {
 export default async function AdminEndorsementsPage() {
   const supabase = createAdminClient();
   
-  // Verify auth
-  const { data: { session } } = await supabase.auth.getSession();
-  if (!session) {
-    redirect("/auth");
-  }
+
 
   // Fetch endorsements
   const { data: endorsements, error } = await supabase

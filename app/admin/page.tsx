@@ -1,6 +1,6 @@
 import React from "react";
 import { createAdminClient } from "@/lib/supabase-admin";
-import { TrendingUp, Users, Truck, ArrowRight, Activity, DollarSign } from "lucide-react";
+import { TrendingUp, Users, Truck, ArrowRight, Activity, DollarSign, ShieldCheck } from "lucide-react";
 import Link from "next/link";
 
 export const revalidate = 0;
@@ -25,6 +25,11 @@ export default async function AdminDashboard() {
     .from("finance_transactions")
     .select("amount, type");
 
+  // 4. Fetch EPR Inquiries
+  const { count: eprCount } = await supabase
+    .from("epr_inquiries")
+    .select("*", { count: 'exact', head: true });
+
   let totalIncome = 0;
   let totalExpense = 0;
 
@@ -44,7 +49,7 @@ export default async function AdminDashboard() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         
         {/* Active Pickups Card */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E3E8E4] relative overflow-hidden group hover:border-[#629A13] transition-colors">
@@ -81,6 +86,22 @@ export default async function AdminDashboard() {
           </Link>
         </div>
 
+        {/* EPR Inquiries Card */}
+        <div className="bg-white p-6 rounded-2xl shadow-sm border border-[#E3E8E4] relative overflow-hidden group hover:border-purple-500 transition-colors">
+          <div className="flex justify-between items-start mb-4">
+            <div className="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center text-purple-600">
+              <ShieldCheck size={24} />
+            </div>
+          </div>
+          <div>
+            <p className="text-[#4A5568] font-medium mb-1">EPR Inquiries</p>
+            <h3 className="text-3xl font-bold text-[#00264A]">{eprCount || 0}</h3>
+          </div>
+          <Link href="/admin/epr" className="absolute bottom-6 right-6 opacity-0 group-hover:opacity-100 transition-opacity bg-[#F8FAF7] p-2 rounded-full text-[#00264A]">
+            <ArrowRight size={20} />
+          </Link>
+        </div>
+
         {/* Net Revenue Card */}
         <div className="bg-[#00264A] p-6 rounded-2xl shadow-sm text-white relative overflow-hidden group">
           <div className="absolute -right-6 -top-6 w-32 h-32 bg-white/5 rounded-full blur-2xl"></div>
@@ -94,7 +115,7 @@ export default async function AdminDashboard() {
           </div>
           <div className="relative z-10">
             <p className="text-blue-100 font-medium mb-1">Net Income</p>
-            <h3 className="text-3xl font-bold text-white">
+            <h3 className="text-2xl font-bold text-white">
               {new Intl.NumberFormat('en-IN', { style: 'currency', currency: 'INR', maximumFractionDigits: 0 }).format(netIncome)}
             </h3>
           </div>

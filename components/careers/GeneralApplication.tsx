@@ -2,7 +2,8 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Send, UploadCloud } from "lucide-react";
+import { Send, UploadCloud, CheckCircle, AlertCircle, Loader2 } from "lucide-react";
+import { submitApplication } from "@/app/actions/submitApplication";
 
 export const GeneralApplication = () => {
   const [formData, setFormData] = useState({
@@ -10,18 +11,48 @@ export const GeneralApplication = () => {
     email: "",
     phone: "",
     interest: "",
-    message: ""
   });
-  
+  const [resumeFile, setResumeFile] = useState<File | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setResumeFile(e.target.files[0]);
+    }
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Simulate submission
-    setTimeout(() => {
-      setSubmitted(true);
-      setFormData({ name: "", email: "", phone: "", interest: "", message: "" });
-    }, 1000);
+    setErrorMsg("");
+    setIsSubmitting(true);
+
+    try {
+      const data = new FormData();
+      data.append("name", formData.name);
+      data.append("email", formData.email);
+      data.append("phone", formData.phone);
+      data.append("interest", formData.interest);
+      
+      if (resumeFile) {
+        data.append("resume", resumeFile);
+      }
+
+      const result = await submitApplication(data);
+
+      if (result.success) {
+        setSubmitted(true);
+        setFormData({ name: "", email: "", phone: "", interest: "" });
+        setResumeFile(null);
+      } else {
+        setErrorMsg(result.error || "Something went wrong.");
+      }
+    } catch (err) {
+      setErrorMsg("Failed to submit. Please try again later.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -61,7 +92,7 @@ export const GeneralApplication = () => {
                   className="h-full flex flex-col items-center justify-center text-center space-y-4"
                 >
                   <div className="w-16 h-16 bg-[#629A13]/20 rounded-full flex items-center justify-center text-[#629A13]">
-                    <Send size={28} />
+                    <CheckCircle size={32} />
                   </div>
                   <h3 className="text-2xl font-bold text-white">Profile Received</h3>
                   <p className="text-[#E6ECF2]">
@@ -76,6 +107,13 @@ export const GeneralApplication = () => {
                 </motion.div>
               ) : (
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {errorMsg && (
+                    <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-xl text-sm flex items-start gap-2">
+                      <AlertCircle size={16} className="mt-0.5 shrink-0" />
+                      <p>{errorMsg}</p>
+                    </div>
+                  )}
+
                   <div className="space-y-1">
                     <label className="text-sm font-medium text-[#E6ECF2]">Full Name</label>
                     <input 
@@ -104,6 +142,7 @@ export const GeneralApplication = () => {
                       <label className="text-sm font-medium text-[#E6ECF2]">Phone</label>
                       <input 
                         type="tel"
+                        required
                         value={formData.phone}
                         onChange={(e) => setFormData({...formData, phone: e.target.value})}
                         className="w-full bg-[#00264A] border border-[#053766] text-white rounded-xl px-4 py-3 focus:outline-none focus:border-[#629A13] transition-colors"
@@ -119,7 +158,7 @@ export const GeneralApplication = () => {
                       onChange={(e) => setFormData({...formData, interest: e.target.value})}
                       className="w-full bg-[#00264A] border border-[#053766] text-white rounded-xl px-4 py-3 focus:outline-none focus:border-[#629A13] transition-colors appearance-none"
                     >
-                      <option value="">Select an area</option>
+                      <option value="">Select an area (Optional)</option>
                       <option value="Technology">Technology & Software</option>
                       <option value="Sustainability">Sustainability & ESG</option>
                       <option value="Operations">Operations & Logistics</option>
@@ -130,20 +169,32 @@ export const GeneralApplication = () => {
 
                   <div className="space-y-1">
                     <label className="text-sm font-medium text-[#E6ECF2]">Resume / CV</label>
-                    <label className="flex items-center justify-center gap-2 w-full bg-[#00264A] border border-[#053766] border-dashed text-[#E6ECF2] hover:text-white rounded-xl px-4 py-3 cursor-pointer hover:border-[#629A13] transition-colors">
-                      <UploadCloud size={18} />
-                      <span className="text-sm">Upload PDF</span>
-                      <input type="file" accept=".pdf" className="hidden" />
+                    <label className={`flex flex-col items-center justify-center gap-2 w-full bg-[#00264A] border ${resumeFile ? 'border-[#629A13] text-white' : 'border-[#053766] border-dashed text-[#E6ECF2]'} hover:text-white rounded-xl px-4 py-3 cursor-pointer hover:border-[#629A13] transition-colors`}>
+                      <UploadCloud size={18} className={resumeFile ? 'text-[#629A13]' : ''} />
+                      <span className="text-sm text-center">
+                        {resumeFile ? resumeFile.name : "Upload PDF Resume (Max 5MB)"}
+                      </span>
+                      <input type="file" accept=".pdf" onChange={handleFileChange} className="hidden" />
                     </label>
                   </div>
 
                   <div className="pt-2">
                     <button 
                       type="submit"
-                      className="w-full flex items-center justify-center gap-2 bg-[#629A13] text-white font-semibold py-3.5 rounded-xl hover:bg-[#528210] transition-colors shadow-lg shadow-[#629A13]/20"
+                      disabled={isSubmitting}
+                      className="w-full flex items-center justify-center gap-2 bg-[#629A13] text-white font-semibold py-3.5 rounded-xl hover:bg-[#528210] transition-colors shadow-lg shadow-[#629A13]/20 disabled:opacity-70 disabled:cursor-not-allowed"
                     >
-                      Send Your Profile
-                      <Send size={18} />
+                      {isSubmitting ? (
+                        <>
+                          <Loader2 size={18} className="animate-spin" />
+                          Submitting...
+                        </>
+                      ) : (
+                        <>
+                          Send Your Profile
+                          <Send size={18} />
+                        </>
+                      )}
                     </button>
                   </div>
                 </form>
