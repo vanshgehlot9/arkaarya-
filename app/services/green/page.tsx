@@ -50,7 +50,7 @@ export default function ArkaAryaGreen() {
               <div className="flex flex-wrap gap-4 mt-4">
                 <button 
                   onClick={() => router.push("/pickup")}
-                  className="btn-pill btn-pill-lime"
+                  className="inline-flex items-center justify-center gap-2 px-6 py-3 rounded-full bg-[#629A13] text-white font-bold hover:bg-[#75B518] transition-all shadow-sm btn-eco-glow"
                 >
                   <span className="font-bold">Schedule Enterprise Pickup</span>
                   <ArrowRight size={16} />

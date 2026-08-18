@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase-browser";
 
 // Types
@@ -16,6 +17,7 @@ interface CaseStudy {
 }
 
 export const CaseStudies = () => {
+  const router = useRouter();
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(0);
   const [isClient, setIsClient] = useState(false);
@@ -44,6 +46,7 @@ export const CaseStudies = () => {
           const formattedId = String(index + 1).padStart(2, "0");
           return {
             ...item,
+            db_id: item.id,
             id: formattedId,
           };
         });
@@ -263,7 +266,10 @@ export const CaseStudies = () => {
 
                         {/* CTA */}
                         <div className="mt-auto">
-                          <button className="flex items-center gap-2 text-sm font-bold text-[#00264A] hover:text-[#629A13] transition-colors group/btn">
+                          <button 
+                            onClick={() => router.push(`/case-studies/${(study as any).db_id}`)}
+                            className="flex items-center gap-2 text-sm font-bold text-[#00264A] hover:text-[#629A13] transition-colors group/btn"
+                          >
                             View Case Study 
                             <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
                           </button>

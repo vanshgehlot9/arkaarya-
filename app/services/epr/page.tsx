@@ -1,6 +1,6 @@
 import React from "react";
 import EPRForm from "./EPRForm";
-import { ShieldCheck, BarChart, FileText, CheckCircle2 } from "lucide-react";
+import { ShieldCheck, BarChart, FileText, CheckCircle2, ArrowLeft } from "lucide-react";
 
 export const metadata = {
   title: "EPR Services | ArkaArya - Extended Producer Responsibility",
@@ -15,6 +15,15 @@ export default function EPRServicePage() {
         <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-[#629A13]/10 rounded-full blur-[120px] pointer-events-none" />
         
         <div className="max-w-[1280px] mx-auto relative z-10 text-center">
+          <div className="flex justify-center mb-6">
+            <a 
+              href="/"
+              className="inline-flex items-center gap-2 text-sm font-semibold text-[#C8D8E4] hover:text-white transition-colors group"
+            >
+              <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
+              Back to Homepage
+            </a>
+          </div>
           <p className="text-sm font-bold uppercase tracking-widest text-[#629A13] mb-4">
             Circular Solutions
           </p>
