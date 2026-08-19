@@ -1,19 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { Wrench, Users, Shield, Save, Loader2, Mail, Key } from "lucide-react";
-import { toggleMaintenanceMode, inviteAdminUser, changeAdminPassword } from "./actions";
+import { Wrench, Shield, Save, Loader2, Key } from "lucide-react";
+import { toggleMaintenanceMode, changeAdminPassword } from "./actions";
 
 export default function SettingsClient({ initialMaintenanceMode }: { initialMaintenanceMode: boolean }) {
   const [activeTab, setActiveTab] = useState("general");
   const [maintenanceMode, setMaintenanceMode] = useState(initialMaintenanceMode);
   const [isToggling, setIsToggling] = useState(false);
   
-  // Team State
-  const [inviteEmail, setInviteEmail] = useState("");
-  const [isInviting, setIsInviting] = useState(false);
-  const [inviteSuccess, setInviteSuccess] = useState("");
-  const [inviteError, setInviteError] = useState("");
+
 
   // Security State
   const [password, setPassword] = useState("");
@@ -33,21 +29,7 @@ export default function SettingsClient({ initialMaintenanceMode }: { initialMain
     setIsToggling(false);
   };
 
-  const handleInvite = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsInviting(true);
-    setInviteError("");
-    setInviteSuccess("");
-    
-    const res = await inviteAdminUser(inviteEmail);
-    if (res.success) {
-      setInviteSuccess(`Invite sent to ${inviteEmail}`);
-      setInviteEmail("");
-    } else {
-      setInviteError(res.error || "Failed to invite user");
-    }
-    setIsInviting(false);
-  };
+
 
   const handleChangePassword = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -86,13 +68,7 @@ export default function SettingsClient({ initialMaintenanceMode }: { initialMain
           <Wrench size={18} />
           General Site Settings
         </button>
-        <button 
-          onClick={() => setActiveTab("team")}
-          className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-colors ${activeTab === 'team' ? 'bg-[#00264A] text-white' : 'text-[#4A5568] hover:bg-white hover:text-[#00264A]'}`}
-        >
-          <Users size={18} />
-          Team Management
-        </button>
+
         <button 
           onClick={() => setActiveTab("security")}
           className={`flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-sm transition-colors ${activeTab === 'security' ? 'bg-[#00264A] text-white' : 'text-[#4A5568] hover:bg-white hover:text-[#00264A]'}`}
@@ -136,54 +112,7 @@ export default function SettingsClient({ initialMaintenanceMode }: { initialMain
           </div>
         )}
 
-        {/* TEAM MANAGEMENT */}
-        {activeTab === "team" && (
-          <div className="max-w-2xl animate-in fade-in duration-300">
-            <h2 className="text-xl font-bold text-[#00264A] mb-2">Team Management</h2>
-            <p className="text-[#4A5568] text-sm mb-8">Invite new administrators to access the dashboard.</p>
-            
-            <div className="bg-white border border-[#E3E8E4] rounded-2xl p-6 shadow-sm">
-              <h3 className="font-bold text-[#00264A] mb-4">Invite Administrator</h3>
-              
-              <form onSubmit={handleInvite} className="space-y-4">
-                {inviteSuccess && (
-                  <div className="p-3 bg-green-50 text-green-700 border border-green-200 rounded-xl text-sm font-medium">
-                    {inviteSuccess}
-                  </div>
-                )}
-                {inviteError && (
-                  <div className="p-3 bg-red-50 text-red-700 border border-red-200 rounded-xl text-sm font-medium">
-                    {inviteError}
-                  </div>
-                )}
-                
-                <div>
-                  <label className="block text-sm font-semibold text-[#00264A] mb-1.5">Email Address</label>
-                  <div className="relative">
-                    <Mail size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                    <input 
-                      type="email" 
-                      required
-                      value={inviteEmail}
-                      onChange={(e) => setInviteEmail(e.target.value)}
-                      placeholder="colleague@arkaarya.com"
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E3E8E4] focus:outline-none focus:border-[#629A13] text-sm"
-                    />
-                  </div>
-                </div>
-                
-                <button 
-                  type="submit" 
-                  disabled={isInviting || !inviteEmail}
-                  className="w-full sm:w-auto px-6 py-2.5 bg-[#00264A] text-white rounded-xl font-semibold text-sm hover:bg-[#001A33] transition-colors flex items-center justify-center gap-2 disabled:opacity-70"
-                >
-                  {isInviting ? <Loader2 size={16} className="animate-spin" /> : <Users size={16} />}
-                  Send Invite Link
-                </button>
-              </form>
-            </div>
-          </div>
-        )}
+
 
         {/* SECURITY */}
         {activeTab === "security" && (

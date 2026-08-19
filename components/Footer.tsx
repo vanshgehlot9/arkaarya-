@@ -123,10 +123,9 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPickup = () => {} }) => {
                 { name: "Our Services", href: "/#services" },
                 { name: "EPR Services", href: "/services/epr" },
                 { name: "Measurable Impact", href: "/#impact" },
-                { name: "Social Activities", href: "/#social-activities" },
+                { name: "News Feed (Social)", href: "/#social-activities" },
                 { name: "Careers", href: "/careers" },
                 { name: "Contact Us", href: "/#contact" },
-                { name: "News Feed", href: "/#news-feed" },
               ].map((l) => (
                 <li key={l.name}>
                   <Link href={l.href} className="text-sm text-[#7A9AB4] hover:text-white transition-colors duration-150">
@@ -196,31 +195,63 @@ export const Footer: React.FC<FooterProps> = ({ onOpenPickup = () => {} }) => {
         </div>
       </div>
 
-      {/* ══ Bottom Bar ══ */}
+      {/* ══ Bottom Bar & Brand Pillars (Single Line) ══ */}
       <div className="border-t border-[#0D3A5C] bg-[#000F1C]">
-        <div className="max-w-[1200px] mx-auto px-6 sm:px-8 lg:px-12 py-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-[#3B5A72]">
-          <span>© {new Date().getFullYear()} ArkaArya Private Limited. All rights reserved.</span>
+        <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-10 py-3 flex flex-wrap lg:flex-nowrap items-center justify-center lg:justify-between gap-y-4 gap-x-6 text-[10px] sm:text-xs text-[#3B5A72]">
+          
+          {/* Left: Copyright */}
+          <div className="shrink-0 text-center lg:text-left">
+            <span>© {new Date().getFullYear()} ArkaArya Pvt. Ltd.</span>
+          </div>
+          
+          {/* Center: Brand Pillars */}
+          <div className="flex flex-wrap items-center justify-center gap-x-4 sm:gap-x-6 gap-y-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#629A13" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+              </svg>
+              <span className="font-bold tracking-[0.1em] text-[#7A9AB4] uppercase">Sustaining Nature.</span>
+            </div>
+            <div className="hidden sm:block w-px h-3 bg-[#0D3A5C]"></div>
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+              <span className="font-bold tracking-[0.1em] text-[#7A9AB4] uppercase">Empowering People.</span>
+            </div>
+            <div className="hidden sm:block w-px h-3 bg-[#0D3A5C]"></div>
+            <div className="flex items-center gap-1.5 sm:gap-2">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#EAB308" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
+                <circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/>
+              </svg>
+              <span className="font-bold tracking-[0.1em] text-[#7A9AB4] uppercase">Enriching Society.</span>
+            </div>
+          </div>
 
-          <span className="flex items-center gap-1">
-            Made with{" "}
-            <svg width="11" height="11" viewBox="0 0 24 24" fill="#629A13" className="mx-0.5" aria-hidden>
-              <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-            </svg>{" "}
-            <a href="https://www.aatomate.com" target="_blank" rel="noreferrer" className="text-[#629A13] hover:text-[#7DC018] font-semibold transition-colors">
-              aatomate
-            </a>
-          </span>
+          {/* Right: Branding & Action */}
+          <div className="shrink-0 flex items-center justify-center lg:justify-end gap-4">
+            <span className="flex items-center gap-1">
+              Made with{" "}
+              <svg width="10" height="10" viewBox="0 0 24 24" fill="#629A13" className="mx-0.5" aria-hidden>
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+              </svg>{" "}
+              <a href="https://www.aatomate.com" target="_blank" rel="noreferrer" className="text-[#629A13] hover:text-[#7DC018] font-semibold transition-colors">
+                aatomate
+              </a>
+            </span>
+            <div className="w-px h-3 bg-[#0D3A5C]"></div>
+            <button
+              onClick={scrollToTop}
+              className="flex items-center gap-1 hover:text-white transition-colors group"
+              aria-label="Back to top"
+            >
+              Back to top
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="group-hover:text-[#629A13] transition-colors" aria-hidden>
+                <path d="m18 15-6-6-6 6"/>
+              </svg>
+            </button>
+          </div>
 
-          <button
-            onClick={scrollToTop}
-            className="flex items-center gap-1.5 hover:text-white transition-colors group"
-            aria-label="Back to top"
-          >
-            Back to top
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:text-[#629A13] transition-colors" aria-hidden>
-              <path d="m18 15-6-6-6 6"/>
-            </svg>
-          </button>
         </div>
       </div>
 

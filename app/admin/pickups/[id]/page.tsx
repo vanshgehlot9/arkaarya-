@@ -123,6 +123,16 @@ export default async function PickupDetailsPage({ params }: { params: { id: stri
                   {pickup.address}<br />
                   {pickup.city}, {pickup.state} {pickup.pincode}
                 </p>
+                {pickup.coordinates && (
+                  <a 
+                    href={`https://maps.google.com/?q=${pickup.coordinates.split(" (")[0].replace(" ", "")}`}
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-[#629A13] hover:text-[#4d7a0f] transition-colors"
+                  >
+                    📍 Use My Location (Google Maps)
+                  </a>
+                )}
               </div>
 
               {pickup.notes && (

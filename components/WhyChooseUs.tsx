@@ -3,6 +3,7 @@
 import React, { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Leaf, Cpu, Users, Globe2, ArrowRight } from "lucide-react";
+import { useAutoScroll } from "@/hooks/useAutoScroll";
 
 interface WhyChooseUsProps {
   onOpenPickup?: () => void;
@@ -11,6 +12,9 @@ interface WhyChooseUsProps {
 export const WhyChooseUs: React.FC<WhyChooseUsProps> = ({ onOpenPickup = () => {} }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
+  
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  useAutoScroll(scrollContainerRef, 3500);
 
   const pillars = [
     {
@@ -64,7 +68,7 @@ export const WhyChooseUs: React.FC<WhyChooseUsProps> = ({ onOpenPickup = () => {
         </motion.div>
 
         {/* 4 Pillars Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-24">
+        <div ref={scrollContainerRef} className="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 mb-24 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-8 -mx-6 px-6 md:mx-0 md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           {pillars.map((pillar, idx) => {
             const Icon = pillar.icon;
             return (
@@ -74,7 +78,7 @@ export const WhyChooseUs: React.FC<WhyChooseUsProps> = ({ onOpenPickup = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: "-50px" }}
                 transition={{ duration: 0.5, delay: idx * 0.1, ease: "easeOut" }}
-                className="group relative bg-white border border-[#E3E8E4] rounded-3xl p-8 flex flex-col items-center text-center transition-all duration-300 hover:shadow-[0_15px_40px_rgba(0,38,74,0.06)] hover:border-[#629A13]/30 hover:-translate-y-1"
+                className="group relative bg-white border border-[#E3E8E4] rounded-3xl p-8 flex flex-col items-center text-center transition-all duration-300 hover:shadow-[0_15px_40px_rgba(0,38,74,0.06)] hover:border-[#629A13]/30 hover:-translate-y-1 min-w-[85vw] sm:min-w-[60vw] md:min-w-0 snap-center"
               >
                 <div className="w-16 h-16 rounded-full bg-[#F8FAF7] border border-[#E3E8E4] text-[#00264A] flex items-center justify-center mb-6 group-hover:scale-110 group-hover:text-[#629A13] group-hover:border-[#629A13]/20 group-hover:bg-[#EBF5DC] transition-all duration-500">
                   <Icon size={24} />

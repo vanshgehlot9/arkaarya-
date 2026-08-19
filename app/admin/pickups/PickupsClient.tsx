@@ -81,15 +81,15 @@ export default function PickupsClient({ initialData }: { initialData: any[] }) {
       {/* Table */}
       <div className="bg-white rounded-2xl shadow-sm border border-[#E3E8E4] overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-sm whitespace-nowrap">
+          <table className="text-left text-sm whitespace-nowrap" style={{ minWidth: "900px", width: "100%" }}>
             <thead className="bg-[#F8FAF7] border-b border-[#E3E8E4] text-[#4A5568]">
               <tr>
-                <th className="px-6 py-4 font-semibold">Request ID</th>
-                <th className="px-6 py-4 font-semibold">Client / Company</th>
-                <th className="px-6 py-4 font-semibold">Location</th>
-                <th className="px-6 py-4 font-semibold">Asset Type</th>
-                <th className="px-6 py-4 font-semibold">Status</th>
-                <th className="px-6 py-4 font-semibold text-right">Actions</th>
+                <th className="px-4 py-4 font-semibold">Request ID</th>
+                <th className="px-4 py-4 font-semibold">Client / Company</th>
+                <th className="px-4 py-4 font-semibold">Location</th>
+                <th className="px-4 py-4 font-semibold">Asset Type</th>
+                <th className="px-4 py-4 font-semibold">Status</th>
+                <th className="px-4 py-4 font-semibold text-right" style={{ minWidth: "140px" }}>Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-[#E3E8E4]">
@@ -107,7 +107,7 @@ export default function PickupsClient({ initialData }: { initialData: any[] }) {
               ) : (
                 filteredPickups.map((pickup) => (
                   <tr key={pickup.id} className="hover:bg-gray-50/50 transition-colors group">
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4">
                       <div className="font-bold text-[#00264A]">{pickup.pickup_id}</div>
                       <div className="text-xs text-gray-500 mt-1">
                         {new Date(pickup.created_at).toLocaleDateString('en-IN', {
@@ -115,24 +115,24 @@ export default function PickupsClient({ initialData }: { initialData: any[] }) {
                         })}
                       </div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4">
                       <div className="font-medium text-[#00264A]">{pickup.company_name || "-"}</div>
                       <div className="text-xs text-gray-500 mt-1 flex items-center gap-1">
                         {pickup.contact_person}
                       </div>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4">
                       <div className="flex items-center gap-1 text-[#4A5568]">
                         <MapPin size={14} className="text-gray-400" />
                         {pickup.city}, {pickup.state}
                       </div>
                     </td>
-                    <td className="px-6 py-4 text-[#4A5568]">
+                    <td className="px-4 py-4 text-[#4A5568]">
                       <span className="bg-gray-100 text-gray-700 px-2.5 py-1 rounded-md text-xs font-medium">
                         {pickup.pickup_type || "E-Waste"}
                       </span>
                     </td>
-                    <td className="px-6 py-4">
+                    <td className="px-4 py-4">
                       <select 
                         value={pickup.status || "pending"}
                         onChange={async (e) => {
@@ -156,8 +156,9 @@ export default function PickupsClient({ initialData }: { initialData: any[] }) {
                         <option value="cancelled">Cancelled</option>
                       </select>
                     </td>
-                    <td className="px-6 py-4 text-right">
-                      <div className="flex items-center justify-end gap-2 relative">
+                    {/* Actions column — always visible; sticky keeps it in view on scroll */}
+                    <td className="px-4 py-4 text-right bg-white" style={{ minWidth: "140px", position: "sticky", right: 0 }}>
+                      <div className="flex items-center justify-end gap-2">
                         <Link 
                           href={`/admin/pickups/${pickup.id}`}
                           className="px-3 py-1.5 bg-[#F8FAF7] text-[#00264A] border border-[#E3E8E4] rounded-lg text-xs font-bold hover:bg-gray-100 transition-colors flex items-center gap-1"

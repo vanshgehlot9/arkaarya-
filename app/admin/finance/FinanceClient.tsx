@@ -54,13 +54,13 @@ export default function FinanceClient({ initialData }: { initialData: any[] }) {
       return;
     }
 
-    const headers = ["Date", "Type", "Category", "Description", "Amount (INR)"];
+    const headers = ["Date", "Type", "Category", "Description", "Invoice No", "Amount (INR)"];
     const csvContent = [
       headers.join(","),
       ...filteredTransactions.map(tx => {
         const date = new Date(tx.transaction_date || tx.created_at).toISOString().split('T')[0];
         // Wrap strings in quotes to handle commas
-        return `"${date}","${tx.type}","${tx.category}","${tx.description.replace(/"/g, '""')}","${tx.amount}"`;
+        return `"${date}","${tx.type}","${tx.category}","${tx.description.replace(/"/g, '""')}","${tx.invoice_number || ""}","${tx.amount}"`;
       })
     ].join("\n");
 
@@ -178,6 +178,7 @@ export default function FinanceClient({ initialData }: { initialData: any[] }) {
               <tr>
                 <th className="px-6 py-4 font-semibold">Date</th>
                 <th className="px-6 py-4 font-semibold">Description</th>
+                <th className="px-6 py-4 font-semibold">Invoice No</th>
                 <th className="px-6 py-4 font-semibold">Category</th>
                 <th className="px-6 py-4 font-semibold text-right">Amount</th>
                 <th className="px-6 py-4 font-semibold text-right">Actions</th>
@@ -186,7 +187,7 @@ export default function FinanceClient({ initialData }: { initialData: any[] }) {
             <tbody className="divide-y divide-[#E3E8E4]">
               {filteredTransactions.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-6 py-12 text-center text-[#4A5568]">
+                  <td colSpan={6} className="px-6 py-12 text-center text-[#4A5568]">
                     <div className="flex flex-col items-center justify-center">
                       <div className="w-12 h-12 bg-gray-50 rounded-full flex items-center justify-center mb-3">
                         <DollarSign size={24} className="text-gray-400" />
@@ -205,6 +206,13 @@ export default function FinanceClient({ initialData }: { initialData: any[] }) {
                     </td>
                     <td className="px-6 py-4">
                       <div className="font-medium text-[#00264A]">{tx.description}</div>
+                    </td>
+                    <td className="px-6 py-4 text-[#4A5568]">
+                      {tx.invoice_number ? (
+                        <span className="font-mono text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded">{tx.invoice_number}</span>
+                      ) : (
+                        "-"
+                      )}
                     </td>
                     <td className="px-6 py-4 text-[#4A5568]">
                       <span className="bg-gray-100 text-gray-600 px-2.5 py-1 rounded-md text-xs font-medium">

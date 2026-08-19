@@ -10,7 +10,7 @@ const pickupSchema = z.object({
   categories: z.array(z.string()).min(1, "Select at least one category"),
   quantity: z.string().min(1, "Quantity is required"),
   items: z.string().optional(),
-  address: z.string().min(5, "Address must be at least 5 characters"),
+  address: z.string().min(2, "Address must be at least 2 characters"),
   state: z.string().min(2, "State is required"),
   city: z.string().min(2, "City is required"),
   pincode: z.string().length(6, "Pincode must be 6 digits"),

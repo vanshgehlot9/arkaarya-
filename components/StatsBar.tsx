@@ -4,15 +4,19 @@ import React, { useState, useEffect, useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { Truck, TreePine, Recycle, ShieldCheck, Sparkles, CheckCircle2, ArrowUpRight, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase-browser";
+import { useAutoScroll } from "@/hooks/useAutoScroll";
 
 export const StatsBar: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(containerRef, { once: true, margin: "-100px" });
-
+  
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  
   const [devicesCount, setDevicesCount] = useState(0);
   const [co2Count, setCo2Count] = useState(0);
   const [recoveryCount, setRecoveryCount] = useState(0);
   const [complianceCount, setComplianceCount] = useState(0);
+  
   const [isHoveredCard, setIsHoveredCard] = useState<number | null>(null);
 
   const [targets, setTargets] = useState({
@@ -23,6 +27,8 @@ export const StatsBar: React.FC = () => {
   });
   const [labels, setLabels] = useState<any>({});
   const [isLoading, setIsLoading] = useState(true);
+
+  useAutoScroll(scrollContainerRef, 3500, [isLoading]);
 
   useEffect(() => {
     const fetchStats = async () => {
@@ -124,7 +130,7 @@ export const StatsBar: React.FC = () => {
             <Loader2 className="w-10 h-10 animate-spin text-[#629A13]" />
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-7">
+          <div ref={scrollContainerRef} className="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 lg:gap-7 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-8 -mx-6 px-6 md:mx-0 md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           
           {/* ========================================================= */}
           {/* CARD 1: DEVICES RECYCLED (Miniature Pickup Truck Loading) */}
@@ -135,7 +141,7 @@ export const StatsBar: React.FC = () => {
             transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
             onMouseEnter={() => setIsHoveredCard(1)}
             onMouseLeave={() => setIsHoveredCard(null)}
-            className="group relative bg-white rounded-3xl p-7 border border-[#E3E8E4] shadow-[0_8px_30px_rgba(0,38,74,0.04)] hover:shadow-[0_20px_50px_rgba(0,38,74,0.12)] hover:-translate-y-2.5 hover:border-[#629A13]/60 transition-all duration-300 flex flex-col justify-between overflow-hidden"
+            className="group relative bg-white rounded-3xl p-7 border border-[#E3E8E4] shadow-[0_8px_30px_rgba(0,38,74,0.04)] hover:shadow-[0_20px_50px_rgba(0,38,74,0.12)] hover:-translate-y-2.5 hover:border-[#629A13]/60 transition-all duration-300 flex flex-col justify-between overflow-hidden min-w-[85vw] sm:min-w-[60vw] md:min-w-0 snap-center"
           >
             {/* Top Accent Gradient on Hover */}
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#00264A] via-[#629A13] to-[#00264A] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -224,14 +230,14 @@ export const StatsBar: React.FC = () => {
           {/* ========================================================= */}
           {/* CARD 2: CO₂ OFFSET (Growing Tree & Swaying Leaves)        */}
           {/* ========================================================= */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-            onMouseEnter={() => setIsHoveredCard(2)}
-            onMouseLeave={() => setIsHoveredCard(null)}
-            className="group relative bg-white rounded-3xl p-7 border border-[#E3E8E4] shadow-[0_8px_30px_rgba(0,38,74,0.04)] hover:shadow-[0_20px_50px_rgba(0,38,74,0.12)] hover:-translate-y-2.5 hover:border-[#629A13]/60 transition-all duration-300 flex flex-col justify-between overflow-hidden"
-          >
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+              onMouseEnter={() => setIsHoveredCard(2)}
+              onMouseLeave={() => setIsHoveredCard(null)}
+              className="group relative bg-white rounded-3xl p-7 border border-[#E3E8E4] shadow-[0_8px_30px_rgba(0,38,74,0.04)] hover:shadow-[0_20px_50px_rgba(0,38,74,0.12)] hover:-translate-y-2.5 hover:border-[#629A13]/60 transition-all duration-300 flex flex-col justify-between overflow-hidden min-w-[85vw] sm:min-w-[60vw] md:min-w-0 snap-center"
+            >
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#629A13] via-[#00264A] to-[#629A13] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
             {/* Animation Scene */}
@@ -290,14 +296,14 @@ export const StatsBar: React.FC = () => {
           {/* ========================================================= */}
           {/* CARD 3: MATERIAL RECOVERY (Conveyor Belt & Yield Ring)    */}
           {/* ========================================================= */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            onMouseEnter={() => setIsHoveredCard(3)}
-            onMouseLeave={() => setIsHoveredCard(null)}
-            className="group relative bg-white rounded-3xl p-7 border border-[#E3E8E4] shadow-[0_8px_30px_rgba(0,38,74,0.04)] hover:shadow-[0_20px_50px_rgba(0,38,74,0.12)] hover:-translate-y-2.5 hover:border-[#629A13]/60 transition-all duration-300 flex flex-col justify-between overflow-hidden"
-          >
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              onMouseEnter={() => setIsHoveredCard(3)}
+              onMouseLeave={() => setIsHoveredCard(null)}
+              className="group relative bg-white rounded-3xl p-7 border border-[#E3E8E4] shadow-[0_8px_30px_rgba(0,38,74,0.04)] hover:shadow-[0_20px_50px_rgba(0,38,74,0.12)] hover:-translate-y-2.5 hover:border-[#629A13]/60 transition-all duration-300 flex flex-col justify-between overflow-hidden min-w-[85vw] sm:min-w-[60vw] md:min-w-0 snap-center"
+            >
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#00264A] via-[#629A13] to-[#00264A] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
             {/* Animation Scene */}
@@ -362,14 +368,14 @@ export const StatsBar: React.FC = () => {
           {/* ========================================================= */}
           {/* CARD 4: CPCB & EPR COMPLIANCE (Hologram Shield & Stamp)   */}
           {/* ========================================================= */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            onMouseEnter={() => setIsHoveredCard(4)}
-            onMouseLeave={() => setIsHoveredCard(null)}
-            className="group relative bg-white rounded-3xl p-7 border border-[#E3E8E4] shadow-[0_8px_30px_rgba(0,38,74,0.04)] hover:shadow-[0_20px_50px_rgba(0,38,74,0.12)] hover:-translate-y-2.5 hover:border-[#629A13]/60 transition-all duration-300 flex flex-col justify-between overflow-hidden"
-          >
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={isInView ? { opacity: 1, y: 0 } : {}}
+              transition={{ duration: 0.6, delay: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              onMouseEnter={() => setIsHoveredCard(4)}
+              onMouseLeave={() => setIsHoveredCard(null)}
+              className="group relative bg-white rounded-3xl p-7 border border-[#E3E8E4] shadow-[0_8px_30px_rgba(0,38,74,0.04)] hover:shadow-[0_20px_50px_rgba(0,38,74,0.12)] hover:-translate-y-2.5 hover:border-[#629A13]/60 transition-all duration-300 flex flex-col justify-between overflow-hidden min-w-[85vw] sm:min-w-[60vw] md:min-w-0 snap-center"
+            >
             <div className="absolute top-0 left-0 right-0 h-1.5 bg-gradient-to-r from-[#629A13] via-[#00264A] to-[#629A13] opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
             {/* Animation Scene */}

@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
+import dynamic from "next/dynamic";
 import { 
   ArrowLeft, ArrowRight, CheckCircle2, MapPin, Loader2, UploadCloud, 
   ShieldAlert, Phone, Trash2, X, RefreshCw, Truck, Check, AlertCircle 
@@ -12,6 +13,12 @@ import { Footer } from "@/components/Footer";
 import { WhatsAppWidget } from "@/components/WhatsAppWidget";
 import { submitPickupRequest } from "@/app/actions/submitPickup";
 import { State, City } from "country-state-city";
+
+// Dynamically import the map to avoid SSR issues (Leaflet needs window)
+const LocationMapPreview = dynamic(
+  () => import("@/components/LocationMapPreview"),
+  { ssr: false }
+);
 
 const IN_STATES = State.getStatesOfCountry("IN");
 
@@ -345,7 +352,7 @@ export default function PickupForm() {
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <a 
-                href={`https://wa.me/919908990874?text=${encodeURIComponent(`Hello ArkaArya, I have scheduled an e-waste pickup.\n\nPickup ID: ${pickupId}\nName: ${formData.name}\nType: ${formData.pickupType}\nCategories: ${formData.categories.join(", ")}\nQuantity: ${formData.quantity}\nDate: ${formData.date}\nTime: ${formData.time}\nLocation: ${formData.address}, ${formData.city}, ${IN_STATES.find(s => s.isoCode === formData.state)?.name || ""} - ${formData.pincode}`)}`} 
+                href={`https://wa.me/919908990874?text=${encodeURIComponent(`♻️ ArkaArya E-Waste Pickup Scheduled! 🚚\nPickup ID: ${pickupId}\nName: ${formData.name}\nType: ${formData.pickupType}\nCategories: ${formData.categories.join(", ")}\nQuantity: ${formData.quantity}\nDate: ${formData.date}\nTime: ${formData.time}\nLocation: ${formData.address}, ${formData.city}, ${IN_STATES.find(s => s.isoCode === formData.state)?.name || ""} - ${formData.pincode}\nContact: ${formData.phone}${formData.email ? `\nEmail : ${formData.email}` : ""}${formData.coordinates ? `\nUse my Location : https://maps.google.com/?q=${formData.coordinates.split(" (")[0].replace(" ", "")}` : ""}`)}`} 
                 target="_blank" rel="noopener noreferrer"
                 className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[#25D366] text-white font-bold hover:bg-[#128C7E] transition-colors shadow-sm"
               >
@@ -537,6 +544,27 @@ export default function PickupForm() {
                           </button>
                         </div>
                         {locStatus && <p className="text-xs text-[#629A13] font-medium">{locStatus}</p>}
+
+                        {/* Map preview — only shown once coordinates are captured */}
+                        {formData.coordinates && (
+                          <motion.div
+                            initial={{ opacity: 0, height: 0 }}
+                            animate={{ opacity: 1, height: "auto" }}
+                            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                            className="overflow-hidden"
+                          >
+                            <div className="mt-2">
+                              <div className="flex items-center gap-1.5 mb-2">
+                                <MapPin size={13} className="text-[#629A13]" />
+                                <span className="text-[11px] font-bold text-[#00264A] uppercase tracking-wider">Location Preview</span>
+                              </div>
+                              <LocationMapPreview coordinates={formData.coordinates} />
+                              <p className="text-[11px] text-[#5E6672] mt-2">
+                                📍 {formData.coordinates} — This is the exact GPS pin our team will navigate to.
+                              </p>
+                            </div>
+                          </motion.div>
+                        )}
                       </div>
 
                       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-4 border-t border-[#E3E8E4]">

@@ -16,7 +16,7 @@ import {
   Box,
   Loader2,
 } from "lucide-react";
-
+import { useAutoScroll } from "@/hooks/useAutoScroll";
 import { createClient } from "@/lib/supabase-browser";
 
 interface ServicesProps {
@@ -27,9 +27,12 @@ export const Services: React.FC<ServicesProps> = ({
   onOpenPickup = () => {},
 }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);
   const [businesses, setBusinesses] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  useAutoScroll(scrollContainerRef, 3500, [isLoading, businesses.length]);
 
   useEffect(() => {
     const fetchServices = async () => {
@@ -137,25 +140,25 @@ export const Services: React.FC<ServicesProps> = ({
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-stretch h-auto">
+          <div ref={scrollContainerRef} className="flex lg:grid lg:grid-cols-3 gap-6 lg:gap-8 items-stretch h-auto overflow-x-auto lg:overflow-visible snap-x snap-mandatory pb-8 -mx-6 px-6 lg:mx-0 lg:px-0 lg:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {businesses.map((business, idx) => {
               const isHovered = hoveredCard === business.id;
 
               return (
-                <motion.div
-                  key={business.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: "-100px" }}
-                  transition={{
-                    duration: 0.6,
-                    delay: idx * 0.15,
-                    ease: "easeOut",
-                  }}
-                  onMouseEnter={() => setHoveredCard(business.id)}
-                  onMouseLeave={() => setHoveredCard(null)}
-                  className="group relative bg-[#F7F9F6] border border-[#E3E8E4] rounded-[2rem] p-8 sm:p-10 flex flex-col transition-all duration-400 ease-out hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(0,38,74,0.06)] hover:border-[#629A13]"
-                >
+                  <motion.div
+                    key={business.id}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-100px" }}
+                    transition={{
+                      duration: 0.6,
+                      delay: idx * 0.15,
+                      ease: "easeOut",
+                    }}
+                    onMouseEnter={() => setHoveredCard(business.id)}
+                    onMouseLeave={() => setHoveredCard(null)}
+                    className="group relative bg-[#F7F9F6] border border-[#E3E8E4] rounded-[2rem] p-8 sm:p-10 flex flex-col transition-all duration-400 ease-out hover:-translate-y-1.5 hover:shadow-[0_20px_50px_rgba(0,38,74,0.06)] hover:border-[#629A13] min-w-[85vw] sm:min-w-[60vw] lg:min-w-0 snap-center"
+                  >
                   {/* Header Hierarchy */}
                   <div className="flex items-center gap-4 mb-6">
                     <span

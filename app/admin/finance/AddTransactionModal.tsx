@@ -114,6 +114,11 @@ export const AddTransactionModal = () => {
                 </div>
 
                 <div className="space-y-1">
+                  <label className="text-sm font-semibold text-[#00264A]">Invoice Number (Optional)</label>
+                  <input type="text" name="invoice_number" className="w-full px-4 py-2.5 rounded-xl border border-[#E3E8E4] focus:border-[#629A13] focus:ring-1 focus:ring-[#629A13] bg-[#F8FAF7]" placeholder="e.g. INV-2026-001" />
+                </div>
+
+                <div className="space-y-1">
                   <label className="text-sm font-semibold text-[#00264A]">Description</label>
                   <input type="text" name="description" required className="w-full px-4 py-2.5 rounded-xl border border-[#E3E8E4] focus:border-[#629A13] focus:ring-1 focus:ring-[#629A13] bg-[#F8FAF7]" placeholder="Brief description..." />
                 </div>

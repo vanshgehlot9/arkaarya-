@@ -23,6 +23,7 @@ export const CaseStudies = () => {
   const [isClient, setIsClient] = useState(false);
   const [caseStudies, setCaseStudies] = useState<CaseStudy[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isInteracting, setIsInteracting] = useState(false);
 
   useEffect(() => {
     setIsClient(true);
@@ -70,6 +71,19 @@ export const CaseStudies = () => {
     setDirection(-1);
     setActiveIndex((prev) => (prev - 1 + caseStudies.length) % caseStudies.length);
   };
+
+  useEffect(() => {
+    if (caseStudies.length === 0 || isLoading) return;
+
+    const interval = setInterval(() => {
+      if (!isInteracting) {
+        setDirection(1);
+        setActiveIndex((prev) => (prev + 1) % caseStudies.length);
+      }
+    }, 4500);
+
+    return () => clearInterval(interval);
+  }, [caseStudies.length, isLoading, isInteracting]);
 
   // Helper to determine the status of a card relative to active
   const getCardPosition = (index: number) => {
@@ -127,7 +141,13 @@ export const CaseStudies = () => {
         </motion.div>
 
         {/* 3D Stage Container */}
-        <div className="relative h-[650px] sm:h-[600px] w-full flex items-center justify-center [perspective:1200px]">
+        <div 
+          className="relative h-[650px] sm:h-[600px] w-full flex items-center justify-center [perspective:1200px]"
+          onMouseEnter={() => setIsInteracting(true)}
+          onMouseLeave={() => setIsInteracting(false)}
+          onTouchStart={() => setIsInteracting(true)}
+          onTouchEnd={() => { setTimeout(() => setIsInteracting(false), 1000) }}
+        >
           {isLoading ? (
             <div className="flex flex-col items-center justify-center text-[#629A13] gap-4">
               <Loader2 className="w-10 h-10 animate-spin" />

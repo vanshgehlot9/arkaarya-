@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { ShieldCheck, Award, Lock, FileText, CheckCircle2, Star, Quote, Loader2 } from "lucide-react";
 import { createClient } from "@/lib/supabase-browser";
+import { useAutoScroll } from "@/hooks/useAutoScroll";
 
 export const Testimonials: React.FC = () => {
   const certifications = [
@@ -30,6 +31,11 @@ export const Testimonials: React.FC = () => {
 
   const [testimonials, setTestimonials] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const certScrollRef = useRef<HTMLDivElement>(null);
+  const testScrollRef = useRef<HTMLDivElement>(null);
+  useAutoScroll(certScrollRef, 3500);
+  useAutoScroll(testScrollRef, 4000, [isLoading, testimonials.length]);
 
   useEffect(() => {
     const fetchTestimonials = async () => {
@@ -67,13 +73,13 @@ export const Testimonials: React.FC = () => {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div ref={certScrollRef} className="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-6 -mx-6 px-6 md:mx-0 md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {certifications.map((cert, idx) => {
               const Icon = cert.icon;
               return (
                 <div
                   key={idx}
-                  className="p-6 rounded-2xl bg-[#F8FAF7] border border-[#E3E8E4] flex items-center gap-4 shadow-sm hover:border-[#629A13]/50 transition-colors"
+                  className="p-6 rounded-2xl bg-[#F8FAF7] border border-[#E3E8E4] flex items-center gap-4 shadow-sm hover:border-[#629A13]/50 transition-colors min-w-[85vw] sm:min-w-[60vw] md:min-w-0 snap-center"
                 >
                   <div className="w-12 h-12 rounded-xl bg-white border border-[#E3E8E4] text-[#629A13] flex items-center justify-center shrink-0">
                     <Icon size={22} />
@@ -113,11 +119,11 @@ export const Testimonials: React.FC = () => {
               No endorsements published yet.
             </div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div ref={testScrollRef} className="flex md:grid md:grid-cols-3 gap-6 md:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-8 -mx-6 px-6 md:mx-0 md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
               {testimonials.map((t, idx) => (
                 <div
                   key={t.id || idx}
-                  className="p-8 rounded-3xl bg-[#F8FAF7] border border-[#E3E8E4] shadow-soft hover:shadow-soft-lg transition-all duration-300 flex flex-col justify-between group hover:border-[#629A13]/40"
+                  className="p-8 rounded-3xl bg-[#F8FAF7] border border-[#E3E8E4] shadow-soft hover:shadow-soft-lg transition-all duration-300 flex flex-col justify-between group hover:border-[#629A13]/40 min-w-[85vw] sm:min-w-[60vw] md:min-w-0 snap-center"
                 >
                   <div>
                     {/* Quote Icon & Stars in Eco Green */}

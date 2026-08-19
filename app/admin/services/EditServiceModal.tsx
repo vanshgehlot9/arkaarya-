@@ -3,13 +3,13 @@
 import React, { useState, useEffect } from "react";
 import { X, Loader2, Info, LayoutTemplate, Link as LinkIcon, CheckCircle2 } from "lucide-react";
 import { updateService } from "./actions";
+import ImageUpload from "@/components/ImageUpload";
 
 export const EditServiceModal = ({ editingService = null, onClose = null }: { editingService?: any, onClose?: any }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
-    const [imageUrl, setImageUrl] = useState(editingService?.image_url || "");
-    const [isUploading, setIsUploading] = useState(false);
+    const [imageUrl, setImageUrl] = useState("");
 
     useEffect(() => {
       if (editingService) {
@@ -23,32 +23,7 @@ export const EditServiceModal = ({ editingService = null, onClose = null }: { ed
       if (onClose) onClose();
     };
 
-    const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
-      if (!file) return;
 
-      setIsUploading(true);
-      setError("");
-      try {
-        const formData = new FormData();
-        formData.append("file", file);
-
-        const res = await fetch("/api/upload", {
-          method: "POST",
-          body: formData,
-        });
-
-        if (!res.ok) throw new Error("Upload failed");
-
-        const data = await res.json();
-        setImageUrl(data.url);
-      } catch (err) {
-        console.error(err);
-        setError("Failed to upload image. Please try again.");
-      } finally {
-        setIsUploading(false);
-      }
-    };
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
@@ -136,34 +111,13 @@ export const EditServiceModal = ({ editingService = null, onClose = null }: { ed
               </div>
               <p className="text-xs text-[#5E6672] mb-4">Upload an image or paste a URL to replace the default illustration.</p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-sm font-semibold text-[#00264A]">Image URL</label>
-                  <input 
-                    type="text" 
-                    value={imageUrl}
-                    onChange={(e) => setImageUrl(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-xl border border-[#E3E8E4] focus:border-[#629A13] bg-[#F8FAF7]" 
-                    placeholder="https://..." 
-                  />
-                </div>
-                <div className="space-y-1">
-                  <label className="text-sm font-semibold text-[#00264A]">Upload New</label>
-                  <label className={`flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl border border-dashed border-[#E3E8E4] hover:border-[#629A13] hover:bg-[#F8FAF7] transition-colors cursor-pointer ${isUploading ? 'opacity-50 pointer-events-none' : ''}`}>
-                    {isUploading ? <Loader2 size={16} className="animate-spin text-[#629A13]" /> : <LayoutTemplate size={16} className="text-[#629A13]" />}
-                    <span className="text-sm font-medium text-[#4A5568]">
-                      {isUploading ? "Uploading..." : "Click to Upload"}
-                    </span>
-                    <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
-                  </label>
-                </div>
+              <div className="max-w-sm">
+                <ImageUpload 
+                  name="image_url"
+                  value={imageUrl}
+                  onChange={setImageUrl}
+                />
               </div>
-
-              {imageUrl && (
-                <div className="mt-4 rounded-xl overflow-hidden border border-[#E3E8E4] aspect-video w-full max-w-sm">
-                  <img src={imageUrl} alt="Preview" className="w-full h-full object-cover" />
-                </div>
-              )}
             </div>
 
             <div className="bg-white p-6 rounded-2xl border border-[#E3E8E4] shadow-sm space-y-5">

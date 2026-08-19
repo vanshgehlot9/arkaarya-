@@ -12,6 +12,7 @@ import {
   Building2,
   Leaf
 } from "lucide-react";
+import { useAutoScroll } from "@/hooks/useAutoScroll";
 
 interface WhoWeAreProps {
   onOpenPickup?: () => void;
@@ -20,6 +21,9 @@ interface WhoWeAreProps {
 export const WhoWeAre: React.FC<WhoWeAreProps> = ({ onOpenPickup = () => {} }) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-80px" });
+  
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  useAutoScroll(scrollContainerRef, 3500);
 
   const pillars = [
     {
@@ -89,7 +93,7 @@ export const WhoWeAre: React.FC<WhoWeAreProps> = ({ onOpenPickup = () => {} }) =
             </p>
 
             {/* 4 Pillars Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 pt-4">
+            <div ref={scrollContainerRef} className="flex md:grid md:grid-cols-2 gap-5 pt-4 pb-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory -mx-6 px-6 md:mx-0 md:px-0 md:pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
               {pillars.map((pillar, idx) => {
                 const Icon = pillar.icon;
                 return (
@@ -98,7 +102,7 @@ export const WhoWeAre: React.FC<WhoWeAreProps> = ({ onOpenPickup = () => {} }) =
                     initial={{ opacity: 0, y: 15 }}
                     animate={isInView ? { opacity: 1, y: 0 } : {}}
                     transition={{ duration: 0.4, delay: 0.2 + idx * 0.1 }}
-                    className="flex flex-col gap-3 p-5 rounded-2xl bg-white border border-[#E3E8E4] shadow-2xs hover:shadow-md hover:border-[#629A13]/30 transition-all duration-300"
+                    className="flex flex-col gap-3 p-5 rounded-2xl bg-white border border-[#E3E8E4] shadow-2xs hover:shadow-md hover:border-[#629A13]/30 transition-all duration-300 min-w-[85vw] sm:min-w-[60vw] md:min-w-0 snap-center"
                   >
                     <div className="w-10 h-10 rounded-xl bg-[#F8FAF7] text-[#00264A] flex items-center justify-center">
                       <Icon size={20} />

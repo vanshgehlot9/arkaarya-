@@ -9,6 +9,7 @@ import {
 import * as LucideIcons from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
+import { useAutoScroll } from "@/hooks/useAutoScroll";
 
 import { createClient } from "@/lib/supabase-browser";
 
@@ -117,6 +118,13 @@ export default function ArkaAryaGreen() {
   const [activeFlowStep, setActiveFlowStep] = useState(1);
   const [heroImage, setHeroImage] = useState("/enterprise_ewaste_facility.jpg");
   const [dynamicSolutions, setDynamicSolutions] = useState<any[]>(SOLUTIONS);
+
+  const capScrollRef = useRef<HTMLDivElement>(null);
+  const solScrollRef = useRef<HTMLDivElement>(null);
+  const whyScrollRef = useRef<HTMLDivElement>(null);
+  useAutoScroll(capScrollRef, 3000);
+  useAutoScroll(solScrollRef, 3500);
+  useAutoScroll(whyScrollRef, 4000);
 
   useEffect(() => {
     const fetchServiceData = async () => {
@@ -282,12 +290,12 @@ export default function ArkaAryaGreen() {
 
         {/* 5. CAPABILITY STRIP */}
         <section className="border-y border-[#E3E8E4] bg-white">
-          <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12">
-            <div className="flex flex-wrap lg:flex-nowrap justify-between">
+          <div className="max-w-[1440px] mx-auto">
+            <div ref={capScrollRef} className="flex lg:grid lg:grid-cols-4 overflow-x-auto lg:overflow-visible snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
               {CAPABILITIES.map((cap, i) => (
                 <div 
                   key={i} 
-                  className="flex-1 min-w-[200px] py-8 px-4 flex flex-col items-center justify-center text-center group cursor-pointer border-r border-[#E3E8E4] last:border-0 hover:bg-[#F8FAF7] transition-colors relative"
+                  className="flex-1 min-w-[50vw] sm:min-w-[33vw] lg:min-w-0 snap-center py-8 px-4 flex flex-col items-center justify-center text-center group cursor-pointer border-r border-[#E3E8E4] last:border-0 hover:bg-[#F8FAF7] transition-colors relative"
                 >
                   <cap.icon size={24} className="text-[#5E6672] mb-3 group-hover:text-[#629A13] transition-colors" />
                   <span className="text-xs font-bold tracking-widest text-[#5E6672] group-hover:text-[#00264A] transition-colors">
@@ -312,7 +320,7 @@ export default function ArkaAryaGreen() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div ref={solScrollRef} className="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-8 -mx-6 px-6 md:mx-0 md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
             {dynamicSolutions.map((sol, i) => {
               const Icon = typeof sol.icon === 'string' 
                 ? ((LucideIcons as any)[sol.icon] || LucideIcons.Box)
@@ -325,7 +333,7 @@ export default function ArkaAryaGreen() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.1, duration: 0.5 }}
-                  className="group relative bg-white border border-[#E3E8E4] rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col"
+                  className="group relative bg-white border border-[#E3E8E4] rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col min-w-[85vw] sm:min-w-[60vw] md:min-w-0 snap-center"
                 >
                   <div className="h-48 overflow-hidden relative bg-[#00264A] flex items-center justify-center">
                     <div className="absolute inset-0 opacity-10 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLXdpZHRoPSIxIiBmaWxsPSJub25lIj48cGF0aCBkPSJNMCA0MGg0ME0wIDIwaDQwTTIwIDB2NDBNNDAgMHY0MCIvPjwvZz48L3N2Zz4=')]" />
@@ -522,10 +530,10 @@ export default function ArkaAryaGreen() {
               Sustainability Built on Trust and Compliance.
             </h2>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div ref={whyScrollRef} className="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-8 -mx-6 px-6 md:mx-0 md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
               {WHY_GREEN.map((item, i) => (
-                <div key={i} className="flex flex-col gap-4">
-                  <div className="w-12 h-12 rounded-xl bg-white border border-[#E3E8E4] shadow-sm flex items-center justify-center text-[#00264A]">
+                <div key={i} className="flex flex-col gap-4 min-w-[85vw] sm:min-w-[60vw] md:min-w-0 snap-center p-6 sm:p-8 bg-white md:bg-transparent rounded-3xl md:rounded-none border border-[#E3E8E4] md:border-none shadow-sm md:shadow-none md:p-0">
+                  <div className="w-12 h-12 rounded-xl bg-[#F8FAF7] md:bg-white border border-[#E3E8E4] shadow-sm flex items-center justify-center text-[#00264A]">
                     <item.icon size={24} />
                   </div>
                   <h3 className="text-lg font-bold text-[#00264A]">{item.title}</h3>

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { Plus, X, Loader2, Info, BookOpen, BarChart3, Image as ImageIcon, Globe } from "lucide-react";
 import { addCaseStudy, updateCaseStudy } from "./actions";
+import ImageUpload from "@/components/ImageUpload";
 
 type Tab = "basic" | "story" | "metrics" | "media" | "publishing";
 
@@ -11,18 +12,21 @@ export const CreateCaseStudyModal = ({ editingStudy = null, onClose = null }: { 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [activeTab, setActiveTab] = useState<Tab>("basic");
+  const [coverImage, setCoverImage] = useState("");
 
   // Open modal automatically when an editingStudy is passed in
   useEffect(() => {
     if (editingStudy) {
       setIsOpen(true);
       setActiveTab("basic");
+      setCoverImage(editingStudy.cover_image || "");
     }
   }, [editingStudy]);
 
   const handleClose = () => {
     setIsOpen(false);
     setActiveTab("basic");
+    setCoverImage("");
     if (onClose) onClose();
   };
 
@@ -206,17 +210,13 @@ export const CreateCaseStudyModal = ({ editingStudy = null, onClose = null }: { 
 
                   {/* TAB 4: MEDIA */}
                   <div className={activeTab === "media" ? "block space-y-5" : "hidden"}>
-                    <div className="space-y-1">
-                      <label className="text-sm font-semibold text-[#00264A]">Cover Image URL</label>
-                      <input type="text" name="cover_image" defaultValue={editingStudy?.cover_image} className="w-full px-4 py-2.5 rounded-xl border border-[#E3E8E4] focus:border-[#629A13] focus:ring-1 focus:ring-[#629A13] bg-[#F8FAF7]" placeholder="e.g. /corporate_ewaste_recovery.png" />
-                      <p className="text-xs text-[#5E6672] mt-1">Provide a high-quality absolute or relative URL for the hero image.</p>
-                    </div>
-
-                    {editingStudy?.cover_image && (
-                      <div className="mt-4 rounded-xl border border-[#E3E8E4] overflow-hidden bg-[#F8FAF7] p-2 aspect-[21/9] flex items-center justify-center">
-                        <img src={editingStudy.cover_image} alt="Preview" className="max-w-full max-h-full rounded-lg object-contain" />
-                      </div>
-                    )}
+                    <ImageUpload 
+                      name="cover_image"
+                      label="Cover Image"
+                      value={coverImage}
+                      onChange={setCoverImage}
+                    />
+                    <p className="text-xs text-[#5E6672] mt-1">Upload a high-quality hero image for the case study.</p>
                   </div>
 
                   {/* TAB 5: PUBLISHING */}

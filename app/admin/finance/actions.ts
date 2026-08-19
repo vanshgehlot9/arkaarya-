@@ -11,6 +11,7 @@ export async function addTransaction(formData: FormData) {
   const description = formData.get("description") as string;
   const amountStr = formData.get("amount") as string;
   const date = formData.get("date") as string;
+  const invoice_number = formData.get("invoice_number") as string;
   const reference_id = formData.get("reference_id") as string;
 
   if (!type || !category || !description || !amountStr || !date) {
@@ -31,6 +32,7 @@ export async function addTransaction(formData: FormData) {
         description,
         amount,
         transaction_date: new Date(date).toISOString(),
+        invoice_number: invoice_number || null,
       }
     ]);
 
