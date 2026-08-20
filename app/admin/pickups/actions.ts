@@ -14,10 +14,29 @@ export async function updatePickupStatus(formData: FormData) {
     return { error: "Missing required fields." };
   }
 
+  // Fetch current internal_notes first
+  const { data: currentPickup } = await supabase
+    .from("pickup_requests")
+    .select("internal_notes")
+    .eq("id", id)
+    .single();
+
+  let updatedInternalNotes = currentPickup?.internal_notes || null;
+  if (notes && notes.trim().length > 0) {
+    const timestamp = new Date().toLocaleString('en-IN', {
+      day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+    });
+    const newNoteEntry = `[${timestamp}] Status updated to ${status.toUpperCase()}:\n${notes}`;
+    updatedInternalNotes = updatedInternalNotes ? `${updatedInternalNotes}\n\n${newNoteEntry}` : newNoteEntry;
+  }
+
   // Update the pickup status
   const { error: updateError } = await supabase
     .from("pickup_requests")
-    .update({ status })
+    .update({ 
+      status,
+      ...(updatedInternalNotes !== null && { internal_notes: updatedInternalNotes })
+    })
     .eq("id", id);
 
   if (updateError) {

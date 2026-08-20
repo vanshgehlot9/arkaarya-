@@ -28,9 +28,20 @@ export const PickupOperations = ({ id, currentStatus }: { id: string, currentSta
   const handleAssignDriver = () => {
     const driverName = prompt("Enter driver name or ID to assign:");
     if (driverName) {
-      // In a real app we'd save the driver name to the DB
-      handleStatusUpdate("assigned");
-      alert(`Driver ${driverName} assigned successfully!`);
+      setLoading('assigned');
+      const formData = new FormData();
+      formData.append("id", id);
+      formData.append("status", "in_transit");
+      formData.append("notes", `Assigned Driver: ${driverName}`);
+      
+      updatePickupStatus(formData).then((result) => {
+        if (result.success) {
+          router.refresh();
+        } else {
+          alert("Error assigning driver: " + result.error);
+        }
+        setLoading(null);
+      });
     }
   };
 

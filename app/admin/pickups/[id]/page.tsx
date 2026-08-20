@@ -143,6 +143,15 @@ export default async function PickupDetailsPage({ params }: { params: { id: stri
                   </div>
                 </div>
               )}
+
+              {pickup.internal_notes && (
+                <div className="pt-4 border-t border-[#E3E8E4]">
+                  <p className="text-sm font-bold text-[#00264A] mb-2 flex items-center gap-1"><ShieldAlert size={14} className="text-[#629A13]" /> Internal & Status Notes</p>
+                  <div className="bg-[#F8FAF7] border border-[#E3E8E4] p-4 rounded-xl text-sm text-[#4A5568] whitespace-pre-wrap font-mono">
+                    {pickup.internal_notes}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
