@@ -22,7 +22,7 @@ export const Hero: React.FC<HeroProps> = ({
       */}
       <div className="absolute inset-0 w-full h-full z-0 select-none pointer-events-none">
         <img
-          src="/hero.jpeg"
+          src="/hero-clean.jpg"
           alt="ArkaArya Circular Economy & Clean Energy"
           className="w-full h-full object-cover object-[center_right] lg:object-right"
         />
