@@ -17,13 +17,15 @@ export const Hero: React.FC<HeroProps> = ({
       className="relative w-full min-h-[500px] sm:min-h-[560px] lg:min-h-[600px] overflow-hidden flex items-center pt-8 pb-10 border-b border-[#E3E8E4]"
       id="home"
     >
-      {/* Full Panoramic Banner Image — no overlay */}
+      {/* Full Panoramic Banner Image */}
       <div className="absolute inset-0 w-full h-full z-0 select-none pointer-events-none">
         <img
           src="/hero.jpeg"
           alt="ArkaArya Circular Economy & Clean Energy"
           className="w-full h-full object-cover object-center"
         />
+        {/* Dark gradient only on left to make text readable — image stays fully visible on right */}
+        <div className="absolute inset-0" style={{ background: "linear-gradient(to right, rgba(0,20,40,0.72) 0%, rgba(0,20,40,0.45) 40%, transparent 70%)" }} />
       </div>
 
       {/* Foreground Content Container */}
