@@ -20,15 +20,15 @@ export default function ImageUpload({ value, onChange, label, className = "", na
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate size (e.g. max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      setError("Image size must be less than 5MB");
+    // Validate size (Vercel has a 4.5MB limit for serverless payloads)
+    if (file.size > 4.5 * 1024 * 1024) {
+      setError("File size must be less than 4.5MB");
       return;
     }
 
     // Validate type
-    if (!file.type.startsWith("image/")) {
-      setError("Please select an image file");
+    if (!file.type.startsWith("image/") && !file.type.startsWith("video/")) {
+      setError("Please select an image or video file");
       return;
     }
 
@@ -69,7 +69,11 @@ export default function ImageUpload({ value, onChange, label, className = "", na
       
       {value ? (
         <div className="relative rounded-xl overflow-hidden border border-[#E3E8E4] bg-gray-50 group">
-          <img src={value} alt="Uploaded preview" className="w-full h-48 object-cover" />
+          {value.match(/\.(mp4|webm|ogg)$/i) || value.includes('video/upload') ? (
+            <video src={value} controls className="w-full h-48 object-cover" />
+          ) : (
+            <img src={value} alt="Uploaded preview" className="w-full h-48 object-cover" />
+          )}
           <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-4">
             <button
               type="button"
@@ -99,15 +103,15 @@ export default function ImageUpload({ value, onChange, label, className = "", na
           {isUploading ? (
             <div className="flex flex-col items-center justify-center text-gray-500">
               <Loader2 size={32} className="animate-spin text-[#629A13] mb-2" />
-              <p className="text-sm font-medium">Uploading image...</p>
+              <p className="text-sm font-medium">Uploading media...</p>
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center text-[#4A5568]">
               <div className="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center mb-3">
                 <ImageIcon size={24} className="text-[#629A13]" />
               </div>
-              <p className="text-sm font-medium text-[#00264A]">Click to upload an image</p>
-              <p className="text-xs text-gray-500 mt-1">PNG, JPG, WEBP up to 5MB</p>
+              <p className="text-sm font-medium text-[#00264A]">Click to upload media</p>
+              <p className="text-xs text-gray-500 mt-1">Images or Videos up to 4.5MB</p>
             </div>
           )}
         </div>
@@ -120,7 +124,7 @@ export default function ImageUpload({ value, onChange, label, className = "", na
         type="file" 
         ref={fileInputRef} 
         onChange={handleUpload} 
-        accept="image/png, image/jpeg, image/webp, image/gif" 
+        accept="image/*,video/*" 
         className="hidden" 
       />
       
