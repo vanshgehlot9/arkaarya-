@@ -25,20 +25,12 @@ export const Hero: React.FC<HeroProps> = ({
           alt="ArkaArya Circular Economy & Clean Energy"
           className="w-full h-full object-cover object-center lg:object-[center_right]"
         />
-        {/* Dark gradient left-to-transparent for text readability — stronger on mobile */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(to right, rgba(0,20,40,0.82) 0%, rgba(0,20,40,0.62) 45%, rgba(0,20,40,0.20) 70%, transparent 90%)",
-          }}
-        />
-        {/* Extra bottom fade on mobile so text doesn't clash with image bottom */}
+        {/* Extra bottom fade on mobile only if needed for bottom button readability, but kept very subtle */}
         <div
           className="absolute inset-0 lg:hidden"
           style={{
             background:
-              "linear-gradient(to bottom, transparent 40%, rgba(0,20,40,0.50) 100%)",
+              "linear-gradient(to bottom, transparent 60%, rgba(255,255,255,0.80) 100%)",
           }}
         />
       </div>
@@ -51,8 +43,7 @@ export const Hero: React.FC<HeroProps> = ({
           <div className="inline-flex items-center gap-2 mb-4">
             <span className="w-2 h-2 rounded-full bg-[#629A13] animate-pulse flex-shrink-0" />
             <span
-              className="text-[11px] sm:text-xs font-semibold tracking-[0.12em] uppercase text-white"
-              style={{ textShadow: "0 1px 4px rgba(0,0,0,0.6)" }}
+              className="text-[11px] sm:text-xs font-semibold tracking-[0.12em] uppercase text-[#00264A]"
             >
               Sustainable Circular Economy
             </span>
@@ -60,17 +51,15 @@ export const Hero: React.FC<HeroProps> = ({
 
           {/* Headline — controlled line breaks */}
           <h1
-            className="font-bold tracking-tight leading-[1.05] mb-4"
+            className="font-bold tracking-tight leading-[1.05] mb-4 text-[#00264A]"
             style={{
               fontFamily: "var(--font-serif)",
               fontSize: "clamp(2.3rem, 6vw, 3.6rem)",
-              color: "#ffffff",
-              textShadow: "0 2px 16px rgba(0,0,0,0.60)",
             }}
           >
             Turn Old Tech.
             <br />
-            <span style={{ color: "#8BC34A", fontStyle: "italic", fontWeight: 400 }}>
+            <span style={{ color: "#629A13", fontStyle: "italic", fontWeight: 400 }}>
               Revive
             </span>
             <br />
@@ -79,12 +68,10 @@ export const Hero: React.FC<HeroProps> = ({
 
           {/* Subtitle */}
           <p
-            className="leading-relaxed mb-5"
+            className="leading-relaxed mb-5 text-[#5E6672]"
             style={{
               fontFamily: "var(--font-sans)",
               fontSize: "clamp(0.85rem, 2vw, 1rem)",
-              color: "#d8ecc8",
-              textShadow: "0 1px 8px rgba(0,0,0,0.55)",
               maxWidth: "38ch",
             }}
           >
@@ -104,14 +91,12 @@ export const Hero: React.FC<HeroProps> = ({
             ].map((s, idx) => (
               <div
                 key={idx}
-                className="flex items-center gap-1.5 font-semibold"
+                className="flex items-center gap-1.5 font-semibold text-[#00264A]"
                 style={{
                   fontSize: "11px",
-                  color: "#ffffff",
-                  textShadow: "0 1px 4px rgba(0,0,0,0.7)",
                 }}
               >
-                <span style={{ color: "#8BC34A" }}>{s.icon}</span>
+                <span style={{ color: "#629A13" }}>{s.icon}</span>
                 {s.label}
               </div>
             ))}
@@ -135,14 +120,14 @@ export const Hero: React.FC<HeroProps> = ({
 
             <button
               onClick={onOpenCalculator}
-              className="inline-flex items-center justify-center gap-2 rounded-full text-white font-semibold border border-white/40 hover:bg-white/10 transition-all duration-200 active:scale-95"
+              className="inline-flex items-center justify-center gap-2 rounded-full text-[#00264A] font-semibold border border-[#00264A]/25 hover:bg-[#00264A]/5 transition-all duration-200 active:scale-95"
               style={{
                 fontSize: "clamp(0.8rem, 2vw, 0.875rem)",
                 padding: "12px 24px",
                 minHeight: "48px",
               }}
             >
-              <Sparkles size={16} style={{ color: "#8BC34A" }} />
+              <Sparkles size={16} style={{ color: "#629A13" }} />
               <span>Calculate Impact</span>
             </button>
           </div>
