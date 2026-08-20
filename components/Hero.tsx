@@ -24,8 +24,8 @@ export const Hero: React.FC<HeroProps> = ({
           alt="ArkaArya Circular Economy & Clean Energy"
           className="w-full h-full object-cover object-center"
         />
-        {/* Dark gradient only on left to make text readable — image stays fully visible on right */}
-        <div className="absolute inset-0" style={{ background: "linear-gradient(to right, rgba(0,20,40,0.72) 0%, rgba(0,20,40,0.45) 40%, transparent 70%)" }} />
+        {/* Dark gradient on mobile only for text readability */}
+        <div className="absolute inset-0 md:hidden" style={{ background: "linear-gradient(to right, rgba(0,20,40,0.72) 0%, rgba(0,20,40,0.45) 50%, transparent 85%)" }} />
       </div>
 
       {/* Foreground Content Container */}
