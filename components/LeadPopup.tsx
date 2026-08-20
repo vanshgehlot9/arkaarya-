@@ -259,7 +259,7 @@ export const LeadPopup = () => {
                       </button>
 
                       <div className="text-center mt-3">
-                        <a href="https://wa.me/919000000000" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#5E6672] hover:text-[#629A13] transition-colors">
+                        <a href="https://wa.me/919908990874" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 text-xs font-semibold text-[#5E6672] hover:text-[#629A13] transition-colors">
                           Prefer WhatsApp? Chat with us <ArrowRight size={12} />
                         </a>
                       </div>
