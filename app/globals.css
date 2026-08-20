@@ -94,3 +94,65 @@ input[type="range"] {
   animation-play-state: paused;
 }
 
+/* =====================================================
+   MOBILE RESPONSIVE SYSTEM
+   ===================================================== */
+
+/* Prevent horizontal overflow globally */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Images — never overflow */
+img, video, svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Mobile section container */
+@media (max-width: 767px) {
+  section {
+    overflow-x: hidden;
+  }
+
+  /* Consistent mobile padding for all section content */
+  .max-w-\[1440px\] {
+    padding-left: 20px !important;
+    padding-right: 20px !important;
+  }
+
+  /* Fix any desktop min-width values causing overflow */
+  [class*="min-w-[600px]"],
+  [class*="min-w-[700px]"],
+  [class*="min-w-[800px]"] {
+    min-width: 0 !important;
+  }
+}
+
+@media (max-width: 380px) {
+  .max-w-\[1440px\] {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}
+
+/* Touch target minimum size */
+@media (max-width: 767px) {
+  button, a[role="button"], [role="button"] {
+    min-height: 44px;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -113,13 +113,16 @@ export const StatsBar: React.FC = () => {
       <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12 relative z-10">
         
         {/* Section Header */}
-        <div className="mb-12 sm:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-6">
+        <div className="mb-10 sm:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6">
           <div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#00264A] font-serif tracking-tight leading-tight">
-              Verified ESG Impact Dashboard
+            <h2 className="font-bold text-[#00264A] font-serif tracking-tight leading-tight"
+              style={{ fontSize: "clamp(1.75rem, 5vw, 3rem)" }}>
+              Verified ESG Impact
+              <br className="hidden xs:block sm:hidden" />
+              {" "}Dashboard
             </h2>
           </div>
-          <p className="text-sm sm:text-base text-[#5E6672] max-w-lg font-sans leading-relaxed">
+          <p className="text-sm text-[#5E6672] max-w-lg font-sans leading-relaxed">
             Every operational metric is verified against Central Pollution Control Board (CPCB) mass-balance registries and forensic recycling protocols.
           </p>
         </div>
