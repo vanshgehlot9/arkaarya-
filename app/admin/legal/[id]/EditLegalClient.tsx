@@ -47,6 +47,7 @@ export default function EditLegalClient({ initialData }: { initialData: any }) {
     const updates = {
       title: formData.get("title") as string,
       slug: formData.get("slug") as string,
+      version: formData.get("version") as string,
       effective_date: formData.get("effective_date") as string || null,
       summary: formData.get("summary") as string,
       content: htmlContent
@@ -145,6 +146,14 @@ export default function EditLegalClient({ initialData }: { initialData: any }) {
             </div>
 
             <div className="space-y-1">
+              <label className="text-sm font-semibold text-[#5E6672]">Version</label>
+              <div className="flex items-center">
+                <span className="px-3 py-2 bg-[#F8FAF7] border border-r-0 border-[#E3E8E4] rounded-l-lg text-[#5E6672] font-semibold text-sm">v</span>
+                <input type="text" name="version" defaultValue={doc.version} required placeholder="1.0" className="w-full px-4 py-2 rounded-r-lg border border-[#E3E8E4] focus:border-[#629A13] focus:ring-1 focus:ring-[#629A13]" />
+              </div>
+            </div>
+
+            <div className="space-y-1">
               <label className="text-sm font-semibold text-[#5E6672]">URL Slug</label>
               <input type="text" name="slug" defaultValue={doc.slug} required className="w-full px-4 py-2 rounded-lg border border-[#E3E8E4] focus:border-[#629A13] focus:ring-1 focus:ring-[#629A13]" />
               <p className="text-xs text-gray-500 mt-1">/legal/{doc.slug}</p>
@@ -165,10 +174,6 @@ export default function EditLegalClient({ initialData }: { initialData: any }) {
              <div className="flex justify-between text-sm">
                 <span className="text-[#5E6672] font-semibold">Status</span>
                 <span className="font-bold uppercase text-[#00264A]">{doc.status}</span>
-             </div>
-             <div className="flex justify-between text-sm">
-                <span className="text-[#5E6672] font-semibold">Version</span>
-                <span className="font-bold text-[#00264A]">v{doc.version}</span>
              </div>
              <div className="flex justify-between text-sm">
                 <span className="text-[#5E6672] font-semibold">Type</span>
