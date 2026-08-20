@@ -26,9 +26,6 @@ export default function Home() {
   const router = useRouter();
   const [isCalculatorOpen, setIsCalculatorOpen] = useState(false);
 
-  const handleOpenPickup = () => {
-    router.push("/pickup");
-  };
 
   const handleOpenCalculator = () => {
     setIsCalculatorOpen(true);
@@ -43,7 +40,6 @@ export default function Home() {
     <div className="min-h-screen flex flex-col bg-[#F8FAF7] text-[#121212]">
       {/* Top Navigation Bar in Deep Blue & Eco Green */}
       <Navbar
-        onOpenPickup={handleOpenPickup}
         onOpenCalculator={handleOpenCalculator}
       />
 
@@ -52,7 +48,6 @@ export default function Home() {
 
         {/* 1. HERO — First Impression & Primary CTA */}
         <Hero
-          onOpenPickup={handleOpenPickup}
           onOpenCalculator={handleOpenCalculator}
         />
 
@@ -60,36 +55,36 @@ export default function Home() {
         <StatsBar />
 
         {/* 3. ABOUT — Who ArkaArya Is & Corporate Vision */}
-        <WhoWeAre onOpenPickup={handleOpenPickup} />
+        <WhoWeAre />
 
         {/* 4. SERVICES — Three Business Verticals */}
-        <Services onOpenPickup={handleOpenPickup} />
+        <Services />
 
         {/* 5. PROCESS — How ArkaArya Delivers (5-Stage Lifecycle) */}
-        <Timeline onOpenPickup={handleOpenPickup} />
+        <Timeline />
 
         {/* 5.1. CASE STUDIES — Proof of Work */}
         <CaseStudies />
 
         {/* 6. INDUSTRIES — Horizontal Showcase of Sectors Served */}
-        <IndustriesSection onOpenPickup={handleOpenPickup} />
+        <IndustriesSection />
 
         {/* 6.5 SOCIAL ACTIVITIES — Corporate Responsibility & Community */}
         <SocialActivities />
 
         {/* 7. DIFFERENTIATORS — Why Choose ArkaArya */}
-        <WhyChooseUs onOpenPickup={handleOpenPickup} />
+        <WhyChooseUs />
 
         {/* 8. SOCIAL PROOF — Testimonials & Accreditations */}
         <Testimonials />
 
         {/* 9. CONTACT — Enterprise Inquiry & Direct CTA */}
-        <ContactSection onOpenPickup={handleOpenPickup} />
+        <ContactSection />
 
       </main>
 
       {/* Corporate Deep Blue Footer */}
-      <Footer onOpenPickup={handleOpenPickup} />
+      <Footer />
 
       {/* Interactive ESG Simulator Modal */}
       <ImpactCalculator

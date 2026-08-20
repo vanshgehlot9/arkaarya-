@@ -48,13 +48,13 @@ export const WhatsAppWidget = () => {
   };
 
   return (
-    <div className="fixed bottom-6 right-6 sm:bottom-8 sm:right-8 z-50 flex items-center justify-end pointer-events-none">
+    <div className="fixed bottom-4 right-4 sm:bottom-8 sm:right-8 z-50 flex items-center justify-end pointer-events-none">
       
       {/* Container for the pulsing ring and button */}
       <div className="relative flex items-center justify-end pointer-events-auto">
         
         {/* Subtle pulsing ring behind the button */}
-        <div className="absolute right-0 top-0 bottom-0 w-[54px] h-[54px] sm:w-[58px] sm:h-[58px] bg-[#629A13] rounded-full animate-ping opacity-20" style={{ animationDuration: '3s' }} />
+        <div className="absolute right-0 top-0 bottom-0 w-[52px] h-[52px] sm:w-[58px] sm:h-[58px] bg-[#629A13] rounded-full animate-ping opacity-20" style={{ animationDuration: '3s' }} />
 
         {/* Expanding Button Container */}
         <motion.button
@@ -63,11 +63,11 @@ export const WhatsAppWidget = () => {
           onMouseLeave={() => setIsHovered(false)}
           initial={false}
           animate={{
-            width: isHovered ? "auto" : "56px",
-            // slightly larger base size on desktop (58px), mobile (54px). We handle width automatically.
+            width: isHovered ? "auto" : "52px",
+            // slightly larger base size on desktop (58px), mobile (52px). We handle width automatically.
           }}
           transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="relative h-[54px] sm:h-[58px] min-w-[54px] sm:min-w-[58px] bg-[#629A13] hover:bg-[#528210] rounded-full shadow-[0_8px_25px_rgba(98,154,19,0.35)] border-2 border-white flex items-center overflow-hidden transition-colors"
+          className="relative h-[52px] sm:h-[58px] min-w-[52px] sm:min-w-[58px] bg-[#629A13] hover:bg-[#528210] rounded-full shadow-[0_8px_25px_rgba(98,154,19,0.35)] border-2 border-white flex items-center overflow-hidden transition-colors"
         >
           {/* Text Content (only visible on hover) */}
           <div className="flex flex-col items-start justify-center pl-5 pr-14 whitespace-nowrap opacity-0 group-hover:opacity-100" style={{ opacity: isHovered ? 1 : 0, transition: 'opacity 0.2s 0.1s' }}>

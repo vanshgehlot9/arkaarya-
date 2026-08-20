@@ -87,6 +87,8 @@ export default function EPRForm() {
               id="email" 
               name="email" 
               required 
+              pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$"
+              title="Please enter a valid email address (e.g. user@example.com)"
               className="w-full px-4 py-3 rounded-xl border border-[#D1D9E6] focus:border-[#629A13] focus:ring-1 focus:ring-[#629A13] outline-none transition-all"
               placeholder="john@company.com"
             />

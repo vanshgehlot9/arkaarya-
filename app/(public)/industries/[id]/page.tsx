@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useParams, useRouter, notFound } from "next/navigation";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowRight, ShieldCheck, CheckCircle2, Recycle, ShieldAlert, Cpu } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
@@ -69,7 +70,6 @@ export default function IndustryPage() {
   return (
     <div className="min-h-screen flex flex-col bg-[#F8FAF7] text-[#121212]">
       <Navbar 
-        onOpenPickup={() => router.push("/pickup")} 
         onOpenCalculator={() => router.push("/#impact")} 
       />
 
@@ -113,13 +113,13 @@ export default function IndustryPage() {
               </p>
               
               <div className="flex flex-wrap gap-4 mt-6">
-                <button 
-                  onClick={() => router.push("/pickup")}
+                <Link 
+                  href="/pickup"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[#629A13] text-white font-bold hover:bg-[#75B518] transition-all shadow-sm btn-eco-glow group/btn"
                 >
                   <span>Schedule Certified Pickup</span>
                   <ArrowRight size={16} className="group-hover/btn:translate-x-1.5 transition-transform" />
-                </button>
+                </Link>
               </div>
               
               {/* Trust markers */}
@@ -203,7 +203,7 @@ export default function IndustryPage() {
         </section>
       </main>
 
-      <Footer onOpenPickup={() => router.push("/pickup")} />
+      <Footer />
     </div>
   );
 }

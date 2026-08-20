@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { motion, AnimatePresence, useInView } from "framer-motion";
 import { 
   ArrowLeft, ArrowRight, Recycle, ShieldCheck, Leaf, Factory, Laptop, CheckCircle2, HardDrive, Cpu
@@ -155,7 +156,7 @@ export default function ArkaAryaGreen() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F8FAF7] text-[#121212] overflow-x-hidden">
-      <Navbar onOpenPickup={() => router.push("/pickup")} onOpenCalculator={() => router.push("/#impact")} />
+      <Navbar onOpenCalculator={() => router.push("/#impact")} />
 
       <main className="flex-grow pt-32 pb-0">
         
@@ -198,13 +199,13 @@ export default function ArkaAryaGreen() {
               </p>
               
               <div className="flex flex-col sm:flex-row gap-4 mt-6">
-                <button 
-                  onClick={() => router.push("/pickup")}
+                <Link 
+                  href="/pickup"
                   className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[#629A13] text-white font-bold hover:bg-[#75B518] transition-all shadow-sm btn-eco-glow group/btn"
                 >
                   <span>Schedule Enterprise Pickup</span>
                   <ArrowRight size={16} className="group-hover/btn:translate-x-1.5 transition-transform" />
-                </button>
+                </Link>
                 <button 
                   onClick={() => {
                     document.getElementById('solutions')?.scrollIntoView({ behavior: 'smooth' });
@@ -556,27 +557,27 @@ export default function ArkaAryaGreen() {
             </h2>
             
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-              <button 
-                onClick={() => router.push("/pickup")}
+              <Link 
+                href="/pickup"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[#629A13] text-white font-bold hover:bg-[#75B518] transition-all shadow-sm btn-eco-glow group"
               >
                 <span>Schedule a Pickup</span>
                 <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
-              </button>
-              <button 
-                onClick={() => router.push("/contact")}
+              </Link>
+              <Link 
+                href="/#contact"
                 className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-white/10 border border-white/20 text-white font-bold hover:bg-white/20 transition-colors shadow-sm group"
               >
                 <span>Talk to an Expert</span>
                 <ArrowRight size={16} className="group-hover:translate-x-1.5 transition-transform" />
-              </button>
+              </Link>
             </div>
           </div>
         </section>
 
       </main>
 
-      <Footer onOpenPickup={() => router.push("/pickup")} />
+      <Footer />
     </div>
   );
 }

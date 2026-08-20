@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { ArrowLeft, Save, Loader2, Eye } from "lucide-react";
 import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -77,12 +78,12 @@ export default function EditLegalClient({ initialData }: { initialData: any }) {
   return (
     <div className="max-w-[1200px] mx-auto space-y-6">
       <div className="flex items-center justify-between">
-        <button 
-          onClick={() => router.push("/admin/legal")}
+        <Link 
+          href="/admin/legal"
           className="flex items-center gap-2 text-[#5E6672] hover:text-[#00264A] font-semibold transition-colors"
         >
           <ArrowLeft size={18} /> Back to Documents
-        </button>
+        </Link>
         <div className="flex gap-3">
           <a 
             href={`/legal/${doc.slug}?preview=true`}

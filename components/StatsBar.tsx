@@ -104,25 +104,27 @@ export const StatsBar: React.FC = () => {
     <section 
       id="impact"
       ref={containerRef}
-      className="w-full bg-[#F8FAF7] py-16 sm:py-24 border-b border-[#E3E8E4] relative overflow-hidden"
+      className="relative w-full overflow-hidden bg-white py-[48px] lg:py-24 border-b border-[#E3E8E4]"
     >
-      {/* Ambient background decoration */}
-      <div className="absolute top-0 right-1/4 w-96 h-96 bg-[#629A13]/05 rounded-full blur-3xl pointer-events-none" />
+      {/* Background Decor */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-gradient-to-bl from-[#F2F5F3] to-transparent rounded-full opacity-60 pointer-events-none translate-x-1/3 -translate-y-1/3" />
       <div className="absolute bottom-0 left-1/4 w-96 h-96 bg-[#00264A]/04 rounded-full blur-3xl pointer-events-none" />
 
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-12 relative z-10">
+      <div className="max-w-[1440px] mx-auto px-5 sm:px-10 lg:px-12 relative z-10">
         
         {/* Section Header */}
-        <div className="mb-10 sm:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6">
+        <div className="mb-8 sm:mb-16 flex flex-col md:flex-row md:items-end justify-between gap-4 sm:gap-6">
           <div>
-            <h2 className="font-bold text-[#00264A] font-serif tracking-tight leading-tight"
-              style={{ fontSize: "clamp(1.75rem, 5vw, 3rem)" }}>
-              Verified ESG Impact
-              <br className="hidden xs:block sm:hidden" />
-              {" "}Dashboard
+            <h2 className="font-bold text-[#00264A] tracking-tight"
+              style={{ 
+                fontFamily: "var(--font-serif)",
+                fontSize: "clamp(30px, 5vw, 3rem)",
+                lineHeight: "1.1"
+              }}>
+              Verified ESG Impact<br className="sm:hidden" /> Dashboard
             </h2>
           </div>
-          <p className="text-sm text-[#5E6672] max-w-lg font-sans leading-relaxed">
+          <p className="text-[13px] sm:text-base text-[#5E6672] max-w-lg font-sans leading-relaxed">
             Every operational metric is verified against Central Pollution Control Board (CPCB) mass-balance registries and forensic recycling protocols.
           </p>
         </div>
@@ -133,7 +135,7 @@ export const StatsBar: React.FC = () => {
             <Loader2 className="w-10 h-10 animate-spin text-[#629A13]" />
           </div>
         ) : (
-          <div ref={scrollContainerRef} className="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 lg:gap-7 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-8 -mx-6 px-6 md:mx-0 md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+          <div ref={scrollContainerRef} className="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-5 md:gap-6 lg:gap-7 overflow-x-auto md:overflow-visible snap-x snap-mandatory pb-8 -mx-5 px-5 md:mx-0 md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
           
           {/* ========================================================= */}
           {/* CARD 1: DEVICES RECYCLED (Miniature Pickup Truck Loading) */}

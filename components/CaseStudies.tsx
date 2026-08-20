@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ChevronLeft, ChevronRight, Loader2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { createClient } from "@/lib/supabase-browser";
 
 // Types
@@ -286,13 +287,13 @@ export const CaseStudies = () => {
 
                         {/* CTA */}
                         <div className="mt-auto">
-                          <button 
-                            onClick={() => router.push(`/case-studies/${(study as any).db_id}`)}
+                          <Link 
+                            href={`/case-studies/${(study as any).db_id}`}
                             className="flex items-center gap-2 text-sm font-bold text-[#00264A] hover:text-[#629A13] transition-colors group/btn"
                           >
                             View Case Study 
                             <ArrowRight size={16} className="group-hover/btn:translate-x-1 transition-transform" />
-                          </button>
+                          </Link>
                         </div>
                       </div>
 

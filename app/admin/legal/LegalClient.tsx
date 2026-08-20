@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { format } from "date-fns";
 import { Scale, Plus, Search, Edit2, Globe, Archive, MoreVertical, ShieldAlert, Eye, FileText, CheckCircle2 } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { publishLegalDocument, unpublishLegalDocument, archiveLegalDocument } from "./actions";
 
 export default function LegalClient({ initialData }: { initialData: any[] }) {
@@ -129,13 +130,13 @@ export default function LegalClient({ initialData }: { initialData: any[] }) {
                         </a>
                       )}
 
-                      <button 
-                        onClick={() => router.push(`/admin/legal/${doc.id}`)}
+                      <Link 
+                        href={`/admin/legal/${doc.id}`}
                         title="Edit Document"
-                        className="p-2 text-[#5E6672] hover:text-[#00264A] hover:bg-gray-100 rounded-lg transition-colors"
+                        className="p-2 flex items-center justify-center text-[#5E6672] hover:text-[#00264A] hover:bg-gray-100 rounded-lg transition-colors"
                       >
                         <Edit2 size={18} />
-                      </button>
+                      </Link>
 
                       <div className="relative group/menu">
                         <button className="p-2 text-[#5E6672] hover:bg-gray-100 rounded-lg transition-colors">

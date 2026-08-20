@@ -146,7 +146,7 @@ export default function ArkaAryaQuantum() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F8FAF7] text-[#121212] overflow-x-hidden">
-      <Navbar onOpenPickup={() => router.push("/pickup")} onOpenCalculator={() => router.push("/#impact")} />
+      <Navbar onOpenCalculator={() => router.push("/#impact")} />
 
       <main className="flex-grow pt-32 pb-0">
         
@@ -567,7 +567,7 @@ export default function ArkaAryaQuantum() {
 
       </main>
 
-      <Footer onOpenPickup={() => router.push("/pickup")} />
+      <Footer />
     </div>
   );
 }

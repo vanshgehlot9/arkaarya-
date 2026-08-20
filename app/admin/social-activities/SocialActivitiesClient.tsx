@@ -16,7 +16,7 @@ type Activity = {
   created_at: string;
 };
 
-const categoryOptions = ["Community", "Environment", "Team", "Events", "Feed"];
+const categoryOptions = ["Community", "Environment", "Team", "Events", "News Feeds"];
 
 export default function SocialActivitiesClient({ initialData }: { initialData: Activity[] }) {
   const [activities, setActivities] = useState<Activity[]>(initialData);
@@ -153,7 +153,11 @@ export default function SocialActivitiesClient({ initialData }: { initialData: A
                     <td className="p-4 pl-6">
                       <div className="w-12 h-12 rounded-lg bg-gray-100 overflow-hidden relative border border-gray-200">
                         {activity.media_url ? (
-                          <img src={activity.media_url} alt={activity.title} className="w-full h-full object-cover" />
+                          activity.media_type === "video" ? (
+                            <video src={activity.media_url} className="w-full h-full object-cover" muted playsInline />
+                          ) : (
+                            <img src={activity.media_url} alt={activity.title} className="w-full h-full object-cover" />
+                          )
                         ) : (
                           <div className="w-full h-full flex items-center justify-center text-gray-400">
                             <ImageIcon size={20} />
@@ -172,7 +176,7 @@ export default function SocialActivitiesClient({ initialData }: { initialData: A
                     </td>
                     <td className="p-4">
                       <div className="inline-flex items-center px-2 py-1 rounded-md bg-[#00264A]/5 text-[#00264A] text-xs font-semibold mb-1">
-                        {activity.category}
+                        {activity.category === "Feed" ? "News Feeds" : activity.category}
                       </div>
                       <div className="text-xs text-[#5E6672]">
                         {activity.activity_date ? new Date(activity.activity_date).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', year: 'numeric' }) : "No date"}
@@ -302,7 +306,7 @@ export default function SocialActivitiesClient({ initialData }: { initialData: A
                   <label className="block text-sm font-semibold text-[#00264A] mb-1.5">Category</label>
                   <select
                     name="category"
-                    defaultValue={editingActivity?.category || "Community"}
+                    defaultValue={editingActivity?.category === "Feed" ? "News Feeds" : (editingActivity?.category || "Community")}
                     className="w-full px-4 py-2.5 rounded-lg border border-[#E3E8E4] focus:outline-none focus:ring-2 focus:ring-[#629A13] text-sm bg-white"
                   >
                     {categoryOptions.map(opt => <option key={opt} value={opt}>{opt}</option>)}

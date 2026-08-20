@@ -18,11 +18,10 @@ const navLinks = [
 ];
 
 interface NavbarProps {
-  onOpenPickup?: () => void;
   onOpenCalculator?: () => void;
 }
 
-export const Navbar = ({ onOpenPickup = () => { }, onOpenCalculator = () => { } }: NavbarProps) => {
+export const Navbar = ({ onOpenCalculator = () => { } }: NavbarProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const pathname = usePathname();
   const [scrolled, setScrolled] = useState(false);
@@ -79,13 +78,13 @@ export const Navbar = ({ onOpenPickup = () => { }, onOpenCalculator = () => { } 
 
   return (
     <header className={cn(
-      "fixed top-0 left-0 right-0 z-50 h-[80px] md:h-[90px] transition-all duration-500 bg-white shadow-sm border-b border-[#E3E8E4]",
+      "fixed top-0 left-0 right-0 z-50 h-[68px] lg:h-[80px] xl:h-[90px] transition-all duration-500 bg-white shadow-sm border-b border-[#E3E8E4]",
       scrolled ? "shadow-md" : ""
     )}>
       <div className="mx-auto flex h-full max-w-[1440px] items-center justify-between px-5 md:px-8 lg:px-12">
         {/* Logo - Aligned Left */}
         <Link href="/" onClick={() => setActive("Home")} className="flex items-center gap-3 z-50 shrink-0 group">
-          <div className="relative h-12 md:h-14 transition-transform duration-500 group-hover:scale-105">
+          <div className="relative h-[48px] sm:h-10 lg:h-12 xl:h-14 transition-transform duration-500 group-hover:scale-105">
             <img
               src="/ArkaAryaPvtLtd_Logo_v3.0.png"
               alt="ArkaArya Private Limited"
@@ -132,19 +131,19 @@ export const Navbar = ({ onOpenPickup = () => { }, onOpenCalculator = () => { } 
             <span>Impact Calculator</span>
           </button>
 
-          <button
-            onClick={onOpenPickup}
+          <Link
+            href="/pickup"
             className="inline-flex items-center justify-center gap-2 rounded-full bg-[#629A13] px-5 py-2.5 text-xs font-semibold text-white transition-all duration-300 hover:bg-[#528210] active:scale-95"
           >
             <UploadCloud size={16} />
             Book a Pickup
-          </button>
+          </Link>
         </div>
 
         {/* Mobile Menu Toggle */}
         <div className="flex xl:hidden items-center gap-4 z-50">
           <button
-            className="flex flex-col justify-center items-center w-10 h-10 rounded-full bg-white/90 shadow-sm border border-[#E3E8E4] backdrop-blur-sm"
+            className="flex flex-col justify-center items-center w-11 h-11 rounded-full bg-white shadow-sm border border-[#E3E8E4]"
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
@@ -162,7 +161,7 @@ export const Navbar = ({ onOpenPickup = () => { }, onOpenCalculator = () => { } 
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ duration: 0.3, ease: "easeInOut" }}
-              className="absolute top-[80px] md:top-[90px] left-0 right-0 border-b border-[#E3E8E4] bg-white p-6 shadow-2xl xl:hidden"
+              className="absolute top-[68px] lg:top-[80px] xl:top-[90px] left-0 right-0 border-b border-[#E3E8E4] bg-white p-6 shadow-2xl xl:hidden"
             >
               <div className="flex flex-col gap-2">
                 {navLinks.map((link) => {
@@ -196,15 +195,13 @@ export const Navbar = ({ onOpenPickup = () => { }, onOpenCalculator = () => { } 
                 >
                   <Sparkles size={16} className="text-[#629A13]" /> Simulate ESG Impact
                 </button>
-                <button
-                  onClick={() => {
-                    setIsOpen(false);
-                    onOpenPickup();
-                  }}
+                <Link
+                  href="/pickup"
+                  onClick={() => setIsOpen(false)}
                   className="flex items-center justify-center gap-2 rounded-full border border-[#629A13] bg-[#629A13] px-6 py-3.5 text-center text-sm font-semibold text-white shadow-lg transition-all hover:bg-[#528210]"
                 >
                   <UploadCloud size={18} /> Book Certified Pickup
-                </button>
+                </Link>
               </div>
             </motion.div>
           )}

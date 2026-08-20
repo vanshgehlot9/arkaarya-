@@ -20,12 +20,9 @@ import { useAutoScroll } from "@/hooks/useAutoScroll";
 import { createClient } from "@/lib/supabase-browser";
 
 interface ServicesProps {
-  onOpenPickup?: () => void;
 }
 
-export const Services: React.FC<ServicesProps> = ({
-  onOpenPickup = () => {},
-}) => {
+export const Services: React.FC<ServicesProps> = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const [hoveredCard, setHoveredCard] = useState<string | null>(null);

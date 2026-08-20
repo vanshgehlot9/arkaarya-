@@ -6,10 +6,9 @@ import { Mail, Phone, MapPin, Send, CheckCircle2, Clock, ShieldCheck, Building2,
 import { submitContact } from "@/app/actions/submitContact";
 
 interface ContactSectionProps {
-  onOpenPickup?: () => void;
 }
 
-export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenPickup = () => {} }) => {
+export const ContactSection: React.FC<ContactSectionProps> = () => {
   const [submitted, setSubmitted] = useState(false);
   const [formState, setFormState] = useState({
     name: "",
@@ -160,6 +159,8 @@ export const ContactSection: React.FC<ContactSectionProps> = ({ onOpenPickup = (
                     <input
                       required
                       type="email"
+                      pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$"
+                      title="Please enter a valid email address (e.g. user@example.com)"
                       placeholder="anand@company.com"
                       value={formState.email}
                       onChange={(e) => setFormState({ ...formState, email: e.target.value })}

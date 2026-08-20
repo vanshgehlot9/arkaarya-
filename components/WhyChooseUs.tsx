@@ -5,11 +5,12 @@ import { motion, useInView } from "framer-motion";
 import { Leaf, Cpu, Users, Globe2, ArrowRight } from "lucide-react";
 import { useAutoScroll } from "@/hooks/useAutoScroll";
 
+import Link from "next/link";
+
 interface WhyChooseUsProps {
-  onOpenPickup?: () => void;
 }
 
-export const WhyChooseUs: React.FC<WhyChooseUsProps> = ({ onOpenPickup = () => {} }) => {
+export const WhyChooseUs: React.FC<WhyChooseUsProps> = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-100px" });
   
@@ -125,13 +126,13 @@ export const WhyChooseUs: React.FC<WhyChooseUsProps> = ({ onOpenPickup = () => {
                 ArkaArya is more than a company. It is a commitment to responsible growth, environmental stewardship, technological innovation, and human empowerment.
               </p>
               
-              <button
-                onClick={onOpenPickup}
+              <Link
+                href="/pickup"
                 className="mt-8 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#629A13] hover:bg-[#528210] text-white text-sm font-semibold transition-all duration-300 shadow-[0_0_20px_rgba(98,154,19,0.3)] group"
               >
                 <span>Partner With Us</span>
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-              </button>
+              </Link>
             </div>
 
             {/* Right side quote box */}

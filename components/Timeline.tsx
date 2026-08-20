@@ -24,10 +24,9 @@ import {
 } from "lucide-react";
 
 interface TimelineProps {
-  onOpenPickup?: () => void;
 }
 
-export const Timeline: React.FC<TimelineProps> = ({ onOpenPickup = () => {} }) => {
+export const Timeline: React.FC<TimelineProps> = () => {
   const [activeStep, setActiveStep] = useState<number>(0);
 
   const steps = [

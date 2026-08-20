@@ -40,11 +40,6 @@ export const LegalLayout = ({ title, description, metadata, sections, children }
   const [activeSection, setActiveSection] = useState<string>(sections[0]?.id || "");
   const [isTocOpen, setIsTocOpen] = useState(false);
 
-  // Handle mock actions for Navbar since we aren't loading the full home page modals
-  const handleOpenPickup = () => {
-    router.push("/pickup");
-  };
-
   const handleOpenCalculator = () => {
     router.push("/#impact");
   };
@@ -69,7 +64,7 @@ export const LegalLayout = ({ title, description, metadata, sections, children }
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F8FAF7] text-[#121212]">
-      <Navbar onOpenPickup={handleOpenPickup} onOpenCalculator={handleOpenCalculator} />
+      <Navbar onOpenCalculator={handleOpenCalculator} />
 
       <main className="flex-grow pt-[80px] md:pt-[90px]">
         {/* Breadcrumb */}
@@ -234,7 +229,7 @@ export const LegalLayout = ({ title, description, metadata, sections, children }
         </div>
       </main>
 
-      <Footer onOpenPickup={handleOpenPickup} />
+      <Footer />
       <WhatsAppWidget />
     </div>
   );

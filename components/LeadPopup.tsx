@@ -218,7 +218,7 @@ export const LeadPopup = () => {
                         </div>
                         <div className="flex flex-col gap-1.5">
                           <label htmlFor="email" className="text-xs font-bold text-[#00264A] uppercase tracking-wide">Work Email</label>
-                          <input required type="email" id="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} placeholder="john@company.com" className="w-full px-4 py-2.5 bg-[#F7F9F6] border border-[#E3E8E4] rounded-lg text-sm text-[#00264A] focus:outline-none focus:border-[#629A13] focus:ring-1 focus:ring-[#629A13] transition-all" />
+                          <input required type="email" pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$" title="Please enter a valid email address (e.g. user@example.com)" id="email" value={formData.email} onChange={(e) => setFormData({...formData, email: e.target.value})} placeholder="john@company.com" className="w-full px-4 py-2.5 bg-[#F7F9F6] border border-[#E3E8E4] rounded-lg text-sm text-[#00264A] focus:outline-none focus:border-[#629A13] focus:ring-1 focus:ring-[#629A13] transition-all" />
                         </div>
                       </div>
 

@@ -110,10 +110,12 @@ export const PickupModal: React.FC<PickupModalProps> = ({ isOpen, onClose, initi
                     <input
                       required
                       type="email"
-                      placeholder="rahul@company.com"
+                      pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$"
+                      title="Please enter a valid email address (e.g. user@example.com)"
+                      placeholder="e.g. facility@company.com"
                       value={formData.email}
                       onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                      className="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#E3E8E4] text-sm text-[#121212] focus:outline-none focus:border-[#629A13] bg-[#F8FAF7]"
+                      className="w-full pl-10 pr-4 py-3 bg-[#F8FAF7] border border-[#E3E8E4] focus:border-[#629A13] focus:ring-[#629A13] rounded-xl text-sm transition-all focus:outline-none focus:ring-1"
                     />
                   </div>
                 </div>

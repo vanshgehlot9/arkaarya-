@@ -42,6 +42,9 @@ const config: Config = {
       },
     },
   },
+  future: {
+    hoverOnlyWhenSupported: true,
+  },
   plugins: [
     require('@tailwindcss/typography'),
   ],

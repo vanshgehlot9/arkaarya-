@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import { uploadToCloudinary } from '@/lib/cloudinary';
 
+export const maxDuration = 300; // Allow up to 5 minutes for large video uploads
+
 export async function POST(request: Request) {
   try {
     const formData = await request.formData();

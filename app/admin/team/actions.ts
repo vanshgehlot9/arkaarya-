@@ -14,13 +14,14 @@ export async function getTeamMembers() {
   return users;
 }
 
-export async function createTeamMember(email: string, password?: string) {
+export async function createTeamMember(email: string, password?: string, name?: string) {
   const supabase = createAdminClient();
   
   const { data, error } = await supabase.auth.admin.createUser({
     email,
     password: password || "ArkaArya@123", // default password if not provided
     email_confirm: true,
+    user_metadata: { full_name: name || "" }
   });
 
   if (error) {
@@ -36,11 +37,11 @@ export async function createTeamMember(email: string, password?: string) {
   };
 }
 
-export async function inviteTeamMember(email: string) {
+export async function inviteTeamMember(email: string, name?: string) {
   const supabase = createAdminClient();
   
   // Directly invite the user (sends email if SMTP is configured, and creates user in Auth)
-  const { data, error } = await supabase.auth.admin.inviteUserByEmail(email);
+  const { data, error } = await supabase.auth.admin.inviteUserByEmail(email, { data: { full_name: name || "" } });
 
   if (error) {
     console.error("Error inviting user:", error);
@@ -87,6 +88,28 @@ export async function toggleTeamMemberStatus(userId: string, currentStatus: bool
 
   if (error) {
     console.error("Error updating user status:", error);
+    return { success: false, error: error.message };
+  }
+
+  revalidatePath("/admin/team");
+  return { success: true };
+}
+
+export async function updateTeamMember(userId: string, data: { name?: string, password?: string }) {
+  const supabase = createAdminClient();
+  
+  const updates: any = {};
+  if (data.name !== undefined) {
+    updates.user_metadata = { full_name: data.name };
+  }
+  if (data.password) {
+    updates.password = data.password;
+  }
+
+  const { error } = await supabase.auth.admin.updateUserById(userId, updates);
+
+  if (error) {
+    console.error("Error updating user:", error);
     return { success: false, error: error.message };
   }
 

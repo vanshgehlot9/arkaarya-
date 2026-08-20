@@ -40,10 +40,18 @@ export default async function PickupDetailsPage({ params }: { params: { id: stri
   };
 
   return (
-    <div className="space-y-6 max-w-5xl mx-auto pb-12 print:pb-0">
+    <div className="space-y-6 max-w-5xl mx-auto pb-12 print:pb-0 print:bg-white print:text-black">
       
+      {/* Print-Only Header */}
+      <div className="hidden print:flex flex-col items-center justify-center border-b-2 border-[#00264A] pb-6 mb-8 text-center break-after-avoid">
+        <img src="/ArkaAryaPvtLtd_Logo_v3.0.png" alt="ArkaArya" className="h-16 w-auto object-contain mb-4" />
+        <h1 className="text-3xl font-serif font-bold text-[#00264A] uppercase tracking-wider">E-Waste Pickup Manifest</h1>
+        <p className="text-sm font-semibold text-gray-500 mt-2">Document ID: {pickup.pickup_id} | Printed on: {new Date().toLocaleDateString('en-IN')}</p>
+        <p className="text-xs text-gray-400 mt-1">Authorized by Central Pollution Control Board (CPCB)</p>
+      </div>
+
       {/* Header & Breadcrumb */}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 print:hidden">
         <Link href="/admin/pickups" className="p-2 bg-white border border-[#E3E8E4] rounded-lg text-gray-500 hover:text-[#00264A] hover:bg-gray-50 transition-colors print:hidden">
           <ArrowLeft size={20} />
         </Link>
@@ -66,16 +74,16 @@ export default async function PickupDetailsPage({ params }: { params: { id: stri
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 print:block">
         
         {/* Left Column: Details */}
-        <div className="lg:col-span-2 space-y-6">
+        <div className="lg:col-span-2 space-y-6 print:space-y-0">
           
           {/* Client Information */}
-          <div className="bg-white rounded-2xl shadow-sm border border-[#E3E8E4] overflow-hidden">
-            <div className="px-6 py-4 border-b border-[#E3E8E4] bg-[#F8FAF7]">
+          <div className="bg-white rounded-2xl shadow-sm border border-[#E3E8E4] overflow-hidden print:shadow-none print:border-gray-300 print:rounded-none print:break-inside-avoid print:mb-8">
+            <div className="px-6 py-4 border-b border-[#E3E8E4] bg-[#F8FAF7] print:bg-gray-100 print:border-gray-300">
               <h2 className="font-bold text-[#00264A] flex items-center gap-2">
-                <Building size={18} className="text-[#629A13]" /> Client Information
+                <Building size={18} className="text-[#629A13] print:text-[#00264A]" /> Client Information
               </h2>
             </div>
             <div className="p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -99,10 +107,10 @@ export default async function PickupDetailsPage({ params }: { params: { id: stri
           </div>
 
           {/* Pickup Details */}
-          <div className="bg-white rounded-2xl shadow-sm border border-[#E3E8E4] overflow-hidden">
-            <div className="px-6 py-4 border-b border-[#E3E8E4] bg-[#F8FAF7]">
+          <div className="bg-white rounded-2xl shadow-sm border border-[#E3E8E4] overflow-hidden print:shadow-none print:border-gray-300 print:rounded-none print:break-inside-avoid print:mb-8">
+            <div className="px-6 py-4 border-b border-[#E3E8E4] bg-[#F8FAF7] print:bg-gray-100 print:border-gray-300">
               <h2 className="font-bold text-[#00264A] flex items-center gap-2">
-                <Box size={18} className="text-[#629A13]" /> Request Details
+                <Box size={18} className="text-[#629A13] print:text-[#00264A]" /> Request Details
               </h2>
             </div>
             <div className="p-6 space-y-6">
@@ -117,7 +125,7 @@ export default async function PickupDetailsPage({ params }: { params: { id: stri
                 </div>
               </div>
               
-              <div className="pt-4 border-t border-[#E3E8E4]">
+              <div className="pt-4 border-t border-[#E3E8E4] print:border-gray-300">
                 <p className="text-sm text-gray-500 mb-2 flex items-center gap-1"><MapPin size={14} /> Pickup Address</p>
                 <p className="font-medium text-[#00264A] leading-relaxed">
                   {pickup.address}<br />
@@ -128,7 +136,7 @@ export default async function PickupDetailsPage({ params }: { params: { id: stri
                     href={`https://maps.google.com/?q=${pickup.coordinates.split(" (")[0].replace(" ", "")}`}
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-[#629A13] hover:text-[#4d7a0f] transition-colors"
+                    className="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-[#629A13] hover:text-[#4d7a0f] transition-colors print:hidden"
                   >
                     📍 Use My Location (Google Maps)
                   </a>
@@ -136,18 +144,18 @@ export default async function PickupDetailsPage({ params }: { params: { id: stri
               </div>
 
               {pickup.notes && (
-                <div className="pt-4 border-t border-[#E3E8E4]">
+                <div className="pt-4 border-t border-[#E3E8E4] print:border-gray-300">
                   <p className="text-sm text-gray-500 mb-2 flex items-center gap-1"><FileText size={14} /> Additional Notes</p>
-                  <div className="bg-gray-50 p-4 rounded-xl text-sm text-[#4A5568]">
+                  <div className="bg-gray-50 p-4 rounded-xl text-sm text-[#4A5568] print:bg-white print:border print:border-gray-300 print:rounded-none">
                     {pickup.notes}
                   </div>
                 </div>
               )}
 
               {pickup.internal_notes && (
-                <div className="pt-4 border-t border-[#E3E8E4]">
-                  <p className="text-sm font-bold text-[#00264A] mb-2 flex items-center gap-1"><ShieldAlert size={14} className="text-[#629A13]" /> Internal & Status Notes</p>
-                  <div className="bg-[#F8FAF7] border border-[#E3E8E4] p-4 rounded-xl text-sm text-[#4A5568] whitespace-pre-wrap font-mono">
+                <div className="pt-4 border-t border-[#E3E8E4] print:border-gray-300">
+                  <p className="text-sm font-bold text-[#00264A] mb-2 flex items-center gap-1"><ShieldAlert size={14} className="text-[#629A13] print:text-[#00264A]" /> Internal & Status Notes</p>
+                  <div className="bg-[#F8FAF7] border border-[#E3E8E4] p-4 rounded-xl text-sm text-[#4A5568] whitespace-pre-wrap font-mono print:bg-white print:border-gray-300 print:rounded-none">
                     {pickup.internal_notes}
                   </div>
                 </div>
@@ -157,12 +165,12 @@ export default async function PickupDetailsPage({ params }: { params: { id: stri
         </div>
 
         {/* Right Column: Timeline & Actions */}
-        <div className="space-y-6">
+        <div className="space-y-6 print:space-y-0">
           
           {/* Scheduling */}
-          <div className="bg-white rounded-2xl shadow-sm border border-[#E3E8E4] p-6">
+          <div className="bg-white rounded-2xl shadow-sm border border-[#E3E8E4] p-6 print:shadow-none print:border-gray-300 print:rounded-none print:break-inside-avoid print:mb-8">
             <h2 className="font-bold text-[#00264A] mb-4 flex items-center gap-2">
-              <Clock size={18} className="text-[#629A13]" /> Scheduling
+              <Clock size={18} className="text-[#629A13] print:text-[#00264A]" /> Scheduling
             </h2>
             <div className="space-y-4">
               <div>
@@ -177,7 +185,9 @@ export default async function PickupDetailsPage({ params }: { params: { id: stri
           </div>
 
           {/* Quick Actions */}
-          <PickupOperations id={pickup.id} currentStatus={pickup.status || 'pending'} />
+          <div className="print:hidden">
+            <PickupOperations id={pickup.id} currentStatus={pickup.status || 'pending'} />
+          </div>
 
         </div>
 

@@ -24,6 +24,7 @@ export const uploadToCloudinary = async (
       {
         folder,
         resource_type: 'auto',
+        timeout: 600000, // 10 minutes timeout for large video files
       },
       (error, result) => {
         if (error) {

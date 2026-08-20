@@ -210,6 +210,12 @@ export default function PickupForm() {
       if (!formData.name) addError("name", "Required");
       if (!formData.phone) addError("phone", "Required");
       else if (formData.phone.length < 10) addError("phone", "Invalid phone number");
+      if (!formData.email) {
+        addError("email", "Required");
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        addError("email", "Invalid email address");
+      }
+
       if (!formData.consent) addError("consent", "Required to proceed");
     }
 
@@ -305,7 +311,7 @@ export default function PickupForm() {
            style={{ backgroundImage: `linear-gradient(#00264A 1px, transparent 1px), linear-gradient(90deg, #00264A 1px, transparent 1px)`, backgroundSize: '40px 40px' }} 
       />
 
-      <Navbar onOpenPickup={() => {}} onOpenCalculator={() => router.push("/")} />
+      <Navbar onOpenCalculator={() => router.push("/")} />
       
       {/* PAGE INTRODUCTION */}
       {!isSubmitted && (
@@ -617,10 +623,10 @@ export default function PickupForm() {
                           <label className="text-[11px] font-bold text-[#00264A] uppercase tracking-wider mb-2 block">Mobile Number *</label>
                           <input ref={assignRef("phone")} type="tel" placeholder="+91" value={formData.phone} onChange={e => handleInputChange("phone", e.target.value.replace(/[^\d+]/g, ''))} className={`w-full h-[52px] px-4 bg-[#F8FAF7] border ${errors.phone ? 'border-red-400 focus:ring-red-400' : 'border-[#E3E8E4] focus:border-[#629A13] focus:ring-[#629A13]'} rounded-xl text-[15px] text-[#00264A] focus:outline-none focus:ring-1 transition-all`} />
                         </ErrorWrapper>
-                        <div>
-                          <label className="text-[11px] font-bold text-[#00264A] uppercase tracking-wider mb-2 block">Email Address</label>
-                          <input type="email" value={formData.email} onChange={e => handleInputChange("email", e.target.value)} className="w-full h-[52px] px-4 bg-[#F8FAF7] border border-[#E3E8E4] focus:border-[#629A13] focus:ring-[#629A13] rounded-xl text-[15px] text-[#00264A] focus:outline-none focus:ring-1 transition-all" />
-                        </div>
+                        <ErrorWrapper field="email" errors={errors}>
+                          <label className="text-[11px] font-bold text-[#00264A] uppercase tracking-wider mb-2 block">Email Address *</label>
+                          <input ref={assignRef("email")} type="email" value={formData.email} onChange={e => handleInputChange("email", e.target.value)} className={`w-full h-[52px] px-4 bg-[#F8FAF7] border ${errors.email ? 'border-red-400 focus:ring-red-400' : 'border-[#E3E8E4] focus:border-[#629A13] focus:ring-[#629A13]'} rounded-xl text-[15px] text-[#00264A] focus:outline-none focus:ring-1 transition-all`} />
+                        </ErrorWrapper>
                       </div>
 
                       {requiresDataDestruction && (
@@ -815,7 +821,7 @@ export default function PickupForm() {
         )}
       </AnimatePresence>
 
-      <Footer onOpenPickup={() => {}} />
+      <Footer />
       <WhatsAppWidget />
     </div>
   );

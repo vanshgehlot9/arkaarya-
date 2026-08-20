@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { motion, useInView } from "framer-motion";
 import { ArrowLeft, Loader2, ArrowRight, MapPin, Building2, TrendingUp, ShieldCheck, Factory, Cpu, CheckCircle2 } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
@@ -129,7 +130,7 @@ export default function CaseStudyPage({ params }: { params: { id: string } }) {
   if (!study) {
     return (
       <div className="min-h-screen flex flex-col bg-[#F8FAF7] text-[#121212]">
-        <Navbar onOpenPickup={() => router.push("/pickup")} onOpenCalculator={() => router.push("/#impact")} />
+        <Navbar onOpenCalculator={() => router.push("/#impact")} />
         <div className="flex-grow flex items-center justify-center">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-[#00264A] mb-4">Case Study not found</h2>
@@ -142,7 +143,7 @@ export default function CaseStudyPage({ params }: { params: { id: string } }) {
             </button>
           </div>
         </div>
-        <Footer onOpenPickup={() => router.push("/pickup")} />
+        <Footer />
       </div>
     );
   }
@@ -152,7 +153,7 @@ export default function CaseStudyPage({ params }: { params: { id: string } }) {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#F8FAF7] text-[#121212]">
-      <Navbar onOpenPickup={() => router.push("/pickup")} onOpenCalculator={() => router.push("/#impact")} />
+      <Navbar onOpenCalculator={() => router.push("/#impact")} />
 
       <main className="flex-grow pt-32 pb-0">
         
@@ -424,25 +425,25 @@ export default function CaseStudyPage({ params }: { params: { id: string } }) {
               Let's build a responsible, high-performance solution for your organization.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <button 
-                onClick={() => router.push("/contact")}
-                className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#629A13] text-white font-bold hover:bg-[#75B518] transition-colors shadow-sm btn-eco-glow"
+              <Link 
+                href="/contact"
+                className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#629A13] text-white flex items-center justify-center font-bold hover:bg-[#75B518] transition-colors shadow-sm btn-eco-glow"
               >
                 Talk to ArkaArya
-              </button>
-              <button 
-                onClick={() => router.push("/pickup")}
-                className="w-full sm:w-auto px-8 py-4 rounded-xl bg-white/10 border border-white/20 text-white font-bold hover:bg-white/20 transition-colors shadow-sm"
+              </Link>
+              <Link 
+                href="/pickup"
+                className="w-full sm:w-auto px-8 py-4 rounded-xl bg-white/10 flex items-center justify-center border border-white/20 text-white font-bold hover:bg-white/20 transition-colors shadow-sm"
               >
                 Schedule a Pickup
-              </button>
+              </Link>
             </div>
           </div>
         </section>
 
       </main>
 
-      <Footer onOpenPickup={() => router.push("/pickup")} />
+      <Footer />
     </div>
   );
 }

@@ -48,6 +48,8 @@ export default function LoginPage() {
               name="email"
               type="email" 
               required
+              pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$"
+              title="Please enter a valid email address (e.g. user@example.com)"
               placeholder="admin@arkaarya.com"
               className="w-full px-4 py-3 rounded-xl border border-[#E3E8E4] focus:border-[#629A13] focus:ring-1 focus:ring-[#629A13] outline-none transition-all bg-[#F8FAF7]"
             />

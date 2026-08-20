@@ -8,15 +8,47 @@ import { deletePickup } from "./actions";
 export default function PickupsClient({ initialData }: { initialData: any[] }) {
   const [pickups, setPickups] = useState(initialData);
   const [searchQuery, setSearchQuery] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
 
   const filteredPickups = pickups.filter((pickup) => {
     const query = searchQuery.toLowerCase();
-    return (
+    const matchesSearch = 
       (pickup.pickup_id && pickup.pickup_id.toLowerCase().includes(query)) ||
       (pickup.company_name && pickup.company_name.toLowerCase().includes(query)) ||
-      (pickup.city && pickup.city.toLowerCase().includes(query))
-    );
+      (pickup.city && pickup.city.toLowerCase().includes(query));
+      
+    const matchesStatus = statusFilter === "all" || (pickup.status || "pending") === statusFilter;
+    
+    return matchesSearch && matchesStatus;
   });
+
+  const exportToCSV = () => {
+    if (filteredPickups.length === 0) return;
+    
+    const headers = ["Request ID", "Date", "Client/Company", "Contact Person", "Phone", "Email", "Location", "Asset Type", "Weight", "Status"];
+    const rows = filteredPickups.map(p => [
+      p.pickup_id || "",
+      new Date(p.created_at).toLocaleDateString('en-IN'),
+      p.company_name || "",
+      p.contact_person || "",
+      p.phone || "",
+      p.email || "",
+      `${p.city || ""}, ${p.state || ""}`,
+      p.pickup_type || "",
+      p.estimated_weight || "",
+      p.status || "pending"
+    ].map(field => `"${String(field).replace(/"/g, '""')}"`).join(","));
+    
+    const csvContent = [headers.join(","), ...rows].join("\n");
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.setAttribute("href", url);
+    link.setAttribute("download", `pickups-export-${new Date().toISOString().split('T')[0]}.csv`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   const handleDelete = async (id: string) => {
     if (!confirm("Are you sure you want to delete this pickup request?")) return;
@@ -54,11 +86,23 @@ export default function PickupsClient({ initialData }: { initialData: any[] }) {
           <p className="text-[#4A5568] text-sm mt-1">Manage e-waste pickup requests and logistics.</p>
         </div>
         <div className="flex gap-3">
-          <button onClick={() => alert('Filters coming soon!')} className="flex items-center gap-2 px-4 py-2 bg-white border border-[#E3E8E4] rounded-lg text-sm font-semibold text-[#00264A] hover:bg-[#F8FAF7]">
-            <Filter size={16} />
-            Filters
-          </button>
-          <button onClick={() => alert('Export Logistics coming soon!')} className="px-4 py-2 bg-[#00264A] text-white rounded-lg text-sm font-semibold hover:bg-[#001A33]">
+          <div className="relative">
+            <select 
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+              className="appearance-none flex items-center gap-2 pl-9 pr-8 py-2 bg-white border border-[#E3E8E4] rounded-lg text-sm font-semibold text-[#00264A] hover:bg-[#F8FAF7] focus:outline-none cursor-pointer"
+            >
+              <option value="all">All Pickups</option>
+              <option value="pending">Pending</option>
+              <option value="assigned">Assigned</option>
+              <option value="in_transit">In Transit</option>
+              <option value="received">Received</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+            <Filter size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-[#00264A]" />
+          </div>
+          <button onClick={exportToCSV} className="px-4 py-2 bg-[#00264A] text-white rounded-lg text-sm font-semibold hover:bg-[#001A33] transition-colors shadow-sm">
             Export Logistics
           </button>
         </div>

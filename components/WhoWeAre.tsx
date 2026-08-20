@@ -14,11 +14,12 @@ import {
 } from "lucide-react";
 import { useAutoScroll } from "@/hooks/useAutoScroll";
 
+import Link from "next/link";
+
 interface WhoWeAreProps {
-  onOpenPickup?: () => void;
 }
 
-export const WhoWeAre: React.FC<WhoWeAreProps> = ({ onOpenPickup = () => {} }) => {
+export const WhoWeAre: React.FC<WhoWeAreProps> = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const isInView = useInView(sectionRef, { once: true, margin: "-80px" });
   
@@ -122,13 +123,13 @@ export const WhoWeAre: React.FC<WhoWeAreProps> = ({ onOpenPickup = () => {} }) =
 
             {/* Direct Action Button */}
             <div className="pt-4">
-              <button
-                onClick={onOpenPickup}
+              <Link
+                href="/pickup"
                 className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#00264A] hover:bg-[#001A33] text-white text-sm font-semibold transition-all duration-300 active:scale-95 shadow-sm group"
               >
                 <span>Partner With Us</span>
                 <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform text-[#629A13]" />
-              </button>
+              </Link>
             </div>
 
           </div>

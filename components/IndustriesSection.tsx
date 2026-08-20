@@ -10,7 +10,6 @@ import {
 import { createClient } from "@/lib/supabase-browser";
 
 interface IndustriesSectionProps {
-  onOpenPickup?: () => void;
 }
 
 // ==========================================
@@ -329,7 +328,7 @@ export const illustrationMap: Record<string, any> = {
   EduIllustration, RetailIllustration, LogisticsIllustration, GovIllustration, HospIllustration
 };
 
-export const IndustriesSection: React.FC<IndustriesSectionProps> = ({ onOpenPickup }) => {
+export const IndustriesSection: React.FC<IndustriesSectionProps> = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
   
   // High-performance scroll tracking via Framer Motion

@@ -132,6 +132,8 @@ export const GeneralApplication = () => {
                       <input 
                         type="email" 
                         required
+                        pattern="^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$"
+                        title="Please enter a valid email address (e.g. user@example.com)"
                         value={formData.email}
                         onChange={(e) => setFormData({...formData, email: e.target.value})}
                         className="w-full bg-[#00264A] border border-[#053766] text-white rounded-xl px-4 py-3 focus:outline-none focus:border-[#629A13] transition-colors"

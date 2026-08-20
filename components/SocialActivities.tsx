@@ -54,7 +54,7 @@ export const SocialActivities = () => {
             return {
               id: item.id,
               type: item.media_type,
-              category: item.category as Category,
+              category: (item.category === "Feed" ? "News Feeds" : item.category) as Category,
               title: item.title,
               description: item.description,
               src: item.media_url,
@@ -190,12 +190,21 @@ export const SocialActivities = () => {
                     className={cn("group relative rounded-[20px] overflow-hidden cursor-pointer bg-[#F8FAF7] border border-[#E3E8E4]/50", gridClass)}
                     onClick={() => openLightbox(activity.id)}
                   >
-                    {/* Image */}
-                    <img
-                      src={activity.src}
-                      alt={activity.title}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
-                    />
+                    {/* Media */}
+                    {activity.type === "video" ? (
+                      <video
+                        src={activity.src}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                        muted
+                        playsInline
+                      />
+                    ) : (
+                      <img
+                        src={activity.src}
+                        alt={activity.title}
+                        className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.03]"
+                      />
+                    )}
                     
                     {/* Subtle Gradient Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-[#00264A]/90 via-[#00264A]/20 to-transparent opacity-60 group-hover:opacity-80 transition-opacity duration-500" />
@@ -282,16 +291,30 @@ export const SocialActivities = () => {
               
               <div className="relative w-full aspect-video md:aspect-[16/9] lg:aspect-[21/9] max-h-[75vh] rounded-2xl overflow-hidden shadow-2xl bg-black">
                 <AnimatePresence mode="wait">
-                  <motion.img
-                    key={filteredActivities[lightboxIndex].id}
-                    initial={{ opacity: 0, scale: 0.98 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.3 }}
-                    src={filteredActivities[lightboxIndex].src}
-                    alt={filteredActivities[lightboxIndex].title}
-                    className="w-full h-full object-cover"
-                  />
+                  {filteredActivities[lightboxIndex].type === "video" ? (
+                    <motion.video
+                      key={filteredActivities[lightboxIndex].id}
+                      initial={{ opacity: 0, scale: 0.98 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      src={filteredActivities[lightboxIndex].src}
+                      controls
+                      autoPlay
+                      className="w-full h-full object-contain"
+                    />
+                  ) : (
+                    <motion.img
+                      key={filteredActivities[lightboxIndex].id}
+                      initial={{ opacity: 0, scale: 0.98 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      src={filteredActivities[lightboxIndex].src}
+                      alt={filteredActivities[lightboxIndex].title}
+                      className="w-full h-full object-contain"
+                    />
+                  )}
                 </AnimatePresence>
               </div>
 

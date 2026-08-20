@@ -16,6 +16,7 @@ export default async function TeamPage() {
     created_at: user.created_at,
     last_sign_in_at: user.last_sign_in_at,
     is_banned: user.banned_until != null, // simplified check
+    name: user.user_metadata?.full_name || "",
   }));
 
   return (
