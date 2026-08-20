@@ -62,16 +62,16 @@ export const Hero: React.FC<HeroProps> = ({
           </p>
 
           {/* Service Icon Pills */}
-          <div className="flex flex-wrap items-center gap-2 mt-4 mb-6">
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-2 mt-4 mb-6 max-w-xs">
             {[
-              { icon: <span className="text-base">♻</span>, label: 'E-Waste' },
-              { icon: <span className="text-base">↻</span>, label: 'Recycling & Circular Economy' },
-              { icon: <span className="text-base">☀</span>, label: 'Renewable' },
-              { icon: <Code size={14} className="text-[#629A13]" />, label: 'IT Consulting' },
-              { icon: <Users size={14} className="text-[#629A13]" />, label: 'Workforce' },
-              { icon: <Leaf size={14} className="text-[#629A13]" />, label: 'Bio' },
+              { icon: <span>♻</span>, label: 'E-Waste' },
+              { icon: <span>↻</span>, label: 'Recycling & Circular Economy' },
+              { icon: <span>☀</span>, label: 'Renewable' },
+              { icon: <Code size={13} />, label: 'IT Consulting' },
+              { icon: <Users size={13} />, label: 'Workforce' },
+              { icon: <Leaf size={13} />, label: 'Bio' },
             ].map((s, idx) => (
-              <div key={idx} className="flex items-center gap-1.5 text-[12px] sm:text-[13px] font-semibold text-[#00264A] bg-white/90 border border-[#E3E8E4] px-3 py-1.5 rounded-lg shadow-sm backdrop-blur-sm">
+              <div key={idx} className="flex items-center gap-1.5 text-[12px] font-semibold text-[#00264A]">
                 <span className="text-[#629A13] leading-none">{s.icon}</span>
                 {s.label}
               </div>
