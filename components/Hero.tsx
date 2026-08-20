@@ -61,27 +61,20 @@ export const Hero: React.FC<HeroProps> = ({
             Preserving nature, responsibly recycling electronic waste, and recovering critical raw materials for a sustainable circular future.
           </p>
 
-          {/* Client Requested 6-Icon Section (Grid format to fit inside white curve) */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-y-4 gap-x-2 w-full max-w-[480px] mt-4 mb-6">
+          {/* Service Icon Pills */}
+          <div className="flex flex-wrap items-center gap-2 mt-4 mb-6">
             {[
-              { icon: '♻', title: 'E-Waste', subtitle: 'Management' },
-              { icon: '↻', title: 'Recycling &', subtitle: 'Circular Economy' },
-              { icon: '☀', title: 'Renewable', subtitle: 'Energy' },
-              { icon: '</>', title: 'IT Consulting &', subtitle: 'Software Solutions' },
-              { icon: '♙', title: 'Workforce', subtitle: 'Solutions' },
-              { icon: '♧', title: 'Bio', subtitle: 'Products' }
+              { icon: <span className="text-base">♻</span>, label: 'E-Waste' },
+              { icon: <span className="text-base">↻</span>, label: 'Recycling & Circular Economy' },
+              { icon: <span className="text-base">☀</span>, label: 'Renewable' },
+              { icon: <Code size={14} className="text-[#629A13]" />, label: 'IT Consulting' },
+              { icon: <Users size={14} className="text-[#629A13]" />, label: 'Workforce' },
+              { icon: <Leaf size={14} className="text-[#629A13]" />, label: 'Bio' },
             ].map((s, idx) => (
-              <article key={idx} className="flex flex-col justify-start items-center text-center px-1">
-                <div className="w-[44px] h-[44px] sm:w-[50px] sm:h-[50px] shrink-0 mx-auto mb-2 border-[1.5px] border-[#629A13] rounded-full flex items-center justify-center text-[#629A13] text-[18px] sm:text-[22px] font-bold bg-[#F8FAF7]">
-                  {s.icon}
-                </div>
-                <h3 className="m-0 text-[11px] sm:text-[12px] font-bold leading-[1.3] text-[#00264A] break-words hyphens-auto">
-                  {s.title}
-                </h3>
-                <p className="hidden sm:block m-0 mt-0.5 text-[10px] sm:text-[11px] text-[#5E6672] leading-[1.2]">
-                  {s.subtitle}
-                </p>
-              </article>
+              <div key={idx} className="flex items-center gap-1.5 text-[12px] sm:text-[13px] font-semibold text-[#00264A] bg-white/90 border border-[#E3E8E4] px-3 py-1.5 rounded-lg shadow-sm backdrop-blur-sm">
+                <span className="text-[#629A13] leading-none">{s.icon}</span>
+                {s.label}
+              </div>
             ))}
           </div>
 
